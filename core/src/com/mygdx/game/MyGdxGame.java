@@ -14,7 +14,7 @@ public class MyGdxGame extends Game {
 	private int screenWidth, screenHeight;
 	private OrthographicCamera ortographicCamera;
 
-	private MyGdxGame() {
+	public MyGdxGame() {
 		INSTANCE = this;
 	}
 
