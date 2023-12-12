@@ -5,13 +5,58 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class MyGdxGame extends Game {
-	
+	private static MyGdxGame INSTANCE = null;
+	private int screenWidth, screenHeight;
+	private OrthographicCamera ortographicCamera;
+
+	private MyGdxGame() {
+		INSTANCE = this;
+	}
+
     @Override
     public void create() {
-        setScreen(new MenuScreen(this));
+		this.screenWidth = Gdx.graphics.getWidth();
+        this.screenHeight = Gdx.graphics.getHeight();
+        this.camera = new OrthographicCamera();
+        this.camera.setToOrtho(false, screenWidth, screenHeight);
+
+        setScreen(new MenuScreen(this)); //menu shows when after starting the game
     }
+
+	public int getScreenHeight() {
+		return screenHeight;
+	}
+
+	public int getScreenWidth() {
+		return screenWidth;
+	}
+
+	public void changeScreen(Screen currentScreen, ScreenType newScreenType) {
+		
+		/*if(newScreenType == ScreenType.GAME)
+			setScreen(new GameScreen(this.ortographicCamera));
+		if(newScreenType == ScreenType.MENU)
+			setScreen(new MenuScreen());
+		if(newScreenType == ScreenType.INFO)
+			setScreen(new InfoScreen());
+			*/
+
+		// LATER change this according to our needs
+	}
+	
+	public void changeScreen(Screen currentScreen, ScreenType newScreenType, String message) {
+		
+		/*if(newScreenType == ScreenType.END_GAME){
+			setScreen(new EndGameScreen(message));
+		}*/
+
+		// LATER change this according to our needs
+	}
 
     @Override
     public void dispose() {
