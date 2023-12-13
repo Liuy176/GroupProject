@@ -34,7 +34,7 @@ public class EnemyGameScreen extends ScreenAdapter{
     public EnemyGameScreen(OrthographicCamera camera) {
         this.camera = camera;
         this.batch = new SpriteBatch();
-        this.world = new World(new Vector2(0,-9.81f), false);
+        this.world = new World(new Vector2(0,-25f), false);
         this.box2DDebugRenderer = new Box2DDebugRenderer();
 
         this.tileMap = new TileMap(this);
@@ -47,6 +47,7 @@ public class EnemyGameScreen extends ScreenAdapter{
 
         batch.setProjectionMatrix(camera.combined);
         orthogonalTiledMapRenderer.setView(camera);
+        player.update();
 
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             // implement functionality to pause the game later
