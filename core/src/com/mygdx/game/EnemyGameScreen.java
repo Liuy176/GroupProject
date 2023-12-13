@@ -16,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.mygdx.objects.player.Player;
 
 public class EnemyGameScreen extends ScreenAdapter{
     
@@ -27,11 +28,13 @@ public class EnemyGameScreen extends ScreenAdapter{
     private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
     private TileMap tileMap;
 
+    private Player player;
+
 
     public EnemyGameScreen(OrthographicCamera camera) {
         this.camera = camera;
         this.batch = new SpriteBatch();
-        this.world = new World(new Vector2(0,0), false);
+        this.world = new World(new Vector2(0,-9.81f), false);
         this.box2DDebugRenderer = new Box2DDebugRenderer();
 
         this.tileMap = new TileMap(this);
@@ -51,7 +54,11 @@ public class EnemyGameScreen extends ScreenAdapter{
     }
 
     private void cameraUpdate() {
-        camera.position.set(new Vector3(0,0,0));
+        Vector3 position = camera.position;
+        position.x = Math.round(player.getBody().getPosition().x * Constants.PPM * 10) / 10f;
+        position.y = Math.round(player.getBody().getPosition().y * Constants.PPM * 10) / 10f;
+        camera.position.set(position);
+        //camera.position.set(new Vector3(0,0,0));
         camera.update();
     }
 
@@ -73,5 +80,9 @@ public class EnemyGameScreen extends ScreenAdapter{
 
     public World getWorld() {
         return world;
+    }
+
+    public void setPlayer(Player player){
+        this.player = player;
     }
 }

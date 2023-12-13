@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.mygdx.game.EnemyGameScreen;
+import com.mygdx.objects.player.Player;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
@@ -12,6 +13,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.math.Rectangle;
 
 import java.util.Vector;
 
@@ -34,6 +37,23 @@ public class TileMap {
         for(MapObject object : mapObjects){
             if(object instanceof PolygonMapObject){
                 createStaticBody((PolygonMapObject) object);
+            }
+
+            if(object instanceof RectangleMapObject){
+                Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
+                String rectangleName = object.getName();
+
+                if(rectangleName.equals("player")){
+                    Body body = BodyHelper.createBody(
+                        rectangle.getX()+ rectangle.getWidth()/2,
+                        rectangle.getY() + rectangle.getHeight()/2,
+                        rectangle.getWidth(),
+                        rectangle.getHeight(),
+                        false,
+                        enemyScreen.getWorld());
+
+                    enemyScreen.setPlayer(new Player(rectangle.getWidth(), rectangle.getHeight(), body));
+                }
             }
         }
     }
