@@ -1,6 +1,8 @@
 package com.mygdx.game;
 
 import com.mygdx.helpers.Constants;
+import com.mygdx.helpers.TileMap;
+
 import java.util.Vector;
 
 import com.badlogic.gdx.Gdx;
@@ -13,6 +15,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 public class EnemyGameScreen extends ScreenAdapter{
     
@@ -21,11 +24,18 @@ public class EnemyGameScreen extends ScreenAdapter{
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
 
+    private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
+    private TileMap tileMap;
+
+
     public EnemyGameScreen(OrthographicCamera camera) {
         this.camera = camera;
         this.batch = new SpriteBatch();
         this.world = new World(new Vector2(0,0), false);
         this.box2DDebugRenderer = new Box2DDebugRenderer();
+
+        this.tileMap = new TileMap();
+        this.orthogonalTiledMapRenderer = tileMap.setupMap();
     }
 
     private void update() {
@@ -33,6 +43,7 @@ public class EnemyGameScreen extends ScreenAdapter{
         cameraUpdate();
 
         batch.setProjectionMatrix(camera.combined);
+        orthogonalTiledMapRenderer.setView(camera);
 
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             // implement functionality to pause the game later
@@ -50,6 +61,7 @@ public class EnemyGameScreen extends ScreenAdapter{
 
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        orthogonalTiledMapRenderer.render();
 
         batch.begin();
 
