@@ -3,7 +3,6 @@ package com.mygdx.helpers;
 import com.badlogic.gdx.physics.box2d.*;
 
 
-
 public class BodyHelper {
 
     public static Body createBody(float x, float y, float width, float height, boolean isStatic, World world){
@@ -19,6 +18,7 @@ public class BodyHelper {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
+        fixtureDef.friction = 0;
         body.createFixture(fixtureDef);
         shape.dispose();
 
