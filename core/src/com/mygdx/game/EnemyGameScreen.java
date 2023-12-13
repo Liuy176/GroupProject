@@ -34,7 +34,7 @@ public class EnemyGameScreen extends ScreenAdapter{
         this.world = new World(new Vector2(0,0), false);
         this.box2DDebugRenderer = new Box2DDebugRenderer();
 
-        this.tileMap = new TileMap();
+        this.tileMap = new TileMap(this);
         this.orthogonalTiledMapRenderer = tileMap.setupMap();
     }
 
@@ -69,5 +69,9 @@ public class EnemyGameScreen extends ScreenAdapter{
 
         batch.end();
         box2DDebugRenderer.render(world, camera.combined.scl(Constants.PPM));
+    }
+
+    public World getWorld() {
+        return world;
     }
 }
