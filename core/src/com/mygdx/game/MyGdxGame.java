@@ -36,6 +36,10 @@ public class MyGdxGame extends Game {
 		return screenWidth;
 	}
 
+	public OrthographicCamera getCamera() {
+		return ortographicCamera;
+	}
+
 	/*public void changeScreen(Screen currentScreen, ScreenType newScreenType) {
 		
 		if(newScreenType == ScreenType.GAME)

@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ScreenAdapter;
 
+import javax.swing.event.ChangeEvent;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -35,6 +36,7 @@ public class MenuScreen extends ScreenAdapter {
         //buttons
         TextButton playButton = new TextButton("Play", skin);
         TextButton settingsButton = new TextButton("Settings", skin);
+        TextButton enemyModeButton = new TextButton("Go to Enemy Mode", skin); // the button to test the enemy game mode
         TextButton exitButton = new TextButton("Exit", skin);
 
         // button listeners
@@ -52,6 +54,13 @@ public class MenuScreen extends ScreenAdapter {
             }
         });
 
+        enemyModeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new EnemyGameScreen(game.getCamera())); // Switch to Enemy Game Screen
+            }
+        });
+
         exitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -63,6 +72,8 @@ public class MenuScreen extends ScreenAdapter {
         table.add(playButton).fillX().uniformX().padBottom(10);
         table.row();
         table.add(settingsButton).fillX().uniformX().padBottom(10);
+        table.row();
+        table.add(enemyModeButton).fillX().uniformX().padBottom(10);
         table.row();
         table.add(exitButton).fillX().uniformX();
     }
