@@ -52,7 +52,7 @@ public class TileMap {
                         false,
                         enemyScreen.getWorld());
 
-                    enemyScreen.setPlayer(new Player(rectangle.getWidth(), rectangle.getHeight(), body));
+                    enemyScreen.setPlayer(new Player(rectangle.getWidth(), rectangle.getHeight(), body, enemyScreen));
                 }
             }
         }
@@ -79,5 +79,9 @@ public class TileMap {
         PolygonShape shape = new PolygonShape();
         shape.set(worldVertices);
         return shape;
+    }
+
+    public void dispose(){
+        tiledMap.dispose();
     }
 }
