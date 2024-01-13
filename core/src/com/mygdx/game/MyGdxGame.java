@@ -14,6 +14,7 @@ public class MyGdxGame extends Game {
 	private int screenWidth, screenHeight;
 	private OrthographicCamera ortographicCamera;
 
+
 	public int V_WIDTH = 400;
 	public int v_HEIGHT = 208;
 
@@ -27,6 +28,7 @@ public class MyGdxGame extends Game {
         this.screenHeight = Gdx.graphics.getHeight();
         this.ortographicCamera = new OrthographicCamera();
         this.ortographicCamera.setToOrtho(false, screenWidth, screenHeight);
+
 
         setScreen(new MenuScreen(this)); //menu shows when after starting the game
     }

@@ -19,6 +19,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.mygdx.objects.player.Player;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+
 
 
 public class EnemyGameScreen extends ScreenAdapter{
@@ -34,6 +36,7 @@ public class EnemyGameScreen extends ScreenAdapter{
     private TileMap tileMap;
 
     private Player player;
+    
 
 
     public EnemyGameScreen(OrthographicCamera camera, MyGdxGame game) {
@@ -65,7 +68,7 @@ public class EnemyGameScreen extends ScreenAdapter{
     private void cameraUpdate() {
         Vector3 position = camera.position;
         position.x = Math.round(player.getBody().getPosition().x * Constants.PPM * 10) / 10f;
-        position.y = Math.round(player.getBody().getPosition().y * Constants.PPM * 10) / 10f;
+        position.y = Math.round((player.getBody().getPosition().y +0.7)* Constants.PPM * 10) / 10f;
         camera.position.set(position);
         //camera.position.set(new Vector3(0,0,0));
         camera.update();
@@ -79,12 +82,16 @@ public class EnemyGameScreen extends ScreenAdapter{
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         orthogonalTiledMapRenderer.render();
 
-        batch.begin();
 
+        box2DDebugRenderer.render(world, camera.combined.scl(Constants.PPM));
+
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        player.draw(batch);
         // here we render objects
 
         batch.end();
-        box2DDebugRenderer.render(world, camera.combined.scl(Constants.PPM));
+
     }
 
     public World getWorld() {
@@ -93,5 +100,13 @@ public class EnemyGameScreen extends ScreenAdapter{
 
     public void setPlayer(Player player){
         this.player = player;
+    }
+
+
+    public void dispose(){
+        tileMap.dispose();
+        orthogonalTiledMapRenderer.dispose();
+        world.dispose();
+        box2DDebugRenderer.dispose();
     }
 }
