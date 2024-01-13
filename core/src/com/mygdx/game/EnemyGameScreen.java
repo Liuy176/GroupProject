@@ -17,13 +17,18 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.mygdx.objects.player.Player;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+
 
 public class EnemyGameScreen extends ScreenAdapter{
+    private MyGdxGame game;
     
     private OrthographicCamera camera;
     private SpriteBatch batch;
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
+    private Viewport gamePort;
 
     private OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
     private TileMap tileMap;
@@ -31,7 +36,8 @@ public class EnemyGameScreen extends ScreenAdapter{
     private Player player;
 
 
-    public EnemyGameScreen(OrthographicCamera camera) {
+    public EnemyGameScreen(OrthographicCamera camera, MyGdxGame game) {
+        this.game = game;
         this.camera = camera;
         this.batch = new SpriteBatch();
         this.world = new World(new Vector2(0,-25f), true);
@@ -39,6 +45,8 @@ public class EnemyGameScreen extends ScreenAdapter{
 
         this.tileMap = new TileMap(this);
         this.orthogonalTiledMapRenderer = tileMap.setupMap();
+        this.gamePort = new FitViewport(game.V_WIDTH, game.v_HEIGHT, camera);
+        this.camera.setToOrtho(false, 100, 100);
     }
 
     private void update() {
