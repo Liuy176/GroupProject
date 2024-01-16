@@ -57,7 +57,7 @@ public class MenuScreen extends ScreenAdapter {
         enemyModeButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new EnemyGameScreen(game.getCamera(), game)); // Switch to Enemy Game Screen
+                game.setScreen(new EnemyGameScreen(game)); // Switch to Enemy Game Screen
             }
         });
 

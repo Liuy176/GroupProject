@@ -13,6 +13,9 @@ public class MyGdxGame extends Game {
 	private static MyGdxGame INSTANCE = null;
 	private int screenWidth, screenHeight;
 	private OrthographicCamera ortographicCamera;
+	private MenuScreen mainMenuScreen;
+	private EnemyGameScreen enemyScreen;
+	private SpriteBatch batch;
 
 
 	public int V_WIDTH = 400;
@@ -24,14 +27,22 @@ public class MyGdxGame extends Game {
 
     @Override
     public void create() {
+		this.batch = new SpriteBatch();
 		this.screenWidth = Gdx.graphics.getWidth();
         this.screenHeight = Gdx.graphics.getHeight();
         this.ortographicCamera = new OrthographicCamera();
         this.ortographicCamera.setToOrtho(false, screenWidth, screenHeight);
 
+		this.mainMenuScreen = new MenuScreen(this);
+		this.enemyScreen = new EnemyGameScreen(this);
 
-        setScreen(new MenuScreen(this)); //menu shows when after starting the game
+
+        setScreen(mainMenuScreen); //menu shows when after starting the game
     }
+
+	public void render(){
+		super.render();
+	}
 
 	public int getScreenHeight() {
 		return screenHeight;
@@ -43,6 +54,14 @@ public class MyGdxGame extends Game {
 
 	public OrthographicCamera getCamera() {
 		return ortographicCamera;
+	}
+
+	public void changeToEnemyScreen(){
+		setScreen(enemyScreen);
+	}
+
+	public SpriteBatch getBatch(){
+		return batch;
 	}
 
 	/*public void changeScreen(Screen currentScreen, ScreenType newScreenType) {
