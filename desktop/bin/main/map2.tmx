@@ -1,64 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="50" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="46">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="50" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="55">
  <tileset firstgid="1" source="tiles.tsx"/>
  <tileset firstgid="101" source="tileset_gutter.tsx"/>
- <layer id="1" name="Tile Layer 1" width="50" height="23">
-  <data encoding="base64" compression="zlib">
-   eJztwwEJAAAMA6A95voXWY+jYC+pqqqqqu8OZe6UXA==
-  </data>
- </layer>
+ <tileset firstgid="1025" source="tileset_gutter.tsx"/>
  <layer id="2" name="Tile Layer 2" width="50" height="23">
   <data encoding="base64" compression="zlib">
-   eJztlDsKACAMQ/X+F+4kLoKL4NBPWs2D4CTkSWtrJCOjx96rjJXzj29HyCt47y//h3eQFSsiZ0Muyc6tf3Y3TX+UjxxOz3g5IFK9v5ULurvWKWr2vVzQ3bQ+6C7MzgSNM17x
+   eJztw7ENAAAMAiCH/j94sX80kNBLqqqqquq7A5NsofM=
   </data>
  </layer>
- <objectgroup id="3" name="Objects">
-  <object id="30" x="0" y="368">
-   <polygon points="0,0 800,0 800,-16 0,-16"/>
-  </object>
-  <object id="31" x="16" y="336">
-   <polygon points="0,0 784,0 784,16 0,16"/>
-  </object>
-  <object id="32" x="48" y="320">
-   <polygon points="0,0 720,0 720,16 0,16"/>
-  </object>
-  <object id="33" x="80" y="304">
-   <polygon points="0,0 16,0 16,16 0,16"/>
-  </object>
-  <object id="34" x="112" y="320">
-   <polygon points="0,0 0,-16 624,-16 624,0"/>
-  </object>
-  <object id="35" x="112" y="288">
-   <polygon points="0,0 608,0 608,16 0,16"/>
-  </object>
-  <object id="36" x="144" y="272">
-   <polygon points="0,0 528,0 528,16 0,16"/>
-  </object>
-  <object id="37" x="176" y="256">
-   <polygon points="0,0 480,0 480,16 0,16"/>
-  </object>
-  <object id="38" x="192" y="240">
-   <polygon points="0,0 16,0 16,16 0,16"/>
-  </object>
-  <object id="39" x="224" y="240">
-   <polygon points="0,0 16,0 16,16 0,16"/>
-  </object>
-  <object id="40" x="256" y="240">
-   <polygon points="0,0 384,0 384,16 0,16"/>
-  </object>
-  <object id="41" x="272" y="224">
-   <polygon points="0,0 304,0 304,16 0,16"/>
-  </object>
-  <object id="42" x="304" y="208">
-   <polygon points="0,0 240,0 240,16 0,16"/>
-  </object>
-  <object id="43" x="336" y="192">
-   <polygon points="0,0 128,0 128,16 0,16"/>
-  </object>
-  <object id="44" x="384" y="176">
-   <polygon points="0,0 32,0 32,16 0,16"/>
-  </object>
-  <object id="45" name="player" x="2.73973" y="337.671" width="6.84932" height="13.0137"/>
+ <layer id="1" name="Tile Layer 1" width="50" height="23">
+  <data encoding="base64" compression="zlib">
+   eJztz8EJACAMBME87L8ZG0wFCh4XI7ID+Ya9CAAAAAD43xzre92uvXqX8lvtde9R/1f1n2y50VC5p7vHsae7wXUJW1Si/Q==
+  </data>
+ </layer>
+ <objectgroup id="3" name="ground">
+  <object id="46" x="0" y="352" width="800" height="16"/>
+  <object id="47" x="16" y="336" width="768" height="16"/>
+  <object id="48" x="48" y="320" width="704" height="16"/>
+  <object id="49" x="96" y="304" width="192" height="16"/>
+  <object id="50" x="144" y="288" width="96" height="16"/>
+  <object id="51" x="320" y="304" width="400" height="16"/>
+  <object id="52" x="352" y="288" width="352" height="16"/>
+  <object id="53" x="448" y="272" width="224" height="16"/>
+  <object id="54" x="496" y="256" width="112" height="16"/>
  </objectgroup>
- <objectgroup id="5" name="Object Layer 2"/>
+ <objectgroup id="5" name="objects"/>
 </map>
