@@ -50,6 +50,7 @@ public class EnemyGameScreen implements Screen{
     private Box2DDebugRenderer debugRenderer;
     private Player player;
     private Enemy enemy;
+    private Enemy enemy2;
 
     private TextureAtlas atlas;
 
@@ -72,7 +73,8 @@ public class EnemyGameScreen implements Screen{
 
         new WorldCreator(world, map);
         player = new Player(world, this);
-        enemy = new Enemy(world, 60, 200, 2, player);
+        enemy = new Enemy(world, 200, 60, 2, player);
+        enemy2 = new Enemy(world, 300, 60, 1, player);
         this.camera.setToOrtho(false, 10, 10);
 
         world.setContactListener(new WorldContactListener());
@@ -109,6 +111,7 @@ public class EnemyGameScreen implements Screen{
         game.getBatch().setProjectionMatrix(camera.combined);
         player.update(dt);
         enemy.update(dt);
+        enemy2.update(dt);
         //camera.update();
         
         renderer.setView(camera);
