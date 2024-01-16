@@ -68,13 +68,13 @@ public class Enemy extends Sprite {
         body.createFixture(fixtureDef);
 
         EdgeShape rightSide = new EdgeShape();
-        rightSide.set(new Vector2(7/Constants.PPM, 5/Constants.PPM), new Vector2(7/Constants.PPM, -5/Constants.PPM));
+        rightSide.set(new Vector2(7/Constants.PPM, 6/Constants.PPM), new Vector2(7/Constants.PPM, -6/Constants.PPM));
         fixtureDef.shape = rightSide;
         fixtureDef.isSensor = true;
         body.createFixture(fixtureDef).setUserData(this);
 
         EdgeShape leftSide = new EdgeShape();
-        leftSide.set(new Vector2(-7/Constants.PPM, 5/Constants.PPM), new Vector2(-7/Constants.PPM, -5/Constants.PPM));
+        leftSide.set(new Vector2(-7/Constants.PPM, 6/Constants.PPM), new Vector2(-7/Constants.PPM, -6/Constants.PPM));
         fixtureDef.shape = leftSide;
         fixtureDef.isSensor = true;
         body.createFixture(fixtureDef).setUserData(this);
