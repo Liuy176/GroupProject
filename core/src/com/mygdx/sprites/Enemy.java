@@ -30,12 +30,10 @@ public class Enemy extends Sprite {
     }
 
     public void update(float dt) {
-        // Update the enemy position and potentially the texture region (if animated)
+        
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
 
 
-
-        // Logic to move towards the player
         Vector2 playerPos = player.body.getPosition();
         Vector2 enemyPos = body.getPosition();
 
@@ -81,7 +79,6 @@ public class Enemy extends Sprite {
     }
 
     public void jump() {
-        // Apply an upward force to make the enemy jump
         body.applyLinearImpulse(new Vector2(0, 3), body.getWorldCenter(), true);
     }
 }

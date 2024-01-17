@@ -117,14 +117,12 @@ public class Player extends Sprite{
     }
 
     public void shoot() {
-        // Determine the position and direction to shoot the projectile
+        
         float x = body.getPosition().x + (facingRight ? 1 : -1) * 1;
         float y = body.getPosition().y;
     
-        // Create a new projectile
         Bullet bullet = new Bullet(world, x, y, facingRight, 2);
         screen.addBullet(bullet);
-        // Add the projectile to a list or directly to your game screen for rendering and updates
     }
     
 }

@@ -20,22 +20,20 @@ public class WorldContactListener implements ContactListener{
         Fixture fixA = contact.getFixtureA();
         Fixture fixB = contact.getFixtureB();
 
-        // Check if either of the fixtures is one of the enemy's sides
         if (fixA.getUserData() instanceof Enemy || fixB.getUserData() instanceof Enemy) {
             Fixture enemyFixture = (fixA.getUserData() instanceof Enemy) ? fixA : fixB;
             Fixture otherFixture = enemyFixture == fixA ? fixB : fixA;
 
-        // Check if the other fixture is the ground
-        if ("ground".equals(otherFixture.getUserData())) {
-            Enemy enemy = (Enemy) enemyFixture.getUserData();
-            enemy.jump();
+            if ("ground".equals(otherFixture.getUserData())) {
+                Enemy enemy = (Enemy) enemyFixture.getUserData();
+                enemy.jump();
+            }
         }
-    }
 
-    if (fixA.getUserData() instanceof Bullet || fixB.getUserData() instanceof Bullet) {
-        Bullet bullet = (fixA.getUserData() instanceof Bullet) ? (Bullet) fixA.getUserData() : (Bullet) fixB.getUserData();
-        bullet.toRemove = true; // Mark the bullet for removal
-    }
+        if (fixA.getUserData() instanceof Bullet || fixB.getUserData() instanceof Bullet) {
+            Bullet bullet = (fixA.getUserData() instanceof Bullet) ? (Bullet) fixA.getUserData() : (Bullet) fixB.getUserData();
+            bullet.toRemove = true; 
+        }
 
     }
 
