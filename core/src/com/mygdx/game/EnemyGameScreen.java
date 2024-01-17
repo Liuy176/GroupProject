@@ -6,6 +6,7 @@ import com.mygdx.helpers.WorldCreator;
 import com.mygdx.sprites.Enemy;
 //import com.mygdx.helpers.TileMap;
 import com.mygdx.sprites.Player;
+import com.mygdx.sprites.Bullet;
 
 import java.util.Vector;
 
@@ -31,6 +32,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.utils.Array;
 //import com.mygdx.objects.player.Player;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -54,6 +56,11 @@ public class EnemyGameScreen implements Screen{
 
     private TextureAtlas atlas;
 
+    private Array<Bullet> bullets;
+
+    private float viewportWidth = 10;
+    private float viewportHeight = 10;
+
 
     public EnemyGameScreen(MyGdxGame game){
         atlas = new TextureAtlas("Mario_and_Enemies.pack");
@@ -67,6 +74,7 @@ public class EnemyGameScreen implements Screen{
         renderer = new OrthogonalTiledMapRenderer(map, 1/Constants.PPM);
         //camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
         
+        bullets = new Array<Bullet>();
 
         world = new World(new Vector2(0,-10), true);
         debugRenderer = new Box2DDebugRenderer();
@@ -98,6 +106,9 @@ public class EnemyGameScreen implements Screen{
         //game.getBatch().setProjectionMatrix(camera.combined.scl(Constants.PPM));        
         game.getBatch().begin();
         player.draw(game.getBatch());
+        //for (Bullet bullet : bullets) {
+        //    bullet.draw(game.getBatch());
+        //}
         
         game.getBatch().end();
     }
@@ -112,6 +123,18 @@ public class EnemyGameScreen implements Screen{
         player.update(dt);
         enemy.update(dt);
         enemy2.update(dt);
+
+        for (int i = 0; i < bullets.size; i++) {
+            Bullet bullet = bullets.get(i);
+            bullet.update(dt);
+
+                // Check if the projectile is off-screen and remove it
+            if (bullet.toRemove) {
+                bullets.removeIndex(i);
+                world.destroyBody(bullet.getBody()); // Important: Destroy the Box2D body
+                i--;
+            }
+        }
         //camera.update();
         
         renderer.setView(camera);
@@ -133,8 +156,39 @@ public class EnemyGameScreen implements Screen{
             player.body.applyLinearImpulse(new Vector2(0.3f, 0), player.body.getWorldCenter(), true);
         if(Gdx.input.isKeyPressed(Input.Keys.A) && player.body.getLinearVelocity().x >=-3 )
             player.body.applyLinearImpulse(new Vector2(-0.3f, 0), player.body.getWorldCenter(), true);
+        if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
+            player.shoot();
+        }
         
             
+    }
+
+    // This makes it only work for the players starting position, fix later
+    private boolean isBulletOffScreen(Bullet bullet) {
+        float playerX = player.body.getPosition().x; // Assuming you can get player's X position
+        float playerY = player.body.getPosition().y; // Assuming you can get player's Y position
+    
+        float leftBound = playerX - viewportWidth / 2;
+        float rightBound = playerX + viewportWidth / 2;
+        float bottomBound = playerY - viewportHeight / 2;
+        float topBound = playerY + viewportHeight / 2;
+    
+        // Convert bounds from meters to pixels (assuming bullet position is in pixels)
+        leftBound *= Constants.PPM;
+        rightBound *= Constants.PPM;
+        bottomBound *= Constants.PPM;
+        topBound *= Constants.PPM;
+    
+        // Check if bullet is outside the viewport centered on the player
+        return bullet.getX() + bullet.getWidth() < leftBound ||
+               bullet.getX() > rightBound ||
+               bullet.getY() + bullet.getHeight() < bottomBound ||
+               bullet.getY() > topBound;
+    }
+    
+
+    public void addBullet(Bullet bullet) {
+        bullets.add(bullet);
     }
 
     public TextureAtlas getAtlas(){
