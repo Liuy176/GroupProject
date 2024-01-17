@@ -64,7 +64,7 @@ public class Enemy extends Sprite {
         fixtureDef.shape = shape;
         fixtureDef.density = 1f;
         fixtureDef.filter.categoryBits = Constants.CATEGORY_ENEMY;
-        fixtureDef.filter.maskBits = Constants.CATEGORY_GROUND;
+        fixtureDef.filter.maskBits = Constants.CATEGORY_GROUND | Constants.CATEGORY_BULLET;
         body.createFixture(fixtureDef);
 
         EdgeShape rightSide = new EdgeShape();

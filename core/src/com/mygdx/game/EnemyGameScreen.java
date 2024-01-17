@@ -129,12 +129,12 @@ public class EnemyGameScreen implements Screen{
             bullet.update(dt);
 
                 // Check if the projectile is off-screen and remove it
-                if (isBulletOffScreen(bullet)) {
-                    bullets.removeIndex(i);
-                    world.destroyBody(bullet.getBody()); // Important: Destroy the Box2D body
-                    i--;
-                }
+            if (bullet.toRemove) {
+                bullets.removeIndex(i);
+                world.destroyBody(bullet.getBody()); // Important: Destroy the Box2D body
+                i--;
             }
+        }
         //camera.update();
         
         renderer.setView(camera);

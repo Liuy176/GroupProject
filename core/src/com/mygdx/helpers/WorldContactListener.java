@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.mygdx.sprites.Bullet;
 import com.mygdx.sprites.Enemy;
 import com.mygdx.sprites.Ground;
 import com.mygdx.sprites.InteractiveObject;
@@ -29,6 +30,11 @@ public class WorldContactListener implements ContactListener{
             Enemy enemy = (Enemy) enemyFixture.getUserData();
             enemy.jump();
         }
+
+        if (fixA.getUserData() instanceof Bullet || fixB.getUserData() instanceof Bullet) {
+            Bullet bullet = (fixA.getUserData() instanceof Bullet) ? (Bullet) fixA.getUserData() : (Bullet) fixB.getUserData();
+            bullet.toRemove = true; // Mark the bullet for removal
+        }
     }
     }
 
@@ -36,7 +42,6 @@ public class WorldContactListener implements ContactListener{
     public void endContact(Contact contact) {
         // TODO Auto-generated method stub
         //throw new UnsupportedOperationException("Unimplemented method 'endContact'");
-        Gdx.app.log("End", "");
     }
 
     @Override
