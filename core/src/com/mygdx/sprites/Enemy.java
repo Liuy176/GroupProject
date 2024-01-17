@@ -2,7 +2,10 @@ package com.mygdx.sprites;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -19,12 +22,21 @@ public class Enemy extends Sprite {
     private TextureRegion enemyTexture;
     private float speed;
     private Player player;
+    private float startHealth;
+    private float currentHealth;
+    public Texture white;
+    public TextureRegion whiteRegion;
 
-    public Enemy(World world,float x, float y, float speed, Player player) {
+
+    public Enemy(World world,float x, float y, float speed, float health, Player player) {
         
         this.world = world;
         this.speed = speed;
         this.player = player;
+        this.startHealth = health;
+        this.currentHealth = health;
+        this.white = new Texture("white.png");
+        this.whiteRegion = new TextureRegion(white, 0,0,1,1);
 
         defineEnemy(x, y);
     }
@@ -81,4 +93,34 @@ public class Enemy extends Sprite {
     public void jump() {
         body.applyLinearImpulse(new Vector2(0, 3), body.getWorldCenter(), true);
     }
+
+    public void takeDamage(float amount) {
+        currentHealth -= amount;
+        if (currentHealth < 0) currentHealth = 0;
+    }
+
+    public float getHealthPercentage() {
+        return currentHealth / startHealth;
+    }
+
+    public void drawHealthBar(SpriteBatch batch) {
+        float healthPercentage = getHealthPercentage();
+        float barWidth = 12/Constants.PPM;
+        float barHeight = 1/Constants.PPM;
+        float padding = 11/Constants.PPM;
+
+        float barX = this.getX() + (this.getWidth() - barWidth) / 2;
+        float barY = this.getY() + this.getHeight() + padding;
+
+        //background
+        batch.setColor(Color.RED);
+        batch.draw(whiteRegion, barX, barY, barWidth, barHeight);
+
+        //foreground of the bar
+        batch.setColor(Color.GREEN);
+        batch.draw(whiteRegion, barX, barY, barWidth * healthPercentage, barHeight);
+
+        batch.setColor(Color.WHITE);
+    }   
+
 }

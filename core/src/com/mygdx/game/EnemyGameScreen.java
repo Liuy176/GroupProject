@@ -81,8 +81,8 @@ public class EnemyGameScreen implements Screen{
 
         new WorldCreator(world, map);
         player = new Player(world, this);
-        enemy = new Enemy(world, 200, 60, 2, player);
-        enemy2 = new Enemy(world, 300, 60, 1, player);
+        enemy = new Enemy(world, 200, 60, 2, 100, player);
+        enemy2 = new Enemy(world, 300, 60, 1, 50, player);
         this.camera.setToOrtho(false, 10, 10);
 
         world.setContactListener(new WorldContactListener());
@@ -109,6 +109,7 @@ public class EnemyGameScreen implements Screen{
         //for (Bullet bullet : bullets) {
         //    bullet.draw(game.getBatch());
         //}
+        enemy.drawHealthBar(game.getBatch());
         
         game.getBatch().end();
     }
