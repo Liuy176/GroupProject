@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class MenuScreen extends ScreenAdapter {
-    private MyGdxGame game; // Reference to your main game class
+    private MyGdxGame game;
     private Stage stage;
     private Skin skin;
     
@@ -91,6 +91,11 @@ public class MenuScreen extends ScreenAdapter {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
+    }
+
+    @Override
+    public void hide() {
+        Gdx.input.setInputProcessor(null);
     }
 
     @Override

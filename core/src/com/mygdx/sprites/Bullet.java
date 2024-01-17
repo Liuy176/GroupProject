@@ -36,12 +36,12 @@ public class Bullet extends Sprite {
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(x , y );
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.gravityScale = 0; // Projectiles typically aren't affected by gravity
+        bodyDef.gravityScale = 0; 
         body = world.createBody(bodyDef);
 
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(2 / Constants.PPM, 2 / Constants.PPM); // Adjust size as needed
+        shape.setAsBox(2 / Constants.PPM, 2 / Constants.PPM); 
 
         fixtureDef.shape = shape;
         fixtureDef.filter.categoryBits = Constants.CATEGORY_BULLET;
@@ -49,17 +49,16 @@ public class Bullet extends Sprite {
         
         body.createFixture(fixtureDef).setUserData(this);
         
-        body.setLinearVelocity((facingRight ? 1 : -1) * speed, 0); // Set velocity based on direction
+        body.setLinearVelocity((facingRight ? 1 : -1) * speed, 0); 
     }
 
     public void update(float dt) {
-        // Update the projectile's position to match the Box2D body
+        
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
 
         distanceTraveled = startPosition.dst(body.getPosition().x, body.getPosition().y);
         if (distanceTraveled > distanceLimit) {
-            // Handle the bullet removal, e.g., set a flag or directly remove from the game
-            this.toRemove = true; // Assuming there's a 'remove' flag in the Bullet class
+            this.toRemove = true; 
         }
     }
 
