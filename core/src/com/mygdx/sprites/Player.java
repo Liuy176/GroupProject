@@ -118,10 +118,10 @@ public class Player extends Sprite{
 
     public void shoot() {
         
-        float x = body.getPosition().x + (facingRight ? 1 : -1) * 1;
+        float x = body.getPosition().x + (facingRight ? 1 : -1) * 0.7f;
         float y = body.getPosition().y;
     
-        Bullet bullet = new Bullet(world, x, y, facingRight, 2);
+        Bullet bullet = new Bullet(world, x, y, facingRight, 5);
         screen.addBullet(bullet);
     }
     

@@ -20,10 +20,12 @@ public class WorldContactListener implements ContactListener{
         Fixture fixA = contact.getFixtureA();
         Fixture fixB = contact.getFixtureB();
 
+        
         if (fixA.getUserData() instanceof Enemy || fixB.getUserData() instanceof Enemy) {
             Fixture enemyFixture = (fixA.getUserData() instanceof Enemy) ? fixA : fixB;
             Fixture otherFixture = enemyFixture == fixA ? fixB : fixA;
 
+        
             if ("ground".equals(otherFixture.getUserData())) {
                 Enemy enemy = (Enemy) enemyFixture.getUserData();
                 enemy.jump();
@@ -32,7 +34,7 @@ public class WorldContactListener implements ContactListener{
 
         if (fixA.getUserData() instanceof Bullet || fixB.getUserData() instanceof Bullet) {
             Bullet bullet = (fixA.getUserData() instanceof Bullet) ? (Bullet) fixA.getUserData() : (Bullet) fixB.getUserData();
-            bullet.toRemove = true; 
+            bullet.toRemove = true;
         }
 
     }

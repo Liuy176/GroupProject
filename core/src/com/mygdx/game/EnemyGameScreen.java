@@ -128,13 +128,13 @@ public class EnemyGameScreen implements Screen{
             Bullet bullet = bullets.get(i);
             bullet.update(dt);
 
-                // Check if the projectile is off-screen and remove it
-            if (bullet.toRemove) {
-                bullets.removeIndex(i);
-                world.destroyBody(bullet.getBody()); // Important: Destroy the Box2D body
-                i--;
+                
+                if (bullet.toRemove) {
+                    bullets.removeIndex(i);
+                    world.destroyBody(bullet.getBody()); 
+                    i--;
+                }
             }
-        }
         //camera.update();
         
         renderer.setView(camera);
@@ -161,29 +161,6 @@ public class EnemyGameScreen implements Screen{
         }
         
             
-    }
-
-    // This makes it only work for the players starting position, fix later
-    private boolean isBulletOffScreen(Bullet bullet) {
-        float playerX = player.body.getPosition().x; // Assuming you can get player's X position
-        float playerY = player.body.getPosition().y; // Assuming you can get player's Y position
-    
-        float leftBound = playerX - viewportWidth / 2;
-        float rightBound = playerX + viewportWidth / 2;
-        float bottomBound = playerY - viewportHeight / 2;
-        float topBound = playerY + viewportHeight / 2;
-    
-        // Convert bounds from meters to pixels (assuming bullet position is in pixels)
-        leftBound *= Constants.PPM;
-        rightBound *= Constants.PPM;
-        bottomBound *= Constants.PPM;
-        topBound *= Constants.PPM;
-    
-        // Check if bullet is outside the viewport centered on the player
-        return bullet.getX() + bullet.getWidth() < leftBound ||
-               bullet.getX() > rightBound ||
-               bullet.getY() + bullet.getHeight() < bottomBound ||
-               bullet.getY() > topBound;
     }
     
 
