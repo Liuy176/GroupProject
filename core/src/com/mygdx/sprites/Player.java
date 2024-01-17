@@ -25,10 +25,12 @@ public class Player extends Sprite{
     private Animation<TextureRegion> jump;
     private boolean facingRight;
     private float timer;
+    private EnemyGameScreen screen;
 
     public Player(World world, EnemyGameScreen screen){
         super(screen.getAtlas().findRegion("little_mario"));
         this.world = world;
+        this.screen = screen;
         definePlayer();
         currState = State.STANDING;
         prevState = State.STANDING;
@@ -109,6 +111,20 @@ public class Player extends Sprite{
         playerShape.setAsBox(4/Constants.PPM,7/Constants.PPM);
 
         fixture.shape = playerShape;
+        fixture.filter.categoryBits = Constants.CATEGORY_PLAYER;
+        fixture.filter.maskBits = Constants.CATEGORY_GROUND;
         body.createFixture(fixture);
     }
+
+    public void shoot() {
+        // Determine the position and direction to shoot the projectile
+        float x = body.getPosition().x + (facingRight ? 1 : -1) * 1;
+        float y = body.getPosition().y;
+    
+        // Create a new projectile
+        Bullet bullet = new Bullet(world, x, y, facingRight, 2);
+        screen.addBullet(bullet);
+        // Add the projectile to a list or directly to your game screen for rendering and updates
+    }
+    
 }
