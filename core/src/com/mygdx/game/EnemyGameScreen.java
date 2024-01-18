@@ -83,7 +83,7 @@ public class EnemyGameScreen implements Screen{
         //enemy = new Enemy(world, 200, 60, 2, 100, player);
         //enemy2 = new Enemy(world, 300, 60, 1, 50, player);
         enemies = new Array<Enemy>();
-        enemies.add(new Enemy(world, 200, 60, 2, 100, player), new Enemy(world, 300, 60, 1, 50, player));
+        enemies.add(new Enemy(world, 200, 60, 2, 100, player), new Enemy(world, 300, 60, 1, 5, player));
         this.camera.setToOrtho(false, 10, 10);
 
         world.setContactListener(new WorldContactListener());
