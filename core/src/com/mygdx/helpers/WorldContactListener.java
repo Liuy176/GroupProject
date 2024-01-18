@@ -28,7 +28,8 @@ public class WorldContactListener implements ContactListener{
         
             if ("ground".equals(otherFixture.getUserData())) {
                 Enemy enemy = (Enemy) enemyFixture.getUserData();
-                enemy.jump();
+                if(enemy.body.getLinearVelocity().y == 0)
+                    enemy.jump();
             }
         }
 
@@ -42,6 +43,18 @@ public class WorldContactListener implements ContactListener{
                 Enemy enemy = (Enemy) other.getUserData();
                 enemy.takeDamage(10);
             }
+        }
+
+        if(fixA.getUserData() != null && fixB.getUserData() != null && (fixA.getUserData().equals("enemyBackupLeft")|| fixB.getUserData().equals("enemyBackupLeft"))){
+            Fixture enemyFix = (fixA.getUserData().equals("enemyBackupLeft")) ? fixA : fixB;
+            Enemy enemy = (Enemy) enemyFix.getBody().getUserData();
+            enemy.moveForward();
+        }
+
+        if(fixA.getUserData() != null && fixB.getUserData() != null && (fixA.getUserData().equals("enemyBackupRight")|| fixB.getUserData().equals("enemyBackupRight"))){
+            Fixture enemyFix = (fixA.getUserData().equals("enemyBackupRight")) ? fixA : fixB;
+            Enemy enemy = (Enemy) enemyFix.getBody().getUserData();
+            enemy.moveBack();
         }
 
     }
