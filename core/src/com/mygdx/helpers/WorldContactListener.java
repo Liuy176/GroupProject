@@ -33,8 +33,15 @@ public class WorldContactListener implements ContactListener{
         }
 
         if (fixA.getUserData() instanceof Bullet || fixB.getUserData() instanceof Bullet) {
-            Bullet bullet = (fixA.getUserData() instanceof Bullet) ? (Bullet) fixA.getUserData() : (Bullet) fixB.getUserData();
+            Fixture bulletFixture = (fixA.getUserData() instanceof Bullet) ? fixA : fixB;
+            Fixture other = bulletFixture == fixA ? fixB: fixA;
+            Bullet bullet = (Bullet) bulletFixture.getUserData();
             bullet.toRemove = true;
+
+            if(other.getUserData() instanceof Enemy){
+                Enemy enemy = (Enemy) other.getUserData();
+                enemy.takeDamage(10);
+            }
         }
 
     }

@@ -4,7 +4,6 @@ import com.mygdx.helpers.Constants;
 import com.mygdx.helpers.WorldContactListener;
 import com.mygdx.helpers.WorldCreator;
 import com.mygdx.sprites.Enemy;
-//import com.mygdx.helpers.TileMap;
 import com.mygdx.sprites.Player;
 import com.mygdx.sprites.Bullet;
 
@@ -33,7 +32,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
-//import com.mygdx.objects.player.Player;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -57,6 +55,7 @@ public class EnemyGameScreen implements Screen{
     private TextureAtlas atlas;
 
     private Array<Bullet> bullets;
+    private Array<Enemy> enemies;
 
     private float viewportWidth = 10;
     private float viewportHeight = 10;
@@ -81,8 +80,10 @@ public class EnemyGameScreen implements Screen{
 
         new WorldCreator(world, map);
         player = new Player(world, this);
-        enemy = new Enemy(world, 200, 60, 2, 100, player);
-        enemy2 = new Enemy(world, 300, 60, 1, 50, player);
+        //enemy = new Enemy(world, 200, 60, 2, 100, player);
+        //enemy2 = new Enemy(world, 300, 60, 1, 50, player);
+        enemies = new Array<Enemy>();
+        enemies.add(new Enemy(world, 200, 60, 2, 100, player), new Enemy(world, 300, 60, 1, 5, player));
         this.camera.setToOrtho(false, 10, 10);
 
         world.setContactListener(new WorldContactListener());
@@ -109,7 +110,9 @@ public class EnemyGameScreen implements Screen{
         //for (Bullet bullet : bullets) {
         //    bullet.draw(game.getBatch());
         //}
-        enemy.drawHealthBar(game.getBatch());
+        for (Enemy enemy : enemies) {
+            enemy.drawHealthBar(game.getBatch());
+        }
         
         game.getBatch().end();
     }
@@ -122,8 +125,9 @@ public class EnemyGameScreen implements Screen{
         cameraUpdate();
         game.getBatch().setProjectionMatrix(camera.combined);
         player.update(dt);
-        enemy.update(dt);
-        enemy2.update(dt);
+        for (Enemy enemy : enemies) {
+            enemy.update(dt);
+        }
 
         for (int i = 0; i < bullets.size; i++) {
             Bullet bullet = bullets.get(i);

@@ -12,6 +12,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
+import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mygdx.helpers.Constants;
@@ -26,6 +28,9 @@ public class Enemy extends Sprite {
     private float currentHealth;
     public Texture white;
     public TextureRegion whiteRegion;
+    private boolean isDefeated;
+    private float deadRotationDeg;
+  
 
 
     public Enemy(World world,float x, float y, float speed, float health, Player player) {
@@ -37,6 +42,9 @@ public class Enemy extends Sprite {
         this.currentHealth = health;
         this.white = new Texture("white.png");
         this.whiteRegion = new TextureRegion(white, 0,0,1,1);
+        this.isDefeated = false;
+        this.deadRotationDeg = 0;
+
 
         defineEnemy(x, y);
     }
@@ -58,6 +66,18 @@ public class Enemy extends Sprite {
         body.applyLinearImpulse(new Vector2(impulse,0), body.getWorldCenter(), true);
         //Vector2 direction = playerPos.sub(body.getPosition()).nor();
         //body.setLinearVelocity(direction.scl(speed));
+        if(isDefeated){
+            deadRotationDeg +=5;
+            rotate(deadRotationDeg);
+            body.setTransform(body.getPosition(), (float)Math.toRadians(deadRotationDeg));
+            if(body.getPosition().y <= -1){
+               body.setActive(false);
+               this.setPosition(0, -1);
+               body.setTransform(0, -1,0);
+               body.setLinearVelocity(0,0);
+               body.setAngularVelocity(0);
+            }
+        }
     }
 
     private void defineEnemy(float x, float y) {
@@ -96,11 +116,25 @@ public class Enemy extends Sprite {
 
     public void takeDamage(float amount) {
         currentHealth -= amount;
-        if (currentHealth < 0) currentHealth = 0;
+        if (currentHealth <= 0) {
+            currentHealth = 0;
+            enemyDies();
+        }
     }
 
     public float getHealthPercentage() {
         return currentHealth / startHealth;
+    }
+
+        private void enemyDies() {
+        for (Fixture fixture : body.getFixtureList()) {
+            Filter filter = fixture.getFilterData();
+            filter.maskBits = 0; // no collision
+            fixture.setFilterData(filter);
+        }
+
+        body.applyLinearImpulse(new Vector2(0, 2f), body.getWorldCenter(), true);
+        isDefeated = true;
     }
 
     public void drawHealthBar(SpriteBatch batch) {
