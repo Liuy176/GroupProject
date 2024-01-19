@@ -8,8 +8,10 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.mygdx.sprites.Bullet;
 import com.mygdx.sprites.Enemy;
+import com.mygdx.sprites.EnemyBullet;
 import com.mygdx.sprites.Ground;
 import com.mygdx.sprites.InteractiveObject;
+import com.mygdx.sprites.Player;
 
 public class WorldContactListener implements ContactListener{
 
@@ -42,6 +44,18 @@ public class WorldContactListener implements ContactListener{
             if(other.getUserData() instanceof Enemy){
                 Enemy enemy = (Enemy) other.getUserData();
                 enemy.takeDamage(10);
+            }
+        }
+
+        if (fixA.getUserData() instanceof EnemyBullet || fixB.getUserData() instanceof EnemyBullet) {
+            Fixture bulletFixture = (fixA.getUserData() instanceof EnemyBullet) ? fixA : fixB;
+            Fixture other = bulletFixture == fixA ? fixB: fixA;
+            EnemyBullet bullet = (EnemyBullet) bulletFixture.getUserData();
+            bullet.toRemove = true;
+
+            if(other.getUserData() instanceof Player){
+                Player enemy = (Player) other.getUserData();
+                //player.takeDamage(10);
             }
         }
 

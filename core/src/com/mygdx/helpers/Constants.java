@@ -9,4 +9,5 @@ public class Constants {
     public static final short CATEGORY_ENEMY = 0x0002;  // 0010 in binary
     public static final short CATEGORY_GROUND = 0x0004;
     public static final short CATEGORY_BULLET = 0x0008;
+    public static final short CATEGORY_ENEMY_BULLET = 0x0010;
 }

@@ -112,7 +112,7 @@ public class Player extends Sprite{
 
         fixture.shape = playerShape;
         fixture.filter.categoryBits = Constants.CATEGORY_PLAYER;
-        fixture.filter.maskBits = Constants.CATEGORY_GROUND;
+        fixture.filter.maskBits = Constants.CATEGORY_GROUND | Constants.CATEGORY_ENEMY_BULLET;
         body.createFixture(fixture);
     }
 
