@@ -8,8 +8,10 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.mygdx.sprites.Bullet;
 import com.mygdx.sprites.Enemy;
+import com.mygdx.sprites.EnemyBullet;
 import com.mygdx.sprites.Ground;
 import com.mygdx.sprites.InteractiveObject;
+import com.mygdx.sprites.Player;
 
 public class WorldContactListener implements ContactListener{
 
@@ -28,7 +30,8 @@ public class WorldContactListener implements ContactListener{
         
             if ("ground".equals(otherFixture.getUserData())) {
                 Enemy enemy = (Enemy) enemyFixture.getUserData();
-                enemy.jump();
+                if(enemy.body.getLinearVelocity().y == 0)
+                    enemy.jump();
             }
         }
 
@@ -42,6 +45,30 @@ public class WorldContactListener implements ContactListener{
                 Enemy enemy = (Enemy) other.getUserData();
                 enemy.takeDamage(10);
             }
+        }
+
+        if (fixA.getUserData() instanceof EnemyBullet || fixB.getUserData() instanceof EnemyBullet) {
+            Fixture bulletFixture = (fixA.getUserData() instanceof EnemyBullet) ? fixA : fixB;
+            Fixture other = bulletFixture == fixA ? fixB: fixA;
+            EnemyBullet bullet = (EnemyBullet) bulletFixture.getUserData();
+            bullet.toRemove = true;
+
+            if(other.getUserData() instanceof Player){
+                Player enemy = (Player) other.getUserData();
+                //player.takeDamage(10);
+            }
+        }
+
+        if(fixA.getUserData() != null && fixB.getUserData() != null && (fixA.getUserData().equals("enemyBackupLeft")|| fixB.getUserData().equals("enemyBackupLeft"))){
+            Fixture enemyFix = (fixA.getUserData().equals("enemyBackupLeft")) ? fixA : fixB;
+            Enemy enemy = (Enemy) enemyFix.getBody().getUserData();
+            enemy.moveForward();
+        }
+
+        if(fixA.getUserData() != null && fixB.getUserData() != null && (fixA.getUserData().equals("enemyBackupRight")|| fixB.getUserData().equals("enemyBackupRight"))){
+            Fixture enemyFix = (fixA.getUserData().equals("enemyBackupRight")) ? fixA : fixB;
+            Enemy enemy = (Enemy) enemyFix.getBody().getUserData();
+            enemy.moveBack();
         }
 
     }

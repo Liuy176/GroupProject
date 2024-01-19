@@ -28,7 +28,7 @@ public class Ground extends InteractiveObject{
         shape.setAsBox(bounds.getWidth()/2/Constants.PPM, bounds.getHeight()/2/Constants.PPM);
         fixture.shape = shape;
         fixture.filter.categoryBits = Constants.CATEGORY_GROUND;
-        fixture.filter.maskBits = Constants.CATEGORY_PLAYER | Constants.CATEGORY_ENEMY | Constants.CATEGORY_BULLET;
+        fixture.filter.maskBits = Constants.CATEGORY_PLAYER | Constants.CATEGORY_ENEMY | Constants.CATEGORY_BULLET | Constants.CATEGORY_ENEMY_BULLET;
 
         fix = body.createFixture(fixture);
         fix.setUserData("ground");

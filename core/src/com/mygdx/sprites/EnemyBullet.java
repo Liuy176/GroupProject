@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mygdx.helpers.Constants;
 
-public class Bullet extends Sprite {
+public class EnemyBullet extends Sprite {
     private World world;
     private Body body;
     private float speed;
@@ -20,7 +20,7 @@ public class Bullet extends Sprite {
     private float distanceTraveled;
     public boolean toRemove;
 
-    public Bullet(World world, float x, float y, boolean facingRight, float speed) {
+    public EnemyBullet(World world, float x, float y, boolean facingRight, float speed) {
         this.world = world;
         this.speed = speed;
         this.facingRight = facingRight;
@@ -41,11 +41,11 @@ public class Bullet extends Sprite {
 
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(1 / Constants.PPM, 1 / Constants.PPM); 
+        shape.setAsBox(2 / Constants.PPM, 2 / Constants.PPM); 
 
         fixtureDef.shape = shape;
-        fixtureDef.filter.categoryBits = Constants.CATEGORY_BULLET;
-        fixtureDef.filter.maskBits = Constants.CATEGORY_GROUND | Constants.CATEGORY_ENEMY;
+        fixtureDef.filter.categoryBits = Constants.CATEGORY_ENEMY_BULLET;
+        fixtureDef.filter.maskBits = Constants.CATEGORY_GROUND | Constants.CATEGORY_PLAYER;
         
         body.createFixture(fixtureDef).setUserData(this);
         
@@ -66,4 +66,3 @@ public class Bullet extends Sprite {
         return body;
     }
 }
-

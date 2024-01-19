@@ -4,6 +4,7 @@ import com.mygdx.helpers.Constants;
 import com.mygdx.helpers.WorldContactListener;
 import com.mygdx.helpers.WorldCreator;
 import com.mygdx.sprites.Enemy;
+import com.mygdx.sprites.EnemyBullet;
 import com.mygdx.sprites.Player;
 import com.mygdx.sprites.Bullet;
 
@@ -49,12 +50,11 @@ public class EnemyGameScreen implements Screen{
     private World world;
     private Box2DDebugRenderer debugRenderer;
     private Player player;
-    private Enemy enemy;
-    private Enemy enemy2;
 
     private TextureAtlas atlas;
 
     private Array<Bullet> bullets;
+    private Array<EnemyBullet> enemyBullets;
     private Array<Enemy> enemies;
 
     private float viewportWidth = 10;
@@ -74,6 +74,7 @@ public class EnemyGameScreen implements Screen{
         //camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
         
         bullets = new Array<Bullet>();
+        enemyBullets = new Array<EnemyBullet>();
 
         world = new World(new Vector2(0,-10), true);
         debugRenderer = new Box2DDebugRenderer();
@@ -83,7 +84,7 @@ public class EnemyGameScreen implements Screen{
         //enemy = new Enemy(world, 200, 60, 2, 100, player);
         //enemy2 = new Enemy(world, 300, 60, 1, 50, player);
         enemies = new Array<Enemy>();
-        enemies.add(new Enemy(world, 200, 60, 2, 100, player), new Enemy(world, 300, 60, 1, 5, player));
+        enemies.add(new Enemy(world, 200, 60, 2, 100, player, this), new Enemy(world, 300, 60, 1, 5, player, this));
         this.camera.setToOrtho(false, 10, 10);
 
         world.setContactListener(new WorldContactListener());
@@ -139,7 +140,18 @@ public class EnemyGameScreen implements Screen{
                     world.destroyBody(bullet.getBody()); 
                     i--;
                 }
-            }
+        }
+        for (int j = 0; j < enemyBullets.size; j++) {
+            EnemyBullet bullet = enemyBullets.get(j);
+            bullet.update(dt);
+
+                
+                if (bullet.toRemove) {
+                    enemyBullets.removeIndex(j);
+                    world.destroyBody(bullet.getBody()); 
+                    j--;
+                }
+        }
         //camera.update();
         
         renderer.setView(camera);
@@ -171,6 +183,10 @@ public class EnemyGameScreen implements Screen{
 
     public void addBullet(Bullet bullet) {
         bullets.add(bullet);
+    }
+
+    public void addEnemyBullet(EnemyBullet bullet) {
+        enemyBullets.add(bullet);
     }
 
     public TextureAtlas getAtlas(){
