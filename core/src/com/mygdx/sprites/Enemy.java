@@ -242,12 +242,10 @@ public class Enemy extends Sprite {
         float y = body.getPosition().y;
 
         x = x + (facingRight ? 1 : -1) * 0.7f;
-        // Determine if the enemy is facing right or left compared to the player
         
-
-        EnemyBullet bullet = new EnemyBullet(world, x, y, facingRight, speed);
+        EnemyBullet bullet = new EnemyBullet(world, x, y, facingRight, 12, player);
         screen.addEnemyBullet(bullet);
-        // Add the bullet to a list of bullets, a game world, or similar
+
     }
 
 }
