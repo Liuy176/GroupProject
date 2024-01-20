@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -60,6 +61,12 @@ public class EnemyGameScreen implements Screen{
     private float viewportWidth = 10;
     private float viewportHeight = 10;
 
+    private float tileSize;
+    private int mapWidthTiles;
+    private int mapHeightTiles;
+    private float mapWidth;
+    private float mapHeight;
+
 
     public EnemyGameScreen(MyGdxGame game){
         atlas = new TextureAtlas("Mario_and_Enemies.pack");
@@ -88,6 +95,13 @@ public class EnemyGameScreen implements Screen{
         this.camera.setToOrtho(false, 10, 10);
 
         world.setContactListener(new WorldContactListener());
+
+        tileSize = 16;
+        mapWidthTiles = map.getProperties().get("width", Integer.class);
+        mapHeightTiles = map.getProperties().get("height", Integer.class);
+        mapWidth = mapWidthTiles * tileSize / Constants.PPM;
+        mapHeight = mapHeightTiles * tileSize / Constants.PPM;
+
     }
     @Override
     public void show() {
@@ -157,14 +171,30 @@ public class EnemyGameScreen implements Screen{
         renderer.setView(camera);
     }
 
-    private void cameraUpdate(){
+    /*private void cameraUpdate(){
         Vector3 pos = camera.position;
         pos.x = player.body.getPosition().x;
         pos.y = player.body.getPosition().y;
         camera.position.set(pos);
         camera.update();
 
-    }
+    }*/
+
+    private void cameraUpdate(){
+        Vector3 position = camera.position;
+
+        float camMinX = viewportWidth / 2;
+        float camMaxX = mapWidth - viewportWidth / 2;
+        float camMinY = viewportHeight / 2;
+        float camMaxY = mapHeight - viewportHeight / 2;
+
+        //making sure we can't see the area outside of the map when player comes closer to the edge of the map
+        position.x = MathUtils.clamp(player.body.getPosition().x, camMinX, camMaxX);
+        position.y = MathUtils.clamp(player.body.getPosition().y, camMinY, camMaxY);
+        camera.position.set(position);
+        camera.update();
+}
+
 
     public void handleInput(float dt){
         if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
