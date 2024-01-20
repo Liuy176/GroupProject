@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="50" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="55">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="50" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="55">
  <tileset firstgid="1" source="tiles.tsx"/>
  <tileset firstgid="101" source="tileset_gutter.tsx"/>
- <tileset firstgid="1025" source="tileset_gutter.tsx"/>
- <layer id="2" name="Tile Layer 2" width="50" height="23">
+ <layer id="2" name="Tile Layer 2" width="50" height="23" visible="0">
   <data encoding="base64" compression="zlib">
-   eJztw7ENAAAMAiCH/j94sX80kNBLqqqqquq7A5NsofM=
+   eJztw8EJAAAMA6Hbf+C8u0dRcNVUVVVVffcAai1RUQ==
   </data>
  </layer>
+ <imagelayer id="8" name="Image Layer 1" offsetx="0" offsety="-93.1507">
+  <image source="7new.png" width="800" height="457"/>
+ </imagelayer>
  <layer id="1" name="Tile Layer 1" width="50" height="23">
   <data encoding="base64" compression="zlib">
-   eJztz8EJACAMBME87L8ZG0wFCh4XI7ID+Ya9CAAAAAD43xzre92uvXqX8lvtde9R/1f1n2y50VC5p7vHsae7wXUJW1Si/Q==
+   eJztz9EJACAMA9E6hftv2gkUDKkVuQf9LZcIAAAAAPjfHOt73a69epfyW+1171H/V/WfbLnRULmnu8exp7vBdQmZChVh
   </data>
  </layer>
  <objectgroup id="3" name="ground">

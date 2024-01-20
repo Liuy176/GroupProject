@@ -52,10 +52,10 @@ public class WorldContactListener implements ContactListener{
             Fixture other = bulletFixture == fixA ? fixB: fixA;
             EnemyBullet bullet = (EnemyBullet) bulletFixture.getUserData();
             bullet.toRemove = true;
-
+  
             if(other.getUserData() instanceof Player){
-                Player enemy = (Player) other.getUserData();
-                //player.takeDamage(10);
+                Player player = (Player) other.getUserData();
+                player.takeDamage(10);
             }
         }
 

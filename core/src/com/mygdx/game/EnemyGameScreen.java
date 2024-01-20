@@ -8,16 +8,18 @@ import com.mygdx.sprites.EnemyBullet;
 import com.mygdx.sprites.Player;
 import com.mygdx.sprites.Bullet;
 
-import java.util.Vector;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -66,6 +68,7 @@ public class EnemyGameScreen implements Screen{
     private int mapHeightTiles;
     private float mapWidth;
     private float mapHeight;
+    private BitmapFont font;
 
 
     public EnemyGameScreen(MyGdxGame game){
@@ -105,7 +108,9 @@ public class EnemyGameScreen implements Screen{
     }
     @Override
     public void show() {
-        // TODO Auto-generated method stub
+        font = new BitmapFont();
+        font.setColor(Color.WHITE);
+        font.getData().setScale(1);
         
     }
 
@@ -128,7 +133,8 @@ public class EnemyGameScreen implements Screen{
         for (Enemy enemy : enemies) {
             enemy.drawHealthBar(game.getBatch());
         }
-        
+        game.getBatch().setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        player.drawHealthBar(game.getBatch(), font);
         game.getBatch().end();
     }
 
@@ -181,17 +187,19 @@ public class EnemyGameScreen implements Screen{
     }*/
 
     private void cameraUpdate(){
-        Vector3 position = camera.position;
+        if(!player.isDefeated){
+            Vector3 position = camera.position;
 
-        float camMinX = viewportWidth / 2;
-        float camMaxX = mapWidth - viewportWidth / 2;
-        float camMinY = viewportHeight / 2;
-        float camMaxY = mapHeight - viewportHeight / 2;
+            float camMinX = viewportWidth / 2;
+            float camMaxX = mapWidth - viewportWidth / 2;
+            float camMinY = viewportHeight / 2;
+            float camMaxY = mapHeight - viewportHeight / 2;
 
-        //making sure we can't see the area outside of the map when player comes closer to the edge of the map
-        position.x = MathUtils.clamp(player.body.getPosition().x, camMinX, camMaxX);
-        position.y = MathUtils.clamp(player.body.getPosition().y, camMinY, camMaxY);
-        camera.position.set(position);
+            //making sure we can't see the area outside of the map when player comes closer to the edge of the map
+            position.x = MathUtils.clamp(player.body.getPosition().x, camMinX, camMaxX);
+            position.y = MathUtils.clamp(player.body.getPosition().y, camMinY, camMaxY);
+            camera.position.set(position);
+        }
         camera.update();
 }
 
@@ -252,6 +260,7 @@ public class EnemyGameScreen implements Screen{
         renderer.dispose();
         world.dispose();
         debugRenderer.dispose();
+        font.dispose();
 
     }
     
