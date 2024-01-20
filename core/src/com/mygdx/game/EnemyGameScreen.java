@@ -70,6 +70,12 @@ public class EnemyGameScreen implements Screen{
     private float mapHeight;
     private BitmapFont font;
 
+    private Texture backgroundTexture;
+    private float backgroundX = 0;
+
+    private float backgroundScaleX = 0;
+    private float backgroundScaleY = 0;
+
 
     public EnemyGameScreen(MyGdxGame game){
         atlas = new TextureAtlas("Mario_and_Enemies.pack");
@@ -111,6 +117,13 @@ public class EnemyGameScreen implements Screen{
         font = new BitmapFont();
         font.setColor(Color.WHITE);
         font.getData().setScale(1);
+        backgroundTexture = new Texture("9.png");
+
+        float mapPixelWidth = mapWidthTiles * tileSize;
+        float mapPixelHeight = mapHeightTiles * tileSize;
+
+        backgroundScaleX = mapPixelWidth / backgroundTexture.getWidth()/Constants.PPM;
+        backgroundScaleY = mapPixelHeight / backgroundTexture.getHeight()/Constants.PPM;
         
     }
 
@@ -119,11 +132,17 @@ public class EnemyGameScreen implements Screen{
         update(delta);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        game.getBatch().begin();
+        
+        game.getBatch().draw(backgroundTexture, 0, 0, backgroundTexture.getWidth() * backgroundScaleX, backgroundTexture.getHeight() * backgroundScaleY);
+        game.getBatch().end();
 
         renderer.render();
 
         debugRenderer.render(world, camera.combined);
 
+        backgroundX += delta * player.body.getLinearVelocity().x;
+        game.getBatch().setProjectionMatrix(camera.combined);
         //game.getBatch().setProjectionMatrix(camera.combined.scl(Constants.PPM));        
         game.getBatch().begin();
         player.draw(game.getBatch());
@@ -261,6 +280,7 @@ public class EnemyGameScreen implements Screen{
         world.dispose();
         debugRenderer.dispose();
         font.dispose();
+        backgroundTexture.dispose();
 
     }
     
