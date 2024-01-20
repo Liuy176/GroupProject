@@ -40,6 +40,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 
 public class EnemyGameScreen implements Screen{
@@ -69,6 +70,15 @@ public class EnemyGameScreen implements Screen{
     private float mapWidth;
     private float mapHeight;
     private BitmapFont font;
+
+    private Texture backgroundTexture;
+    private float backgroundScaleX = 0;
+    private float backgroundScaleY = 0;
+
+    private float fade = 0f;
+    public boolean startFade = false;
+    private final float fadeDuration = 3f; 
+    private ShapeRenderer shapeRenderer;
 
 
     public EnemyGameScreen(MyGdxGame game){
@@ -108,9 +118,17 @@ public class EnemyGameScreen implements Screen{
     }
     @Override
     public void show() {
+        shapeRenderer = new ShapeRenderer();
         font = new BitmapFont();
         font.setColor(Color.WHITE);
         font.getData().setScale(1);
+        backgroundTexture = new Texture("9.png");
+
+        float mapPixelWidth = mapWidthTiles * tileSize;
+        float mapPixelHeight = mapHeightTiles * tileSize;
+
+        backgroundScaleX = mapPixelWidth / backgroundTexture.getWidth()/Constants.PPM;
+        backgroundScaleY = mapPixelHeight / backgroundTexture.getHeight()/Constants.PPM;
         
     }
 
@@ -119,11 +137,18 @@ public class EnemyGameScreen implements Screen{
         update(delta);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        game.getBatch().begin();
+        
+        game.getBatch().draw(backgroundTexture, 0, 0, backgroundTexture.getWidth() * backgroundScaleX, backgroundTexture.getHeight() * backgroundScaleY);
+        game.getBatch().setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        player.drawHealthBar(game.getBatch(), font);
+
+        game.getBatch().end();
 
         renderer.render();
-
         debugRenderer.render(world, camera.combined);
 
+        game.getBatch().setProjectionMatrix(camera.combined);
         //game.getBatch().setProjectionMatrix(camera.combined.scl(Constants.PPM));        
         game.getBatch().begin();
         player.draw(game.getBatch());
@@ -133,7 +158,25 @@ public class EnemyGameScreen implements Screen{
         for (Enemy enemy : enemies) {
             enemy.drawHealthBar(game.getBatch());
         }
+        game.getBatch().end();
+
+        if (startFade) {
+            fade += delta / fadeDuration;
+            if (fade > 1) {
+                fade = 1;
+                game.setScreen(new GameOverScreen(game)); 
+            }
+        }
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(0, 0, 0, fade);
+        shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+
         game.getBatch().setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        game.getBatch().begin();
         player.drawHealthBar(game.getBatch(), font);
         game.getBatch().end();
     }
@@ -261,6 +304,7 @@ public class EnemyGameScreen implements Screen{
         world.dispose();
         debugRenderer.dispose();
         font.dispose();
+        backgroundTexture.dispose();
 
     }
     
