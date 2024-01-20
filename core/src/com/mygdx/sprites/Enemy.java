@@ -35,12 +35,13 @@ public class Enemy extends Sprite {
     private EnemyGameScreen screen;
     private float optimalDistance = 3.0f;
 
-    private float movementDuration = 2.0f; // Duration to move in one direction
-    private float movementTimer = 0.0f; // Timer to track movement duration
-    private float currentDirectionX = 0.0f; // Current movement direction along X
-
+    /*private float movementDuration = 2.0f;
+    private float movementTimer = 0.0f;
+    private float currentDirectionX = 0.0f;
+*/
     private float timeSinceLastShot = 0f;
     private float shootingInterval = 1f;
+    
   
 
     public Enemy(World world,float x, float y, float speed, float health, Player player, EnemyGameScreen screen) {
@@ -205,7 +206,7 @@ public class Enemy extends Sprite {
         return currentHealth / startHealth;
     }
 
-        private void enemyDies() {
+    private void enemyDies() {
         for (Fixture fixture : body.getFixtureList()) {
             Filter filter = fixture.getFilterData();
             filter.maskBits = 0; // no collision
