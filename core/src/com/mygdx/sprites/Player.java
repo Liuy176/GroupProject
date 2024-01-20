@@ -25,7 +25,7 @@ public class Player extends Sprite{
     public World world;
     public Body body;
     private TextureRegion stand;
-    public enum State {FALLING, JUMPING, STANDING, RUNNING };
+    public enum State {FALLING, JUMPING, STANDING, RUNNING, DEAD };
     public State currState;
     public State prevState;
     private Animation<TextureRegion> run;
@@ -77,7 +77,7 @@ public class Player extends Sprite{
         setRegion(getFrame(delta));
 
         if(isDefeated){
-            deadRotationDeg +=5;
+            deadRotationDeg +=0;
             rotate(deadRotationDeg);
             body.setTransform(body.getPosition(), (float)Math.toRadians(deadRotationDeg));
             if(body.getPosition().y <= -1){
@@ -101,6 +101,9 @@ public class Player extends Sprite{
             case RUNNING:
                 region = run.getKeyFrame(timer, true);
                 break;
+            case DEAD:
+                region = stand;
+                return region;
             case FALLING:
             case STANDING:
             default:
@@ -122,7 +125,9 @@ public class Player extends Sprite{
 
 
     public State getState(){
-        if(body.getLinearVelocity().y>0 || (body.getLinearVelocity().y < 0 && prevState == State.JUMPING))
+        if(isDefeated)
+            return State.DEAD;
+        else if(body.getLinearVelocity().y>0 || (body.getLinearVelocity().y < 0 && prevState == State.JUMPING))
             return State.JUMPING;
         else if(body.getLinearVelocity().y<0)
             return State.FALLING;
@@ -193,6 +198,7 @@ public class Player extends Sprite{
     }
     
     private void playerDies() {
+        isDefeated = true;
         for (Fixture fixture : body.getFixtureList()) {
             Filter filter = fixture.getFilterData();
             filter.maskBits = 0; // no collision
@@ -200,6 +206,5 @@ public class Player extends Sprite{
         }
 
         body.applyLinearImpulse(new Vector2(0, 2f), body.getWorldCenter(), true);
-        isDefeated = true;
     }
 }
