@@ -8,7 +8,6 @@ import com.mygdx.sprites.EnemyBullet;
 import com.mygdx.sprites.Player;
 import com.mygdx.sprites.Bullet;
 
-import java.util.Vector;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;

@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mygdx.helpers.Constants;
@@ -40,10 +41,11 @@ public class Bullet extends Sprite {
         body = world.createBody(bodyDef);
 
         FixtureDef fixtureDef = new FixtureDef();
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(1 / Constants.PPM, 1 / Constants.PPM); 
+        CircleShape shape = new CircleShape();
+        shape.setRadius(1 / Constants.PPM);
 
         fixtureDef.shape = shape;
+        fixtureDef.isSensor = true;
         fixtureDef.filter.categoryBits = Constants.CATEGORY_BULLET;
         fixtureDef.filter.maskBits = Constants.CATEGORY_GROUND | Constants.CATEGORY_ENEMY;
         
