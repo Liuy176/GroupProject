@@ -206,5 +206,6 @@ public class Player extends Sprite{
         }
 
         body.applyLinearImpulse(new Vector2(0, 2f), body.getWorldCenter(), true);
+        screen.startFade = true;
     }
 }
