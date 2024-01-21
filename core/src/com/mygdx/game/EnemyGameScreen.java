@@ -85,7 +85,7 @@ public class EnemyGameScreen implements Screen{
     private Random random;
 
 
-    public EnemyGameScreen(MyGdxGame game, int roundNumber){
+    public EnemyGameScreen(MyGdxGame game, int roundNumber, float playerHealth, float playerWeaponStrength){
         atlas = new TextureAtlas("Mario_and_Enemies.pack");
 
         this.game = game;
@@ -104,7 +104,7 @@ public class EnemyGameScreen implements Screen{
         debugRenderer = new Box2DDebugRenderer();
 
         new WorldCreator(world, map);
-        player = new Player(world, this);
+        player = new Player(world, this, playerHealth, playerWeaponStrength);
 
         //
         random = new Random();
@@ -112,8 +112,8 @@ public class EnemyGameScreen implements Screen{
         int enemyCount = 1+roundNumber;
 
         for(int i = 0; i<enemyCount; i++ ){
-            int enemyHealth = 60 + random.nextInt(61) + 60*(roundNumber/4);
-            float enemySpeed = 1 + random.nextInt(3) +(roundNumber/4); 
+            int enemyHealth = 60 + random.nextInt(61) + 60*(roundNumber/3);
+            float enemySpeed = 1 + random.nextInt(3+(roundNumber/4)); 
             int x = 450 + random.nextInt(300);
             int y = 150;
 

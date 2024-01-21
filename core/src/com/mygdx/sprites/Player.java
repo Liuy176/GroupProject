@@ -39,8 +39,9 @@ public class Player extends Sprite{
     public TextureRegion whiteRegion;
     public boolean isDefeated;
     private int deadRotationDeg;
+    public float damage;
 
-    public Player(World world, EnemyGameScreen screen){
+    public Player(World world, EnemyGameScreen screen, float maxHealth, float weaponStrength){
         super(screen.getAtlas().findRegion("little_mario"));
         this.world = world;
         this.screen = screen;
@@ -49,7 +50,8 @@ public class Player extends Sprite{
         prevState = State.STANDING;
         timer = 0;
         facingRight = true;
-        this.startHealth = 100;
+        this.damage = weaponStrength;
+        this.startHealth = maxHealth;
         this.currentHealth = startHealth;
         this.white = new Texture("white.png");
         this.whiteRegion = new TextureRegion(white, 0,0,1,1);
