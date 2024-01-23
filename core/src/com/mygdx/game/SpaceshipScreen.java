@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import java.util.Iterator;
 
 
-//import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.Color;
 
@@ -30,8 +30,8 @@ public class SpaceshipScreen implements Screen {
     private long lastEnemyTime;
     private int score, power, numEnemies;
   
-    //private FreeTypeFontGenerator generator;
-    //private FreeTypeFontGenerator.FreeTypeFontParameter parameter;
+    private FreeTypeFontGenerator generator;
+    private FreeTypeFontGenerator.FreeTypeFontParameter parameter;
     private BitmapFont bitmap;
     private Texture tCandy;
     private Array<Rectangle> candies;
@@ -65,14 +65,14 @@ public class SpaceshipScreen implements Screen {
     power = 3;
     numEnemies = 999999999;
 
-    //generator = new FreeTypeFontGenerator(Gdx.files.internal("font.ttf"));
-    //parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+    generator = new FreeTypeFontGenerator(Gdx.files.internal("font.ttf"));
+    parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
     
-    //parameter.size = 30;
-    //parameter.borderWidth = 1;
-    //parameter.borderColor = Color.BLACK;
-    //parameter.color = Color.WHITE;
-    //bitmap = generator.generateFont(parameter);
+    parameter.size = 30;
+    parameter.borderWidth = 1;
+    parameter.borderColor = Color.BLACK;
+    parameter.color = Color.WHITE;
+    bitmap = generator.generateFont(parameter);
 
     gameover = false;
   }
@@ -98,22 +98,22 @@ public class SpaceshipScreen implements Screen {
         for(Rectangle enemy : enemies1 ){
           batch.draw(tEnemy1, enemy.x, enemy.y);
         }
-        /* 
+         
         bitmap.draw(batch, "Score: " + score, 20, Gdx.graphics.getHeight() - 20);
         bitmap.draw(
             batch, "Power: " + power, 
             Gdx.graphics.getWidth() - 150, 
             Gdx.graphics.getHeight() - 20
             );
-            */
+            
       }else{
-        /* 
+        
         bitmap.draw(batch, "Score: " + score, 20, Gdx.graphics.getHeight() - 20);
         bitmap.draw(
             batch, "GAME OVER", 
             Gdx.graphics.getWidth() - 150, 
             Gdx.graphics.getHeight() - 20
-            );*/
+            );
   
         if( Gdx.input.isKeyPressed(Input.Keys.ENTER) ){
           score = 0;
