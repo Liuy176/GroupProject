@@ -61,7 +61,7 @@ public class EnemyGameScreen implements Screen{
     private Array<EnemyBullet> enemyBullets;
     private Array<Enemy> enemies;
 
-    private float viewportWidth = 10;
+    private float viewportWidth = 18;
     private float viewportHeight = 10;
 
     private float tileSize;
@@ -105,7 +105,7 @@ public class EnemyGameScreen implements Screen{
         //enemy2 = new Enemy(world, 300, 60, 1, 50, player);
         enemies = new Array<Enemy>();
         enemies.add(new Enemy(world, 200, 60, 2, 100, player, this), new Enemy(world, 300, 60, 1, 5, player, this));
-        this.camera.setToOrtho(false, 10, 10);
+        this.camera.setToOrtho(false, 18, 10);
 
         world.setContactListener(new WorldContactListener());
 
