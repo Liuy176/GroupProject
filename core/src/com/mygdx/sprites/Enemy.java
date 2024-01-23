@@ -187,15 +187,21 @@ public class Enemy extends Sprite {
     }
 
     public void moveBack() {
-        body.applyLinearImpulse(new Vector2(-6,0), body.getWorldCenter(), true);
+        if(speed >3)
+            body.applyLinearImpulse(new Vector2(-20,0), body.getWorldCenter(), true);
+        else
+            body.applyLinearImpulse(new Vector2(-6,0), body.getWorldCenter(), true);
     }
 
     public void moveForward() {
-        body.applyLinearImpulse(new Vector2(6,0), body.getWorldCenter(), true);
+        if(speed >3)
+            body.applyLinearImpulse(new Vector2(20,0), body.getWorldCenter(), true);
+        else
+            body.applyLinearImpulse(new Vector2(6,0), body.getWorldCenter(), true);
     }
 
-    public void takeDamage(float amount) {
-        currentHealth -= amount;
+    public void takeDamage() {
+        currentHealth -= player.damage;
         if (currentHealth <= 0) {
             currentHealth = 0;
             enemyDies();

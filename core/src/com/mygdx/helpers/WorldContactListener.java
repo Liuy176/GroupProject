@@ -43,7 +43,7 @@ public class WorldContactListener implements ContactListener{
 
             if(other.getUserData() instanceof Enemy){
                 Enemy enemy = (Enemy) other.getUserData();
-                enemy.takeDamage(10);
+                enemy.takeDamage();
             }
         }
 

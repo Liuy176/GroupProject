@@ -8,6 +8,7 @@ import com.mygdx.sprites.EnemyBullet;
 import com.mygdx.sprites.Player;
 import com.mygdx.sprites.Bullet;
 
+import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -40,13 +41,13 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 
 public class EnemyGameScreen implements Screen{
     private MyGdxGame game;
     private OrthographicCamera camera;
-    private Viewport viewport;
     private TmxMapLoader mapLoader;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
@@ -77,11 +78,14 @@ public class EnemyGameScreen implements Screen{
 
     private float fade = 0f;
     public boolean startFade = false;
-    private final float fadeDuration = 3f; 
+    private float fadeDuration = 3f; 
     private ShapeRenderer shapeRenderer;
 
+    private int roundNumber;
+    private Random random;
 
-    public EnemyGameScreen(MyGdxGame game){
+
+    public EnemyGameScreen(MyGdxGame game, int roundNumber, float playerHealth, float playerWeaponStrength){
         atlas = new TextureAtlas("Mario_and_Enemies.pack");
 
         this.game = game;
@@ -100,11 +104,23 @@ public class EnemyGameScreen implements Screen{
         debugRenderer = new Box2DDebugRenderer();
 
         new WorldCreator(world, map);
-        player = new Player(world, this);
-        //enemy = new Enemy(world, 200, 60, 2, 100, player);
-        //enemy2 = new Enemy(world, 300, 60, 1, 50, player);
+        player = new Player(world, this, playerHealth, playerWeaponStrength);
+
+        //
+        random = new Random();
         enemies = new Array<Enemy>();
-        enemies.add(new Enemy(world, 200, 60, 2, 100, player, this), new Enemy(world, 300, 60, 1, 5, player, this));
+        int enemyCount = 1+roundNumber;
+
+        for(int i = 0; i<enemyCount; i++ ){
+            int enemyHealth = 60 + random.nextInt(61) + 60*(roundNumber/3);
+            float enemySpeed = 1 + random.nextInt(3+(roundNumber/4)); 
+            int x = 450 + random.nextInt(300);
+            int y = 150;
+
+            enemies.add(new Enemy(world, x,y, enemySpeed, enemyHealth, player, this));
+        }
+        //
+
         this.camera.setToOrtho(false, 18, 10);
 
         world.setContactListener(new WorldContactListener());

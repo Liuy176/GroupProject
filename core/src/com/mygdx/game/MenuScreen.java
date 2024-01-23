@@ -48,7 +48,7 @@ public class MenuScreen extends ScreenAdapter {
         });
 
         settingsButton.addListener(new ChangeListener() {
-            @Override
+            @Override                  
             public void changed(ChangeEvent event, Actor actor) {
                 // settings
             }
@@ -57,7 +57,7 @@ public class MenuScreen extends ScreenAdapter {
         enemyModeButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new EnemyGameScreen(game)); // Switch to Enemy Game Screen
+                game.setScreen(new EnemyGameScreen(game,4, 500, 30)); // Switch to Enemy Game Screen
             }
         });
 

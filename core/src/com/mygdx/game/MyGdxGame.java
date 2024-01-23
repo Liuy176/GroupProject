@@ -34,7 +34,6 @@ public class MyGdxGame extends Game {
         this.ortographicCamera.setToOrtho(false, screenWidth, screenHeight);
 
 		this.mainMenuScreen = new MenuScreen(this);
-		this.enemyScreen = new EnemyGameScreen(this);
 
 
         setScreen(mainMenuScreen); //menu shows when after starting the game
@@ -56,9 +55,6 @@ public class MyGdxGame extends Game {
 		return ortographicCamera;
 	}
 
-	public void changeToEnemyScreen(){
-		setScreen(enemyScreen);
-	}
 
 	public SpriteBatch getBatch(){
 		return batch;
