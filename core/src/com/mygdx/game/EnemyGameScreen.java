@@ -53,7 +53,7 @@ public class EnemyGameScreen implements Screen{
     private OrthogonalTiledMapRenderer renderer;
 
     private World world;
-    private Box2DDebugRenderer debugRenderer;
+    //private Box2DDebugRenderer debugRenderer;
     private Player player;
 
     private TextureAtlas atlas;
@@ -101,7 +101,7 @@ public class EnemyGameScreen implements Screen{
         enemyBullets = new Array<EnemyBullet>();
 
         world = new World(new Vector2(0,-10), true);
-        debugRenderer = new Box2DDebugRenderer();
+        //debugRenderer = new Box2DDebugRenderer();
 
         new WorldCreator(world, map);
         player = new Player(world, this, playerHealth, playerWeaponStrength);
@@ -162,7 +162,7 @@ public class EnemyGameScreen implements Screen{
         game.getBatch().end();
 
         renderer.render();
-        debugRenderer.render(world, camera.combined);
+        //debugRenderer.render(world, camera.combined);
 
         game.getBatch().setProjectionMatrix(camera.combined);
         //game.getBatch().setProjectionMatrix(camera.combined.scl(Constants.PPM));        
@@ -318,7 +318,7 @@ public class EnemyGameScreen implements Screen{
         map.dispose();
         renderer.dispose();
         world.dispose();
-        debugRenderer.dispose();
+        //debugRenderer.dispose();
         font.dispose();
         backgroundTexture.dispose();
 

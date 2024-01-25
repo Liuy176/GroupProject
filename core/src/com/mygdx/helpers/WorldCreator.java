@@ -43,7 +43,6 @@ public class WorldCreator {
             //Vector2[] worldVertices = new Vector2[vertices.length / 2];
 
             for (int i = 0; i < vertices.length; ++i) {
-                //worldVertices[i/2] = new Vector2(vertices[i] / Constants.PPM, vertices[i + 1] / Constants.PPM);
                 worldVertices[i] = vertices[i] / Constants.PPM;
             }
             
