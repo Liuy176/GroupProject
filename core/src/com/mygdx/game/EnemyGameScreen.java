@@ -93,7 +93,7 @@ public class EnemyGameScreen implements Screen{
         //viewport = new FitViewport(800/Constants.PPM, 480/Constants.PPM, camera);
 
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("map2.tmx");
+        map = mapLoader.load("map3.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1/Constants.PPM);
         //camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
         
