@@ -2,9 +2,10 @@
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="50" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="32">
  <tileset firstgid="1" source="astroTiles2.tsx"/>
  <tileset firstgid="101" source="UntitledNew.tsx"/>
+ <tileset firstgid="425" source="UntitledNew1.tsx"/>
  <layer id="1" name="Tile Layer 1" width="50" height="23">
   <data encoding="base64" compression="zlib">
-   eJztz8kJgDAURdG0Yp3OBThvHTpw6NArGBDJNmjgXTh8MHxijFFKKaWUUkop5bsYCVJkyFGg/HAvenhXOXbt9xoNWnToMdznrjt97dl/HzFhDnguWLFhD3geesev5vWOE70Wo9c=
+   eJxjYBgFo2AUjIJRMApGwSgYBaNgFIyCUUBrUA3ENUBcC8R1QFwPxEcYGRiOMtJXXyOSGkUkjA560fQ2IIlfAprTD6QnAPFEIL4G5F+HugfdTkr1XWTErQ/m9gdA9kMgfoSFtmJiYJBAwrZAzMaEKY5N/gsjAuMSJyRPrL7HQPYnIP4MFUenxaHuG+z0VzR/DLR7Rv3BwAAAvptZMQ==
   </data>
  </layer>
  <objectgroup id="5" name="ground">

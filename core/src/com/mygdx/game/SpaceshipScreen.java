@@ -20,8 +20,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.Color;
 
 public class SpaceshipScreen implements Screen {
-    SpriteBatch batch;
-    Texture img, tNave, tMissile, tEnemy1;
+    private SpriteBatch batch;
+    private Texture img, tNave, tMissile, tEnemy1;
     private Sprite nave, missile;
     private float posX, posY, velocity, xMissile, yMissile;
     private boolean  gameover;
@@ -36,10 +36,12 @@ public class SpaceshipScreen implements Screen {
     private Texture tCandy;
     private Array<Rectangle> candies;
     private long lastCandyTime;
+    //Andrej's edit (to be able to pause)
+    private boolean paused;
   
   public SpaceshipScreen(MyGdxGame game){
     batch = game.getBatch();
-    img = new Texture("7.png");
+    img = new Texture("9.png");
     tNave = new Texture("spaceship.png");
     nave = new Sprite(tNave);
     posX = 0;
@@ -54,8 +56,6 @@ public class SpaceshipScreen implements Screen {
     tCandy = new Texture("6445166.png");
     candies = new Array<Rectangle>();
     lastCandyTime = TimeUtils.nanoTime();
-
-
 
     tEnemy1 = new Texture("asteroid2.png");
     enemies1 = new Array<Rectangle>();
@@ -75,21 +75,26 @@ public class SpaceshipScreen implements Screen {
     bitmap = generator.generateFont(parameter);
 
     gameover = false;
+    
+    paused=false; //Andrejs edit
   }
   
     @Override
     public void render(float delta) {
-  
+      if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) paused = !paused; // Andrejs edit
+      if(!paused){
       this.moveNave();
       this.moveEnemies();
       this.moveCandy();
+      }
   
       ScreenUtils.clear(1, 0, 0, 1);
       batch.begin();
       batch.draw(img, 0, 0);
-  
+      
+      if (paused) bitmap.draw(batch, "PAUSED", Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2); // Andrejs edit
       if(!gameover){
-  
+        
         batch.draw(nave, posX, posY);
         for (Rectangle candy : candies) {
           batch.draw(tCandy, candy.x, candy.y);
@@ -137,6 +142,8 @@ public class SpaceshipScreen implements Screen {
     }
   
     private void moveNave(){
+      if(paused) return; // Andrejs edit
+
       if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
         if( posX < Gdx.graphics.getWidth() - nave.getWidth() ){
           posX += velocity;
@@ -177,7 +184,8 @@ public class SpaceshipScreen implements Screen {
       lastEnemyTime = TimeUtils.nanoTime();
     }
     private void moveCandy() {
-  
+      if(paused) return; // Andrejs edit
+
       if (TimeUtils.nanoTime() - lastCandyTime > 2000000000) { // Adjust the time as needed
         this.produceCandy();
       }
@@ -194,6 +202,8 @@ public class SpaceshipScreen implements Screen {
     }
   
     private void moveEnemies() {
+      if(paused) return; //Andrejs edit
+
       if (TimeUtils.nanoTime() - lastEnemyTime > numEnemies) {
         this.ProductEnemies();
       }
