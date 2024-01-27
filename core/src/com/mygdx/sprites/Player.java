@@ -36,6 +36,8 @@ public class Player extends Sprite{
     private float startHealth;
     private float currentHealth;
     public Texture white;
+    public Texture heartTexture;
+    public Texture healthFrame;
     public TextureRegion whiteRegion;
     public boolean isDefeated;
     private int deadRotationDeg;
@@ -55,6 +57,8 @@ public class Player extends Sprite{
         this.currentHealth = startHealth;
         this.white = new Texture("white.png");
         this.whiteRegion = new TextureRegion(white, 0,0,1,1);
+        this.heartTexture = new Texture("heart.png");
+        this.healthFrame = new Texture("healthFrame.png");
         this.isDefeated = false;
         this.deadRotationDeg = 0;
 
@@ -170,15 +174,19 @@ public class Player extends Sprite{
 
     public void drawHealthBar(SpriteBatch batch, BitmapFont font) {
         float healthPercentage = getHealthPercentage();
-        float barWidth = 100;
-        float barHeight = 12;
-        float padding = 10;
+        float barWidth = 200;
+        float barHeight = 24;
+        float padding = 15;
+        float heartSize = 32;
 
         float barX = Gdx.graphics.getWidth() - barWidth - padding;
         float barY = Gdx.graphics.getHeight() - barHeight - padding;
+        float heartX = barX - heartSize - 20;
+        float heartY = barY + (barHeight - heartSize) / 2;
 
-        String healthText = "PLAYER'S HP: ";
-        font.draw(batch, healthText, barX - 100, barY + barHeight);
+        //String healthText = "PLAYER'S HP: ";
+        //font.draw(batch, healthText, barX - 100, barY + barHeight);
+        batch.draw(heartTexture, heartX, heartY, 40, 32);
 
         //background
         batch.setColor(Color.RED);
@@ -189,6 +197,7 @@ public class Player extends Sprite{
         batch.draw(whiteRegion, barX, barY, barWidth * healthPercentage, barHeight);
 
         batch.setColor(Color.WHITE);
+        batch.draw(healthFrame, barX-3, barY-3,206, 30);
     }
 
     public void takeDamage(float amount) {
@@ -209,5 +218,12 @@ public class Player extends Sprite{
 
         body.applyLinearImpulse(new Vector2(0, 2f), body.getWorldCenter(), true);
         screen.startFade = true;
+    }
+
+    public void dispose(){
+        heartTexture.dispose();
+        white.dispose();
+        healthFrame.dispose();
+        
     }
 }
