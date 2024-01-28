@@ -149,7 +149,7 @@ public class SpaceshipScreen implements Screen {
     private void moveNave(){
       if(paused) return; // Andrejs edit
 
-      /*if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+      if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
         if( posX < Gdx.graphics.getWidth() - nave.getWidth() ){
           posX += velocity;
         }
@@ -168,24 +168,21 @@ public class SpaceshipScreen implements Screen {
         if( posY > 0 ){
           posY -= velocity;
         }
-      }*/
-      if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-        currentVelocity = jumpVelocity; // This will 'jump' the spaceship upwards
+      }
+    /*if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+        currentVelocity = jumpVelocity; // jump
     }
 
-    // Apply gravity
+    // gravity
     currentVelocity += gravity;
     posY -= currentVelocity;
 
-    // Prevent the spaceship from falling below the bottom of the screen
     if(posY < 0){
         posY = 0;
     }
-
-    // Prevent the spaceship from going off the top of the screen
     if(posY > Gdx.graphics.getHeight() - nave.getHeight()){
         posY = Gdx.graphics.getHeight() - nave.getHeight();
-    }
+    }*/
     }
   
     private void produceCandy() {

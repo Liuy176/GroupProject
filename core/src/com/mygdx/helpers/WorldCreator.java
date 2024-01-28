@@ -1,4 +1,5 @@
 package com.mygdx.helpers;
+import com.mygdx.sprites.Border;
 import com.mygdx.sprites.Ground;
 
 import com.badlogic.gdx.maps.MapObject;
@@ -61,6 +62,11 @@ public class WorldCreator {
             
 
             polygonShape.dispose();
+        }
+        for(MapObject object: map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            new Border(world, map, rect);
         }
     }
 }
