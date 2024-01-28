@@ -36,15 +36,20 @@ public class SpaceshipScreen implements Screen {
     private Texture tCandy;
     private Array<Rectangle> candies;
     private long lastCandyTime;
-    //Andrej's edit (to be able to pause)
-    private boolean paused;
-  
+    
+    private boolean paused; //Andrej's edit (to be able to pause)
+    private MyGdxGame game;
+    
+    private float gravity = 0.5f; // Adjust as needed
+    private float jumpVelocity = -10f; // Adjust as needed
+    private float currentVelocity = 0f;
   public SpaceshipScreen(MyGdxGame game){
+    this.game = game;
     batch = game.getBatch();
     img = new Texture("9.png");
     tNave = new Texture("spaceship.png");
     nave = new Sprite(tNave);
-    posX = 0;
+    posX = 100;
     posY = 0;
     velocity = 10;
 
@@ -164,6 +169,20 @@ public class SpaceshipScreen implements Screen {
           posY -= velocity;
         }
       }
+    /*if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+        currentVelocity = jumpVelocity; // jump
+    }
+
+    // gravity
+    currentVelocity += gravity;
+    posY -= currentVelocity;
+
+    if(posY < 0){
+        posY = 0;
+    }
+    if(posY > Gdx.graphics.getHeight() - nave.getHeight()){
+        posY = Gdx.graphics.getHeight() - nave.getHeight();
+    }*/
     }
   
     private void produceCandy() {
@@ -186,13 +205,13 @@ public class SpaceshipScreen implements Screen {
     private void moveCandy() {
       if(paused) return; // Andrejs edit
 
-      if (TimeUtils.nanoTime() - lastCandyTime > 2000000000) { // Adjust the time as needed
+      if ((TimeUtils.nanoTime() - lastCandyTime)*0.1 > 2000000000) { // Adjust the time as needed
         this.produceCandy();
       }
   
       for (Iterator<Rectangle> iter = candies.iterator(); iter.hasNext(); ) {
         Rectangle candy = iter.next();
-        candy.x -= 800 * Gdx.graphics.getDeltaTime(); // Adjust speed as needed
+        candy.x -= 200 * Gdx.graphics.getDeltaTime(); // Adjust speed as needed
         if (candy.x + tCandy.getWidth() < 0) iter.remove();
         else if (collide(candy.x, candy.y, candy.width, candy.height, posX, posY, nave.getWidth(), nave.getHeight())) {
           power++; // Restore power
@@ -204,7 +223,7 @@ public class SpaceshipScreen implements Screen {
     private void moveEnemies() {
       if(paused) return; //Andrejs edit
 
-      if (TimeUtils.nanoTime() - lastEnemyTime > numEnemies) {
+      if ((TimeUtils.nanoTime() - lastEnemyTime)*1.5 > numEnemies) {
         this.ProductEnemies();
       }
   
@@ -224,7 +243,16 @@ public class SpaceshipScreen implements Screen {
         // Check for collision with the ship
         if (collide(enemy.x, enemy.y, enemy.width, enemy.height, posX, posY, nave.getWidth(), nave.getHeight())) {
           if (!gameover) {
-            --power;
+            // Andrejs edit
+            paused = true; 
+            //--power;
+            //try{
+            //  Thread.sleep(2000);
+            //} catch (InterruptedException e){
+
+            //}
+            //game.setScreen(new EnemyGameScreen(game, 4, 500, 30));
+            // until here
             if (power <= 0) {
               gameover = true;
             }
