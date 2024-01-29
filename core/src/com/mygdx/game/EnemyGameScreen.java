@@ -72,13 +72,15 @@ public class EnemyGameScreen implements Screen{
     private float mapHeight;
     private BitmapFont font;
 
-    private Texture backgroundTexture;
+    private Texture backgroundTexture, blackTexture;
     private float backgroundScaleX = 0;
     private float backgroundScaleY = 0;
 
     private float fade = 0f;
     public boolean startFade = false;
-    private float fadeDuration = 3f; 
+    private float fadeDuration = 3f;
+    private float fadeInOpacity = 1.0f; 
+    private float fadeInSpeed = 0.5f; 
     private ShapeRenderer shapeRenderer;
 
     private int roundNumber;
@@ -105,7 +107,7 @@ public class EnemyGameScreen implements Screen{
 
         new WorldCreator(world, map);
         player = new Player(world, this, playerHealth, playerWeaponStrength);
-
+        blackTexture = new Texture("BlackScreen.jpg");
         //
         random = new Random();
         enemies = new Array<Enemy>();
@@ -150,6 +152,11 @@ public class EnemyGameScreen implements Screen{
 
     @Override
     public void render(float delta) {
+        if (fadeInOpacity > 0) {
+            fadeInOpacity -= fadeInSpeed * delta;
+            fadeInOpacity = Math.max(fadeInOpacity, 0.0f); // Ensure opacity doesn't go below 0
+        }
+
         update(delta);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -195,6 +202,17 @@ public class EnemyGameScreen implements Screen{
         game.getBatch().begin();
         player.drawHealthBar(game.getBatch(), font);
         game.getBatch().end();
+
+        if(fadeInOpacity>0){
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            game.getBatch().begin();
+            game.getBatch().setColor(1, 1, 1, fadeInOpacity);
+            game.getBatch().draw(blackTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            game.getBatch().setColor(1, 1, 1, 1); // Reset color
+            game.getBatch().end();
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+        }
     }
 
     public void update(float dt){
