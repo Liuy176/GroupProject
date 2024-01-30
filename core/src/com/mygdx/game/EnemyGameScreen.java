@@ -175,11 +175,12 @@ public class EnemyGameScreen implements Screen{
         //game.getBatch().setProjectionMatrix(camera.combined.scl(Constants.PPM));        
         game.getBatch().begin();
         player.draw(game.getBatch());
-        //for (Bullet bullet : bullets) {
-        //    bullet.draw(game.getBatch());
-        //}
+        for (Bullet bullet : bullets) {
+           bullet.draw(game.getBatch());
+        }
         for (Enemy enemy : enemies) {
             enemy.drawHealthBar(game.getBatch());
+            enemy.draw(game.getBatch());
         }
         game.getBatch().end();
 
@@ -230,7 +231,6 @@ public class EnemyGameScreen implements Screen{
         for (int i = 0; i < bullets.size; i++) {
             Bullet bullet = bullets.get(i);
             bullet.update(dt);
-
                 
                 if (bullet.toRemove) {
                     bullets.removeIndex(i);

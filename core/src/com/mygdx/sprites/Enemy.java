@@ -41,6 +41,9 @@ public class Enemy extends Sprite {
 */
     private float timeSinceLastShot = 0f;
     private float shootingInterval = 1f;
+
+    private Texture texture;
+    private TextureRegion enemyTextureRegion;
     
   
 
@@ -57,7 +60,11 @@ public class Enemy extends Sprite {
         this.isDefeated = false;
         this.deadRotationDeg = 0;
 
-
+        this.texture = new Texture("enemyNew.png");
+        this.enemyTextureRegion = new TextureRegion(texture);
+        setRegion(enemyTextureRegion);
+        setSize(texture.getWidth() / Constants.PPM, texture.getHeight() / Constants.PPM);
+        setOrigin(getWidth() / 2, getHeight() / 2);
         defineEnemy(x, y);
     }
 
@@ -253,6 +260,17 @@ public class Enemy extends Sprite {
         EnemyBullet bullet = new EnemyBullet(world, x, y, facingRight, 12, player);
         screen.addEnemyBullet(bullet);
 
+    }
+
+    public void draw(SpriteBatch batch) {
+        // Update the position of the sprite to match the body
+        setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
+        
+        // Draw the sprite
+        super.draw(batch);
+    }
+    public void dispose() {
+        texture.dispose();
     }
 
 }
