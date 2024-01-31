@@ -13,6 +13,7 @@ public class Border extends InteractiveObject{
 
     public Fixture fix;
     
+    // Creates border around the map
     public Border(World world, TiledMap map, Rectangle bounds){
 
         super(world, map, bounds);
@@ -27,6 +28,8 @@ public class Border extends InteractiveObject{
 
         shape.setAsBox(bounds.getWidth()/2/Constants.PPM, bounds.getHeight()/2/Constants.PPM);
         fixture.shape = shape;
+
+        // set collision bits
         fixture.filter.categoryBits = Constants.CATEGORY_GROUND;
         fixture.filter.maskBits = Constants.CATEGORY_PLAYER | Constants.CATEGORY_ENEMY | Constants.CATEGORY_BULLET | Constants.CATEGORY_ENEMY_BULLET;
 

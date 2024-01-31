@@ -61,6 +61,8 @@ public class Bullet extends Sprite {
         fixtureDef.filter.categoryBits = Constants.CATEGORY_BULLET;
         fixtureDef.filter.maskBits = Constants.CATEGORY_GROUND | Constants.CATEGORY_ENEMY;
         body.createFixture(fixtureDef).setUserData(this);
+
+        shape.dispose();
         
         body.setLinearVelocity((facingRight ? 1 : -1) * speed, 0); 
     }
@@ -77,7 +79,6 @@ public class Bullet extends Sprite {
     }
 
     public void draw(SpriteBatch batch) {
-        setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
         super.draw(batch);
     }
 

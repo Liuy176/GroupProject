@@ -13,6 +13,7 @@ public class Ground extends InteractiveObject{
 
     public Fixture fix;
     
+    //Creates ground objects in EnemyGameScreen
     public Ground(World world, TiledMap map, Rectangle bounds){
 
         super(world, map, bounds);

@@ -178,6 +178,9 @@ public class EnemyGameScreen implements Screen{
         for (Bullet bullet : bullets) {
            bullet.draw(game.getBatch());
         }
+        for (EnemyBullet bullet : enemyBullets) {
+            bullet.draw(game.getBatch());
+        }
         for (Enemy enemy : enemies) {
             enemy.drawHealthBar(game.getBatch());
             enemy.draw(game.getBatch());
@@ -241,9 +244,8 @@ public class EnemyGameScreen implements Screen{
         for (int j = 0; j < enemyBullets.size; j++) {
             EnemyBullet bullet = enemyBullets.get(j);
             bullet.update(dt);
-
                 
-                if (bullet.toRemove) {
+                if (bullet.getToRemove()) {
                     enemyBullets.removeIndex(j);
                     world.destroyBody(bullet.getBody()); 
                     j--;
@@ -342,7 +344,7 @@ public class EnemyGameScreen implements Screen{
         map.dispose();
         renderer.dispose();
         world.dispose();
-        //debugRenderer.dispose();
+        debugRenderer.dispose();
         font.dispose();
         backgroundTexture.dispose();
 

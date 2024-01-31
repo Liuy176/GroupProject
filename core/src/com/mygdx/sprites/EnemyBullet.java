@@ -1,27 +1,28 @@
 package com.mygdx.sprites;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mygdx.helpers.Constants;
 
 public class EnemyBullet extends Sprite {
     private World world;
     private Player player;
     private Body body;
-    private float speed;
-    private boolean facingRight;
+    private float speed, distanceLimit, distanceTraveled;
+    private boolean facingRight, toRemove;
+    private Vector2 startPosition, direction;
 
-    private Vector2 startPosition;
-    private float distanceLimit;
-    private float distanceTraveled;
-    public boolean toRemove;
-    private Vector2 direction;
+    private Texture bulletTexture;
+    private TextureRegion bulletTextureRegion;
+
 
     public EnemyBullet(World world, float x, float y, boolean facingRight, float speed, Player player) {
         this.world = world;
@@ -33,27 +34,35 @@ public class EnemyBullet extends Sprite {
         this.distanceTraveled = 0;
         this.toRemove = false;
 
-        direction = new Vector2(player.body.getPosition().x - x, player.body.getPosition().y - y).nor();
+        this.bulletTexture = new Texture("bullet-1.png.png");
+        this.bulletTextureRegion = new TextureRegion(bulletTexture);
 
+        this.direction = new Vector2(player.body.getPosition().x - x, player.body.getPosition().y - y).nor();
+
+        // add drawn texture to the bullet body
+        setRegion(bulletTextureRegion);
+        setSize(bulletTexture.getWidth() / Constants.PPM, bulletTexture.getHeight() / Constants.PPM);
+        setOrigin(getWidth() / 2, getHeight() / 2);
         defineBullet(x, y);
     }
 
     private void defineBullet(float x, float y) {
+        // defining body
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(x , y );
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.gravityScale = 0; 
         body = world.createBody(bodyDef);
 
-        FixtureDef fixtureDef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(1 / Constants.PPM);
 
+        // define properties of a fixture of the body
+        FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.isSensor = true;
         fixtureDef.filter.categoryBits = Constants.CATEGORY_ENEMY_BULLET;
         fixtureDef.filter.maskBits = Constants.CATEGORY_GROUND | Constants.CATEGORY_PLAYER;
-        
         body.createFixture(fixtureDef).setUserData(this);
 
         shape.dispose();
@@ -73,7 +82,20 @@ public class EnemyBullet extends Sprite {
         }
     }
 
+    public void draw(SpriteBatch batch) {
+        super.draw(batch);
+    }
+
     public Body getBody(){
         return body;
+    }
+    public void setToRemove(boolean remove){
+        this.toRemove = remove;
+    }
+    public boolean getToRemove(){
+        return toRemove;
+    }
+    public void dispose(){
+        getTexture().dispose();
     }
 }
