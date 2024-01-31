@@ -14,7 +14,7 @@ public class MyGdxGame extends Game {
 	private int screenWidth, screenHeight;
 	private OrthographicCamera ortographicCamera;
 	private MenuScreen mainMenuScreen;
-	private EnemyGameScreen enemyScreen;
+	public SpaceshipScreen spaceshipScreen;
 	private SpriteBatch batch;
 
 
@@ -34,6 +34,7 @@ public class MyGdxGame extends Game {
         this.ortographicCamera.setToOrtho(false, screenWidth, screenHeight);
 
 		this.mainMenuScreen = new MenuScreen(this);
+		this.spaceshipScreen = new SpaceshipScreen(this, 100);
 
 
         setScreen(mainMenuScreen); //menu shows when after starting the game

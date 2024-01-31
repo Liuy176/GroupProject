@@ -83,8 +83,8 @@ public class EnemyGameScreen implements Screen{
     private float fadeInSpeed = 0.5f; 
     private ShapeRenderer shapeRenderer;
 
-    private int roundNumber;
     private Random random;
+    public int enemyCount;
 
 
     public EnemyGameScreen(MyGdxGame game, int roundNumber, float playerHealth, float playerWeaponStrength){
@@ -111,7 +111,7 @@ public class EnemyGameScreen implements Screen{
         //
         random = new Random();
         enemies = new Array<Enemy>();
-        int enemyCount = 1+roundNumber;
+        enemyCount = 1+roundNumber;
 
         for(int i = 0; i<enemyCount; i++ ){
             int enemyHealth = 60 + random.nextInt(61) + 60*(roundNumber/3);
@@ -232,7 +232,7 @@ public class EnemyGameScreen implements Screen{
             Bullet bullet = bullets.get(i);
             bullet.update(dt);
                 
-                if (bullet.toRemove) {
+                if (bullet.getToRemove()) {
                     bullets.removeIndex(i);
                     world.destroyBody(bullet.getBody()); 
                     i--;
@@ -248,6 +248,12 @@ public class EnemyGameScreen implements Screen{
                     world.destroyBody(bullet.getBody()); 
                     j--;
                 }
+        }
+
+        if(enemyCount==0){
+            game.spaceshipScreen.playerHealth = player.currentHealth;
+            game.spaceshipScreen.restart(true);
+            game.setScreen(game.spaceshipScreen);
         }
         //camera.update();
         

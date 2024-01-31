@@ -59,8 +59,11 @@ public class SpaceshipScreen implements Screen {
     private float fadeOutSpeed = 0.5f;
     private float fadeOutOpacity = 0.0f;
     private float collisionTimer = 0f;
+    private int timesCrashed;
+    public float playerHealth;
+    private float weaponStrength;
 
-  public SpaceshipScreen(MyGdxGame game){
+  public SpaceshipScreen(MyGdxGame game, float health){
     this.game = game;
     batch = game.getBatch();
     img = new Texture("9.png");
@@ -83,6 +86,9 @@ public class SpaceshipScreen implements Screen {
     enemies1 = new Array<Rectangle>();
     lastEnemyTime = 0;
 
+    playerHealth = health;
+    weaponStrength = 15;
+    timesCrashed = 0;
     score = 0;
     power = 3;
     numEnemies = 999999999;
@@ -246,11 +252,12 @@ public class SpaceshipScreen implements Screen {
     }
   
   
-    private void ProductEnemies(){
+    /*private void ProductEnemies(){
       Rectangle enemy = new Rectangle( Gdx.graphics.getWidth(), MathUtils.random(0, Gdx.graphics.getHeight() - tEnemy1.getHeight()), tEnemy1.getWidth(), tEnemy1.getHeight());
       enemies1.add(enemy);
       lastEnemyTime = TimeUtils.nanoTime();
     }
+    */
     private void moveCandy() {
       if(paused) return; // Andrejs edit
 
@@ -316,6 +323,7 @@ public class SpaceshipScreen implements Screen {
             isBlinking = true;
             blinkStartTime = TimeUtils.nanoTime();
             paused = true; 
+            timesCrashed++;
             //--power;
             //game.setScreen(new EnemyGameScreen(game, 4, 500, 30));
             // until here
@@ -330,8 +338,8 @@ public class SpaceshipScreen implements Screen {
 
         if(fadeOut){
           collisionTimer +=delta;
-          if(collisionTimer>=3){
-            game.setScreen(new EnemyGameScreen(game, 4, 500, 30));
+          if(collisionTimer>=1){
+            game.setScreen(new EnemyGameScreen(game, timesCrashed, playerHealth, weaponStrength));
           }
         }
       }
@@ -392,6 +400,8 @@ public class SpaceshipScreen implements Screen {
         gameover = false;
         paused = isPaused;
         isBlinking = false;
+        fadeOutOpacity=0f;
+        fadeOut=false;
     }
 
     @Override

@@ -34,7 +34,7 @@ public class Player extends Sprite{
     private float timer;
     private EnemyGameScreen screen;
     private float startHealth;
-    private float currentHealth;
+    public float currentHealth;
     public Texture white;
     public Texture heartTexture;
     public Texture healthFrame;

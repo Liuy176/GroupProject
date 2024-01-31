@@ -228,6 +228,7 @@ public class Enemy extends Sprite {
 
         body.applyLinearImpulse(new Vector2(0, 2f), body.getWorldCenter(), true);
         isDefeated = true;
+        screen.enemyCount--;
     }
 
     public void drawHealthBar(SpriteBatch batch) {

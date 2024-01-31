@@ -17,13 +17,10 @@ import com.mygdx.helpers.Constants;
 public class Bullet extends Sprite {
     private World world;
     private Body body;
-    private float speed;
-    private boolean facingRight;
+    private float speed, distanceLimit, distanceTraveled;
+    private boolean facingRight, toRemove;
 
     private Vector2 startPosition;
-    private float distanceLimit;
-    private float distanceTraveled;
-    public boolean toRemove;
     private Texture bulletTexture;
     private TextureRegion bulletTextureRegion;
 
@@ -38,6 +35,8 @@ public class Bullet extends Sprite {
 
         this.bulletTexture = new Texture("bullet-1.png.png");
         this.bulletTextureRegion = new TextureRegion(bulletTexture);
+
+        // add drawn texture to the bullet body
         setRegion(bulletTextureRegion);
         setSize(bulletTexture.getWidth() / Constants.PPM, bulletTexture.getHeight() / Constants.PPM);
         setOrigin(getWidth() / 2, getHeight() / 2);
@@ -45,21 +44,22 @@ public class Bullet extends Sprite {
     }
 
     private void defineBullet(float x, float y) {
+        // defining body
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(x , y );
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.gravityScale = 0; 
         body = world.createBody(bodyDef);
 
-        FixtureDef fixtureDef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(1 / Constants.PPM);
 
+        // define properties of a fixture of the body
+        FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.isSensor = true;
         fixtureDef.filter.categoryBits = Constants.CATEGORY_BULLET;
         fixtureDef.filter.maskBits = Constants.CATEGORY_GROUND | Constants.CATEGORY_ENEMY;
-        
         body.createFixture(fixtureDef).setUserData(this);
         
         body.setLinearVelocity((facingRight ? 1 : -1) * speed, 0); 
@@ -83,6 +83,13 @@ public class Bullet extends Sprite {
 
     public Body getBody(){
         return body;
+    }
+
+    public void setToRemove(boolean remove){
+        this.toRemove = remove;
+    }
+    public boolean getToRemove(){
+        return toRemove;
     }
 
     public void dispose(){
