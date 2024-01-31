@@ -43,7 +43,7 @@ public class MenuScreen extends ScreenAdapter {
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new SpaceshipScreen(game));
+                game.setScreen(game.spaceshipScreen);
             }
         });
 

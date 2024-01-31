@@ -30,7 +30,7 @@ public class SpaceshipScreen implements Screen {
   
     private long lastEnemyTime;
     private int score, power, numEnemies;
-    private boolean toIncrementScore = false; //Andrejs edit
+    private boolean toIncrementScore = false;
   
     private FreeTypeFontGenerator generator;
     private FreeTypeFontGenerator.FreeTypeFontParameter parameter;
@@ -38,7 +38,7 @@ public class SpaceshipScreen implements Screen {
     private Array<Rectangle> candies;
     private long lastCandyTime;
     
-    private boolean paused; //Andrej's edit (to be able to pause)
+    private boolean paused; 
     private MyGdxGame game;
     
     private float gravity = 0.5f; 
@@ -59,8 +59,11 @@ public class SpaceshipScreen implements Screen {
     private float fadeOutSpeed = 0.5f;
     private float fadeOutOpacity = 0.0f;
     private float collisionTimer = 0f;
+    private int timesCrashed;
+    public float playerHealth;
+    private float weaponStrength;
 
-  public SpaceshipScreen(MyGdxGame game){
+  public SpaceshipScreen(MyGdxGame game, float health){
     this.game = game;
     batch = game.getBatch();
     img = new Texture("9.png");
@@ -75,7 +78,7 @@ public class SpaceshipScreen implements Screen {
     xMissile = posX;
     yMissile = posY;
     //attack = false; */
-    tCandy = new Texture("6445166.png");
+    tCandy = new Texture("gunPickup.png");
     candies = new Array<Rectangle>();
     lastCandyTime = TimeUtils.nanoTime();
 
@@ -83,6 +86,9 @@ public class SpaceshipScreen implements Screen {
     enemies1 = new Array<Rectangle>();
     lastEnemyTime = 0;
 
+    playerHealth = health;
+    weaponStrength = 15;
+    timesCrashed = 0;
     score = 0;
     power = 3;
     numEnemies = 999999999;
@@ -99,18 +105,18 @@ public class SpaceshipScreen implements Screen {
     gameover = false;
     isBlinking=false;
     blinkStartTime = 0f;
-    paused=false; //Andrejs edit
+    paused=false; 
   }
   
     @Override
     public void render(float delta) {
-      if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) paused = !paused; // Andrejs edit
+      if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) paused = !paused; 
       if(!paused){
         this.moveNave();
         this.moveEnemies(delta);
         this.moveCandy();
       }
-      //Andrejs edit
+
       if (isBlinking) {
         float elapsed = (TimeUtils.nanoTime() - blinkStartTime) *0.000000001f;
         if (elapsed > blinkDuration) {
@@ -129,7 +135,7 @@ public class SpaceshipScreen implements Screen {
     if (fadeOut) {
       fadeOutOpacity += fadeOutSpeed * delta;
       fadeOutOpacity = Math.min(fadeOutOpacity, 1.0f); // opacity< 1
-      }   //Until here
+      } 
   
       ScreenUtils.clear(1, 0, 0, 1);
       batch.begin();
@@ -140,7 +146,7 @@ public class SpaceshipScreen implements Screen {
         
         if(isShipVisible) batch.draw(nave, posX, posY);
         for (Rectangle candy : candies) {
-          batch.draw(tCandy, candy.x, candy.y);
+          batch.draw(tCandy, candy.x, candy.y, candy.width*3, candy.height*3);
         }
   
         for(Rectangle enemy : enemies1 ){
@@ -172,6 +178,7 @@ public class SpaceshipScreen implements Screen {
         }
       }
       batch.end();
+
       if (fadeOut) {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -193,45 +200,25 @@ public class SpaceshipScreen implements Screen {
     }
   
     private void moveNave(){
-      if(paused) return; // Andrejs edit
+      if(paused) return;
 
-      /*if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-        if( posX < Gdx.graphics.getWidth() - nave.getWidth() ){
-          posX += velocity;
-        }
+      if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+          restart(true);
       }
-      if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-        if( posX > 0 ){
-          posX -= velocity;
-        }
+      if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+          currentVelocity = jumpVelocity; // jump
       }
-      if(Gdx.input.isKeyPressed(Input.Keys.UP)){
-        if( posY < Gdx.graphics.getHeight() - nave.getHeight() ){
-          posY += velocity;
-        }
-      }
-      if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-        if( posY > 0 ){
-          posY -= velocity;
-        }
-      }*/
-    if (Gdx.input.isKeyJustPressed(Input.Keys.R)) { // Press R to restart
-        restart(true);
-    }
-    if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-        currentVelocity = jumpVelocity; // jump
-    }
 
-    // gravity
-    currentVelocity += gravity;
-    posY -= currentVelocity;
+      // gravity
+      currentVelocity += gravity;
+      posY -= currentVelocity;
 
-    if(posY < 0){
-        posY = 0;
-    }
-    if(posY > Gdx.graphics.getHeight() - nave.getHeight()){
-        posY = Gdx.graphics.getHeight() - nave.getHeight();
-    }
+      if(posY < 0){
+          posY = 0;
+      }
+      if(posY > Gdx.graphics.getHeight() - nave.getHeight()){
+          posY = Gdx.graphics.getHeight() - nave.getHeight();
+      }
     }
   
     private void produceCandy() {
@@ -245,16 +232,10 @@ public class SpaceshipScreen implements Screen {
       lastCandyTime = TimeUtils.nanoTime();
     }
   
-  
-    private void ProductEnemies(){
-      Rectangle enemy = new Rectangle( Gdx.graphics.getWidth(), MathUtils.random(0, Gdx.graphics.getHeight() - tEnemy1.getHeight()), tEnemy1.getWidth(), tEnemy1.getHeight());
-      enemies1.add(enemy);
-      lastEnemyTime = TimeUtils.nanoTime();
-    }
     private void moveCandy() {
-      if(paused) return; // Andrejs edit
-
-      if ((TimeUtils.nanoTime() - lastCandyTime)*0.1 > 2000000000) { // Adjust the time as needed
+      if(paused) return; 
+    
+      if ((TimeUtils.nanoTime() - lastCandyTime)*0.1 > 2000000000) { // Adjust time as needed
         this.produceCandy();
       }
   
@@ -270,11 +251,8 @@ public class SpaceshipScreen implements Screen {
     }
   
     private void moveEnemies(float delta) {
-      if(paused) return; //Andrejs edit
+      if(paused) return; 
 
-      //if ((TimeUtils.nanoTime() - lastEnemyTime)*1.5 > numEnemies) {
-      //  this.produceAsteroidPair();
-      //}
       this.produceAsteroidPair(delta);
   
       for (Iterator<Rectangle> iter = enemies1.iterator(); iter.hasNext();) {
@@ -283,21 +261,10 @@ public class SpaceshipScreen implements Screen {
         
         if (enemy.x < lastAsteroidBatchX) {
           lastAsteroidBatchX = enemy.x;
-      }
-        // Check if the asteroid is off screen and increase score
+        }
+        // Check if the player has moved past an asteroid batch, and increase the score accordingly
         if (enemy.x + enemy.width < 0) {
           iter.remove();
-          /*if (!gameover) {
-            if(!toIncrementScore){
-              toIncrementScore =true;
-            }
-            else {
-              score++;
-              toIncrementScore = false;
-            }// Increment score when an asteroid is avoided
-           
-          }
-          continue;*/ // Continue to next iteration
         }
         if(enemy.x < posX && enemy.x + 400 * Gdx.graphics.getDeltaTime() >= 100){
           if(!toIncrementScore){
@@ -312,16 +279,10 @@ public class SpaceshipScreen implements Screen {
         // Check for collision with the ship
         if (collide(enemy.x, enemy.y, enemy.width, enemy.height, posX, posY, nave.getWidth(), nave.getHeight())) {
           if (!gameover) {
-            // Andrejs edit
             isBlinking = true;
             blinkStartTime = TimeUtils.nanoTime();
             paused = true; 
-            //--power;
-            //game.setScreen(new EnemyGameScreen(game, 4, 500, 30));
-            // until here
-            //if (power <= 0) {
-            //  gameover = true;
-            //}
+            timesCrashed++;
             fadeOut = true;
             collisionTimer = 0;
           }
@@ -330,8 +291,8 @@ public class SpaceshipScreen implements Screen {
 
         if(fadeOut){
           collisionTimer +=delta;
-          if(collisionTimer>=3){
-            game.setScreen(new EnemyGameScreen(game, 4, 500, 30));
+          if(collisionTimer>=1){
+            game.setScreen(new EnemyGameScreen(game, timesCrashed, playerHealth, weaponStrength));
           }
         }
       }
@@ -361,7 +322,6 @@ public class SpaceshipScreen implements Screen {
 
         private void produceAsteroidPair(float delta) {
           timeSinceLastAsteroidPair += delta;
-            //float timeSinceLastPair = (TimeUtils.nanoTime() - lastEnemyTime) / 1000000000f; // Convert to seconds
             if (timeSinceLastAsteroidPair > pairGenInterval) {
                 float baseY = MathUtils.random(0, Gdx.graphics.getHeight() - tEnemy1.getHeight() * 2 - asteroidBatchDistance);
                 float y1 = baseY;
@@ -392,37 +352,23 @@ public class SpaceshipScreen implements Screen {
         gameover = false;
         paused = isPaused;
         isBlinking = false;
+        fadeOutOpacity=0f;
+        fadeOut=false;
     }
 
     @Override
-    public void show() {
-        // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'show'");
-    }
-
+    public void show() {}
 
     @Override
-    public void resize(int width, int height) {
-        // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'resize'");
-    }
+    public void resize(int width, int height) {}
 
     @Override
-    public void pause() {
-        // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'pause'");
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-        // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'resume'");
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-        // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'hide'");
-    }
+    public void hide() {}
   
-      }
+}

@@ -75,7 +75,7 @@ public class Enemy extends Sprite {
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
 
 
-        Vector2 playerPos = player.body.getPosition();
+        Vector2 playerPos = player.getBody().getPosition();
         Vector2 enemyPos = body.getPosition();
 
         float distance = enemyPos.dst(playerPos);
@@ -208,7 +208,7 @@ public class Enemy extends Sprite {
     }
 
     public void takeDamage() {
-        currentHealth -= player.damage;
+        currentHealth -= player.getDamage();
         if (currentHealth <= 0) {
             currentHealth = 0;
             enemyDies();
@@ -228,6 +228,7 @@ public class Enemy extends Sprite {
 
         body.applyLinearImpulse(new Vector2(0, 2f), body.getWorldCenter(), true);
         isDefeated = true;
+        screen.enemyCount--;
     }
 
     public void drawHealthBar(SpriteBatch batch) {
