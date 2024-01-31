@@ -37,7 +37,7 @@ public class EnemyBullet extends Sprite {
         this.bulletTexture = new Texture("bullet-1.png.png");
         this.bulletTextureRegion = new TextureRegion(bulletTexture);
 
-        this.direction = new Vector2(player.body.getPosition().x - x, player.body.getPosition().y - y).nor();
+        this.direction = new Vector2(player.getBody().getPosition().x - x, player.getBody().getPosition().y - y).nor();
 
         // add drawn texture to the bullet body
         setRegion(bulletTextureRegion);

@@ -250,16 +250,20 @@ public class EnemyGameScreen implements Screen{
 
         // move back to spaceship game mode if player has defeated all enemies
         if(enemyCount==0){
-            game.spaceshipScreen.playerHealth = player.currentHealth;
-            game.spaceshipScreen.restart(true);
-            game.setScreen(game.spaceshipScreen);
+            fade += dt / fadeDuration;
+            if (fade > 1) {
+                fade = 1;
+                game.spaceshipScreen.playerHealth = player.getCurrentHealth();
+                game.spaceshipScreen.restart(true);
+                game.setScreen(game.spaceshipScreen); 
+            }
         }
         
         renderer.setView(camera);
     }
 
     private void cameraUpdate(){
-        if(!player.isDefeated){
+        if(!player.getIsDefeated()){
             Vector3 position = camera.position;
 
             float camMinX = viewportWidth / 2;
@@ -268,8 +272,8 @@ public class EnemyGameScreen implements Screen{
             float camMaxY = mapHeight - viewportHeight / 2;
 
             //making sure we can't see the area outside of the map when player comes closer to the edge of the map
-            position.x = MathUtils.clamp(player.body.getPosition().x, camMinX, camMaxX);
-            position.y = MathUtils.clamp(player.body.getPosition().y, camMinY, camMaxY);
+            position.x = MathUtils.clamp(player.getBody().getPosition().x, camMinX, camMaxX);
+            position.y = MathUtils.clamp(player.getBody().getPosition().y, camMinY, camMaxY);
             camera.position.set(position);
         }
         camera.update();
@@ -278,11 +282,11 @@ public class EnemyGameScreen implements Screen{
 
     public void handleInput(float dt){
         if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
-            player.body.applyLinearImpulse(new Vector2(0,4f), player.body.getWorldCenter(), true);
-        if(Gdx.input.isKeyPressed(Input.Keys.D) && player.body.getLinearVelocity().x <=3 )
-            player.body.applyLinearImpulse(new Vector2(0.3f, 0), player.body.getWorldCenter(), true);
-        if(Gdx.input.isKeyPressed(Input.Keys.A) && player.body.getLinearVelocity().x >=-3 )
-            player.body.applyLinearImpulse(new Vector2(-0.3f, 0), player.body.getWorldCenter(), true);
+            player.getBody().applyLinearImpulse(new Vector2(0,4f), player.getBody().getWorldCenter(), true);
+        if(Gdx.input.isKeyPressed(Input.Keys.D) && player.getBody().getLinearVelocity().x <=3 )
+            player.getBody().applyLinearImpulse(new Vector2(0.3f, 0), player.getBody().getWorldCenter(), true);
+        if(Gdx.input.isKeyPressed(Input.Keys.A) && player.getBody().getLinearVelocity().x >=-3 )
+            player.getBody().applyLinearImpulse(new Vector2(-0.3f, 0), player.getBody().getWorldCenter(), true);
         if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
             player.shoot();
         }

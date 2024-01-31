@@ -38,7 +38,7 @@ public class Bullet extends Sprite {
 
         // add drawn texture to the bullet body
         setRegion(bulletTextureRegion);
-        setSize(bulletTexture.getWidth() / Constants.PPM, bulletTexture.getHeight() / Constants.PPM);
+        setSize(bulletTexture.getWidth() / (3*Constants.PPM), bulletTexture.getHeight() / (3*Constants.PPM));
         setOrigin(getWidth() / 2, getHeight() / 2);
         defineBullet(x, y);
     }

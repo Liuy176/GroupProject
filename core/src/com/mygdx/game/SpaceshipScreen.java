@@ -78,7 +78,7 @@ public class SpaceshipScreen implements Screen {
     xMissile = posX;
     yMissile = posY;
     //attack = false; */
-    tCandy = new Texture("6445166.png");
+    tCandy = new Texture("gunPickup.png");
     candies = new Array<Rectangle>();
     lastCandyTime = TimeUtils.nanoTime();
 
@@ -146,7 +146,7 @@ public class SpaceshipScreen implements Screen {
         
         if(isShipVisible) batch.draw(nave, posX, posY);
         for (Rectangle candy : candies) {
-          batch.draw(tCandy, candy.x, candy.y);
+          batch.draw(tCandy, candy.x, candy.y, candy.width*3, candy.height*3);
         }
   
         for(Rectangle enemy : enemies1 ){

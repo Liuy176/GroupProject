@@ -16,32 +16,27 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.EnemyGameScreen;
 import com.mygdx.helpers.Constants;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.utils.Array;
 
 public class Player extends Sprite{
-    public World world;
-    public Body body;
+    private World world;
+    private Body body;
     private TextureRegion stand;
     public enum State {FALLING, JUMPING, STANDING, RUNNING, DEAD };
-    public State currState;
-    public State prevState;
+    private State currState, prevState;
     private Animation<TextureRegion> run;
     private Animation<TextureRegion> jump;
     private boolean facingRight;
     private float timer;
     private EnemyGameScreen screen;
-    private float startHealth;
-    public float currentHealth;
-    public Texture white;
-    public Texture heartTexture;
-    public Texture healthFrame;
-    public TextureRegion whiteRegion;
-    public boolean isDefeated;
+    private float startHealth, currentHealth;
+    private Texture heartTexture, healthFrame, white;
+    private TextureRegion whiteRegion;
+    private boolean isDefeated;
     private int deadRotationDeg;
-    public float damage;
+    private float damage;
 
     public Player(World world, EnemyGameScreen screen, float maxHealth, float weaponStrength){
         super(screen.getAtlas().findRegion("little_mario"));
@@ -225,5 +220,21 @@ public class Player extends Sprite{
         white.dispose();
         healthFrame.dispose();
         
+    }
+
+    public World getWorld(){
+        return world;
+    }
+    public Body getBody(){
+        return body;
+    }
+    public float getCurrentHealth(){
+        return currentHealth;
+    }
+    public boolean getIsDefeated(){
+        return isDefeated;
+    }
+    public float getDamage(){
+        return damage;
     }
 }
