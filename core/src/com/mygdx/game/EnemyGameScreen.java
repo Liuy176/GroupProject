@@ -186,8 +186,8 @@ public class EnemyGameScreen implements Screen{
             fade += delta / fadeDuration;
             if (fade > 1) {
                 fade = 1;
+                //this.dispose();
                 this.reset();
-                this.dispose();
                 game.setScreen(new GameOverScreen(game));
             }
         }
@@ -339,7 +339,7 @@ public class EnemyGameScreen implements Screen{
     public void dispose() {
         map.dispose();
         blackTexture.dispose();
-        //renderer.dispose();
+        renderer.dispose();
         world.dispose();
         debugRenderer.dispose();
         font.dispose();

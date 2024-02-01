@@ -44,7 +44,9 @@ public class Enemy extends Sprite {
 
     private Texture texture;
     private TextureRegion enemyTextureRegion;
-    
+    private Sprite armSprite;
+    private Texture armTexture;
+    private boolean facingRight = false;
   
 
     public Enemy(World world,float x, float y, float speed, float health, Player player, EnemyGameScreen screen) {
@@ -62,6 +64,12 @@ public class Enemy extends Sprite {
 
         this.texture = new Texture("enemyNew.png");
         this.enemyTextureRegion = new TextureRegion(texture);
+        armTexture = new Texture("arm.png"); // Assuming you have an arm texture
+        armSprite = new Sprite(armTexture);
+        armSprite.flip(true, true);
+        armSprite.setSize(armTexture.getWidth() / Constants.PPM, armTexture.getHeight() / Constants.PPM);
+        armSprite.setOrigin(0, armSprite.getHeight() / 2);
+        
         setRegion(enemyTextureRegion);
         setSize(texture.getWidth() / Constants.PPM, texture.getHeight() / Constants.PPM);
         setOrigin(getWidth() / 2, getHeight() / 2);
@@ -71,13 +79,16 @@ public class Enemy extends Sprite {
     public void update(float dt) {
 
         timeSinceLastShot += dt;
-        
+        boolean isPlayerRight = player.getBody().getPosition().x > this.body.getPosition().x;
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
 
 
         Vector2 playerPos = player.getBody().getPosition();
         Vector2 enemyPos = body.getPosition();
-
+        //dVector2 directionToPlayer = player.getBody().getPosition().sub(body.getPosition());
+        //Vector2 directionToPlayer = playerPos.sub(body.getPosition()).nor();
+        Vector2 directionToPlayer = new Vector2(player.getBody().getPosition()).sub(body.getPosition()).nor();
+        float angle = directionToPlayer.angleDeg();
         float distance = enemyPos.dst(playerPos);
         //float direction = playerPos.x - enemyPos.x;
         //direction = Math.signum(direction);
@@ -89,16 +100,31 @@ public class Enemy extends Sprite {
         //Vector2 direction = playerPos.sub(body.getPosition()).nor();
         //body.setLinearVelocity(direction.scl(speed));
 
+        armSprite.setRotation(angle);
+        armSprite.setPosition(body.getPosition().x - 0.2f + armSprite.getWidth() / 2, body.getPosition().y +0.1f-armSprite.getHeight() / 2);
+
+        if (!facingRight && isPlayerRight) {
+            this.flip(true, false);
+            armSprite.flip(false, true);
+            facingRight = true; //
+        } 
+        
+        else if (facingRight && !isPlayerRight) {
+            this.flip(true, false);
+            armSprite.flip(false, true);
+            facingRight = false; 
+        }
+        
         if (distance > optimalDistance) {
-            // Move towards the player
+            // move towards the player
             approachPlayer(playerPos);
         } else {
-            // Either stand still or perform random action
+            
             body.setLinearVelocity(0, body.getLinearVelocity().y);
-            //performRandomActionOrStandStill();
+            
             if (timeSinceLastShot >= shootingInterval) {
                 shoot(playerPos);
-                timeSinceLastShot = 0f; // Reset the timer after shooting
+                timeSinceLastShot = 0f; 
             }
         }
 
@@ -269,9 +295,11 @@ public class Enemy extends Sprite {
         
         // Draw the sprite
         super.draw(batch);
+        armSprite.draw(batch);
     }
     public void dispose() {
         texture.dispose();
+        armTexture.dispose();
     }
 
 }
