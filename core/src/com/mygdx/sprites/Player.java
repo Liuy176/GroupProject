@@ -219,7 +219,6 @@ public class Player extends Sprite{
         heartTexture.dispose();
         white.dispose();
         healthFrame.dispose();
-        
     }
 
     public World getWorld(){

@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 public class MyGdxGame extends Game {
 	private int screenWidth, screenHeight;
 	private OrthographicCamera ortographicCamera;
-	private MenuScreen mainMenuScreen;
+	public MenuScreen mainMenuScreen;
 	public SpaceshipScreen spaceshipScreen;
 	private SpriteBatch batch;
 

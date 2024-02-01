@@ -34,7 +34,9 @@ public class GameOverScreen implements Screen {
         spriteBatch.end();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            game.setScreen(new MenuScreen(game)); 
+            game.spaceshipScreen.dispose();
+            game.setScreen(game.mainMenuScreen); 
+            this.dispose();
         }
     }
 

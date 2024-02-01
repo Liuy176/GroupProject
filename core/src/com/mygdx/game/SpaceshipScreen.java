@@ -141,10 +141,10 @@ public class SpaceshipScreen implements Screen {
       batch.begin();
       batch.draw(img, 0, 0);
       
-      if (paused) bitmap.draw(batch, "PAUSED", Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2); // Andrejs edit
+     //if (paused) bitmap.draw(batch, "PAUSED", Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2); // Andrejs edit
       if(!gameover){
         
-        if(isShipVisible) batch.draw(nave, posX, posY);
+        if(isShipVisible) batch.draw(nave, posX, posY, nave.getWidth()*4, nave.getHeight()*4 );
         for (Rectangle candy : candies) {
           batch.draw(tCandy, candy.x, candy.y, candy.width*3, candy.height*3);
         }
@@ -154,11 +154,11 @@ public class SpaceshipScreen implements Screen {
         }
          
         bitmap.draw(batch, "Score: " + score, 20, Gdx.graphics.getHeight() - 20);
-        bitmap.draw(
-            batch, "Power: " + power, 
-            Gdx.graphics.getWidth() - 150, 
-            Gdx.graphics.getHeight() - 20
-            );
+        //bitmap.draw(
+        //    batch, "Power: " + power, 
+        //    Gdx.graphics.getWidth() - 150, 
+        //    Gdx.graphics.getHeight() - 20
+        //    );
             
       }else{
         
@@ -193,10 +193,10 @@ public class SpaceshipScreen implements Screen {
   
     @Override
     public void dispose () {
-      batch.dispose();
-      img.dispose();
-      tNave.dispose();
-      tCandy.dispose();
+      //batch.dispose();
+      //img.dispose();
+      //tNave.dispose();
+      //tCandy.dispose();
     }
   
     private void moveNave(){
@@ -243,7 +243,7 @@ public class SpaceshipScreen implements Screen {
         Rectangle candy = iter.next();
         candy.x -= 200 * Gdx.graphics.getDeltaTime(); // Adjust speed as needed
         if (candy.x + tCandy.getWidth() < 0) iter.remove();
-        else if (collide(candy.x, candy.y, candy.width, candy.height, posX, posY, nave.getWidth(), nave.getHeight())) {
+        else if (collide(candy.x, candy.y, candy.width*3, candy.height*3, posX, posY, nave.getWidth()*4, nave.getHeight()*4)) {
           power++; // Restore power
           iter.remove();
         }
@@ -277,7 +277,7 @@ public class SpaceshipScreen implements Screen {
         }
   
         // Check for collision with the ship
-        if (collide(enemy.x, enemy.y, enemy.width, enemy.height, posX, posY, nave.getWidth(), nave.getHeight())) {
+        if (collide(enemy.x, enemy.y, enemy.width*2, enemy.height*2, posX, posY, nave.getWidth()*4, nave.getHeight()*4)) {
           if (!gameover) {
             isBlinking = true;
             blinkStartTime = TimeUtils.nanoTime();
@@ -356,6 +356,36 @@ public class SpaceshipScreen implements Screen {
         fadeOut=false;
     }
 
+    public void setPlayerHealth(float health){
+      this.playerHealth = health;
+    }
+    public void setWeaponStrength(float strength){
+      this.weaponStrength = strength;
+    }
+    public void setAmountOfCrashes(int num){
+      this.timesCrashed = num;
+    }
+    public void setScore(int score){
+      this.score = score;
+    }
+    public void setGameOver(boolean isGameOver){
+      this.gameover = isGameOver;
+    }
+    public void setFadeOut(boolean isFadeOut){
+      this.fadeOut = isFadeOut;
+    }
+    public void clearEnemies(){
+      enemies1.clear();
+    }
+    public void clearCandies(){
+      candies.clear();
+    }
+    public void setFadeOpacity(float opacity){
+      this.fadeOutOpacity=opacity;
+    }
+    public void setIsBlinking(boolean blinking){
+      this.isBlinking = blinking;
+    }
     @Override
     public void show() {}
 
@@ -369,6 +399,6 @@ public class SpaceshipScreen implements Screen {
     public void resume() {}
 
     @Override
-    public void hide() {}
+    public void hide() {} 
   
 }

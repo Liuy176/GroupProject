@@ -37,6 +37,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -185,7 +186,9 @@ public class EnemyGameScreen implements Screen{
             fade += delta / fadeDuration;
             if (fade > 1) {
                 fade = 1;
-                game.setScreen(new GameOverScreen(game)); 
+                this.reset();
+                game.setScreen(new GameOverScreen(game));
+                this.dispose();
             }
         }
 
@@ -253,9 +256,10 @@ public class EnemyGameScreen implements Screen{
             fade += dt / fadeDuration;
             if (fade > 1) {
                 fade = 1;
-                game.spaceshipScreen.playerHealth = player.getCurrentHealth();
+                game.spaceshipScreen.setPlayerHealth(player.getCurrentHealth());
                 game.spaceshipScreen.restart(true);
-                game.setScreen(game.spaceshipScreen); 
+                game.setScreen(game.spaceshipScreen);
+                //this.dispose();
             }
         }
         
@@ -294,6 +298,18 @@ public class EnemyGameScreen implements Screen{
             
     }
     
+    private void reset(){
+        game.spaceshipScreen.setPlayerHealth(100);
+        game.spaceshipScreen.setWeaponStrength(15);
+        game.spaceshipScreen.setAmountOfCrashes(0);
+        game.spaceshipScreen.setScore(0);
+        game.spaceshipScreen.setGameOver(false);
+        game.spaceshipScreen.setFadeOut(false);
+        game.spaceshipScreen.setFadeOpacity(0f);
+        game.spaceshipScreen.setIsBlinking(false);
+        game.spaceshipScreen.clearCandies();
+        game.spaceshipScreen.clearEnemies();
+    }
 
     public void addBullet(Bullet bullet) {
         bullets.add(bullet);
@@ -322,12 +338,16 @@ public class EnemyGameScreen implements Screen{
     @Override
     public void dispose() {
         map.dispose();
+        blackTexture.dispose();
         renderer.dispose();
         world.dispose();
         debugRenderer.dispose();
         font.dispose();
         backgroundTexture.dispose();
-
+        atlas.dispose();
+        shapeRenderer.dispose();
+        player.dispose();
+       
     }
     
 }
