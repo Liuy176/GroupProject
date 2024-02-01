@@ -187,8 +187,8 @@ public class EnemyGameScreen implements Screen{
             if (fade > 1) {
                 fade = 1;
                 this.reset();
-                game.setScreen(new GameOverScreen(game));
                 this.dispose();
+                game.setScreen(new GameOverScreen(game));
             }
         }
 
@@ -258,8 +258,8 @@ public class EnemyGameScreen implements Screen{
                 fade = 1;
                 game.spaceshipScreen.setPlayerHealth(player.getCurrentHealth());
                 game.spaceshipScreen.restart(true);
+                game.spaceshipScreen.setDisposeEnemyScreen(this);
                 game.setScreen(game.spaceshipScreen);
-                //this.dispose();
             }
         }
         
@@ -339,7 +339,7 @@ public class EnemyGameScreen implements Screen{
     public void dispose() {
         map.dispose();
         blackTexture.dispose();
-        renderer.dispose();
+        //renderer.dispose();
         world.dispose();
         debugRenderer.dispose();
         font.dispose();

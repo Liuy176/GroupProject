@@ -63,6 +63,8 @@ public class SpaceshipScreen implements Screen {
     public float playerHealth;
     private float weaponStrength;
 
+    private EnemyGameScreen disposeEnemyScreen = null;
+
   public SpaceshipScreen(MyGdxGame game, float health){
     this.game = game;
     batch = game.getBatch();
@@ -106,6 +108,7 @@ public class SpaceshipScreen implements Screen {
     isBlinking=false;
     blinkStartTime = 0f;
     paused=false; 
+
   }
   
     @Override
@@ -115,6 +118,11 @@ public class SpaceshipScreen implements Screen {
         this.moveNave();
         this.moveEnemies(delta);
         this.moveCandy();
+      }
+
+      if(disposeEnemyScreen!=null) {
+        disposeEnemyScreen.dispose();
+        disposeEnemyScreen = null;
       }
 
       if (isBlinking) {
@@ -355,7 +363,9 @@ public class SpaceshipScreen implements Screen {
         fadeOutOpacity=0f;
         fadeOut=false;
     }
-
+    public void setDisposeEnemyScreen(EnemyGameScreen screen){
+      this.disposeEnemyScreen = screen;
+    }
     public void setPlayerHealth(float health){
       this.playerHealth = health;
     }

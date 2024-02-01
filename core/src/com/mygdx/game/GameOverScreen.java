@@ -9,11 +9,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GameOverScreen implements Screen {
-    private final MyGdxGame game;
+    private MyGdxGame game;
     private BitmapFont gameOverFont;
     private SpriteBatch spriteBatch;
 
-    public GameOverScreen(final MyGdxGame game) {
+    public GameOverScreen(MyGdxGame game) {
         this.game = game;
         spriteBatch = new SpriteBatch();
         gameOverFont = new BitmapFont();
@@ -35,8 +35,8 @@ public class GameOverScreen implements Screen {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             game.spaceshipScreen.dispose();
-            game.setScreen(game.mainMenuScreen); 
             this.dispose();
+            game.setScreen(game.mainMenuScreen); 
         }
     }
 
