@@ -22,7 +22,7 @@ import com.badlogic.gdx.graphics.GL20;
 
 public class SpaceshipScreen implements Screen {
     private SpriteBatch batch;
-    private Texture img, tNave, tMissile, tEnemy1, tCandy;
+    private Texture img, tNave, tMissile, tEnemy1, tCandy, tWeapon;
     private Sprite nave, missile;
     private float posX, posY, velocity, xMissile, yMissile;
     private boolean  gameover;
@@ -35,8 +35,8 @@ public class SpaceshipScreen implements Screen {
     private FreeTypeFontGenerator generator;
     private FreeTypeFontGenerator.FreeTypeFontParameter parameter;
     private BitmapFont bitmap;
-    private Array<Rectangle> candies;
-    private long lastCandyTime;
+    private Array<Rectangle> candies, weapons;
+    private long lastCandyTime, lastWeaponTime;
     
     private boolean paused; 
     private MyGdxGame game;
@@ -80,9 +80,12 @@ public class SpaceshipScreen implements Screen {
     xMissile = posX;
     yMissile = posY;
     //attack = false; */
-    tCandy = new Texture("gunPickup.png");
+    tCandy = new Texture("healthPickup.png");
+    tWeapon = new Texture("gunPickup.png");
     candies = new Array<Rectangle>();
+    weapons = new Array<Rectangle>();
     lastCandyTime = TimeUtils.nanoTime();
+    lastWeaponTime = TimeUtils.nanoTime();
 
     tEnemy1 = new Texture("asteroidNew.png");
     enemies1 = new Array<Rectangle>();
@@ -149,12 +152,15 @@ public class SpaceshipScreen implements Screen {
       batch.begin();
       batch.draw(img, 0, 0);
       
-     //if (paused) bitmap.draw(batch, "PAUSED", Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2); // Andrejs edit
+     //if (paused) bitmap.draw...
       if(!gameover){
         
         if(isShipVisible) batch.draw(nave, posX, posY, nave.getWidth()*4, nave.getHeight()*4 );
         for (Rectangle candy : candies) {
           batch.draw(tCandy, candy.x, candy.y, candy.width*3, candy.height*3);
+        }
+        for (Rectangle weapon : weapons) {
+          batch.draw(tWeapon, weapon.x, weapon.y, weapon.width*3, weapon.height*3);
         }
   
         for(Rectangle enemy : enemies1 ){
@@ -229,22 +235,26 @@ public class SpaceshipScreen implements Screen {
       }
     }
   
-    private void produceCandy() {
-      Rectangle candy = new Rectangle(
+    private void produceCandy(Texture texture, Array<Rectangle> items) {
+      Rectangle item = new Rectangle(
               Gdx.graphics.getWidth(),
-              MathUtils.random(0, Gdx.graphics.getHeight() - tCandy.getHeight()),
-              tCandy.getWidth(),
-              tCandy.getHeight()
+              MathUtils.random(0, Gdx.graphics.getHeight() - texture.getHeight()),
+              texture.getWidth(),
+              texture.getHeight()
       );
-      candies.add(candy);
-      lastCandyTime = TimeUtils.nanoTime();
+      items.add(item);
     }
   
     private void moveCandy() {
       if(paused) return; 
     
-      if ((TimeUtils.nanoTime() - lastCandyTime)*0.1 > 2000000000) { // Adjust time as needed
-        this.produceCandy();
+      if ((TimeUtils.nanoTime() - lastCandyTime)*0.3 > 2000000000) { // Adjust time as needed
+        this.produceCandy(tCandy, candies);
+        lastCandyTime = TimeUtils.nanoTime();
+      }
+      if ((TimeUtils.nanoTime() - lastWeaponTime)*0.2 > 2000000000) { // Adjust time as needed
+        this.produceCandy(tWeapon, weapons);
+        lastWeaponTime = TimeUtils.nanoTime();
       }
   
       for (Iterator<Rectangle> iter = candies.iterator(); iter.hasNext(); ) {
@@ -252,7 +262,17 @@ public class SpaceshipScreen implements Screen {
         candy.x -= 200 * Gdx.graphics.getDeltaTime(); // Adjust speed as needed
         if (candy.x + tCandy.getWidth() < 0) iter.remove();
         else if (collide(candy.x, candy.y, candy.width*3, candy.height*3, posX, posY, nave.getWidth()*4, nave.getHeight()*4)) {
-          power++; // Restore power
+          playerHealth=100; // Restore power
+          iter.remove();
+        }
+      }
+
+      for (Iterator<Rectangle> iter = weapons.iterator(); iter.hasNext(); ) {
+        Rectangle weapon = iter.next();
+        weapon.x -= 250 * Gdx.graphics.getDeltaTime(); // Adjust speed as needed
+        if (weapon.x + tWeapon.getWidth() < 0) iter.remove();
+        else if (collide(weapon.x, weapon.y, weapon.width*3, weapon.height*3, posX, posY, nave.getWidth()*4, nave.getHeight()*4)) {
+          playerHealth=100; // Restore power
           iter.remove();
         }
       }
@@ -300,7 +320,7 @@ public class SpaceshipScreen implements Screen {
         if(fadeOut){
           collisionTimer +=delta;
           if(collisionTimer>=1){
-            game.setScreen(new EnemyGameScreen(game, timesCrashed, playerHealth, weaponStrength));
+            game.setScreen(new EnemyGameScreen(game, timesCrashed, 100, weaponStrength, playerHealth));
           }
         }
       }
@@ -357,6 +377,7 @@ public class SpaceshipScreen implements Screen {
         candies.clear();
         lastEnemyTime = TimeUtils.nanoTime();
         lastCandyTime = TimeUtils.nanoTime();
+        lastWeaponTime = TimeUtils.nanoTime();
         gameover = false;
         paused = isPaused;
         isBlinking = false;

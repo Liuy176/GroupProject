@@ -23,7 +23,6 @@ import com.mygdx.helpers.Constants;
 public class Enemy extends Sprite {
     private World world;
     public Body body;
-    private TextureRegion enemyTexture;
     private float speed;
     private Player player;
     private float startHealth;
@@ -155,7 +154,7 @@ public class Enemy extends Sprite {
             currentDirectionX = MathUtils.random(-1f, 1f);
             movementTimer = movementDuration; // Reset the timer
         } else {
-            // Continue moving in the current direction
+            // continue moving in the current direction
             body.setLinearVelocity(currentDirectionX * speed, body.getLinearVelocity().y);
             movementTimer -= Gdx.graphics.getDeltaTime(); // decrease the timer
         }
@@ -221,14 +220,14 @@ public class Enemy extends Sprite {
 
     public void moveBack() {
         if(speed >3)
-            body.applyLinearImpulse(new Vector2(-20,0), body.getWorldCenter(), true);
+            body.applyLinearImpulse(new Vector2(-30,0), body.getWorldCenter(), true);
         else
             body.applyLinearImpulse(new Vector2(-6,0), body.getWorldCenter(), true);
     }
 
     public void moveForward() {
         if(speed >3)
-            body.applyLinearImpulse(new Vector2(20,0), body.getWorldCenter(), true);
+            body.applyLinearImpulse(new Vector2(30,0), body.getWorldCenter(), true);
         else
             body.applyLinearImpulse(new Vector2(6,0), body.getWorldCenter(), true);
     }

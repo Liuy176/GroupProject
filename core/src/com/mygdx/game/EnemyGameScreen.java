@@ -84,7 +84,7 @@ public class EnemyGameScreen implements Screen{
     public int enemyCount;
 
 
-    public EnemyGameScreen(MyGdxGame game, int roundNumber, float playerHealth, float playerWeaponStrength){
+    public EnemyGameScreen(MyGdxGame game, int roundNumber, float playerHealth, float playerWeaponStrength, float currHealth){
 
         this.game = game;
         this.camera = new OrthographicCamera();
@@ -98,7 +98,7 @@ public class EnemyGameScreen implements Screen{
         this.atlas = new TextureAtlas("Mario_and_Enemies.pack");
 
         new WorldCreator(world, map);
-        this.player = new Player(world, this, playerHealth, playerWeaponStrength);
+        this.player = new Player(world, this, playerHealth, playerWeaponStrength, currHealth);
         this.blackTexture = new Texture("BlackScreen.jpg");
         this.random = new Random();
         this.enemies = new Array<Enemy>();
