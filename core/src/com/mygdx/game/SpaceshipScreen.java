@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.Gdx;
@@ -64,6 +65,9 @@ public class SpaceshipScreen implements Screen {
     private float weaponStrength;
 
     private EnemyGameScreen disposeEnemyScreen = null;
+    private Texture heartTexture, healthFrame, white;
+    private TextureRegion whiteRegion;
+    private BitmapFont font;
 
   public SpaceshipScreen(MyGdxGame game, float health){
     this.game = game;
@@ -111,6 +115,11 @@ public class SpaceshipScreen implements Screen {
     isBlinking=false;
     blinkStartTime = 0f;
     paused=false; 
+    
+    this.white = new Texture("white.png");
+    this.whiteRegion = new TextureRegion(white, 0,0,1,1);
+    this.heartTexture = new Texture("heart.png");
+    this.healthFrame = new Texture("healthFrame.png");
 
   }
   
@@ -151,7 +160,7 @@ public class SpaceshipScreen implements Screen {
       ScreenUtils.clear(1, 0, 0, 1);
       batch.begin();
       batch.draw(img, 0, 0);
-      
+      drawHealthBar(game.getBatch(), font);
      //if (paused) bitmap.draw...
       if(!gameover){
         
@@ -384,6 +393,35 @@ public class SpaceshipScreen implements Screen {
         fadeOutOpacity=0f;
         fadeOut=false;
     }
+
+    public void drawHealthBar(SpriteBatch batch, BitmapFont font) {
+      float healthPercentage = playerHealth/100;
+      float barWidth = 200;
+      float barHeight = 24;
+      float padding = 15;
+      float heartSize = 32;
+
+      float barX = Gdx.graphics.getWidth() - barWidth - padding;
+      float barY = Gdx.graphics.getHeight() - barHeight - padding;
+      float heartX = barX - heartSize - 20;
+      float heartY = barY + (barHeight - heartSize) / 2;
+
+      //String healthText = "PLAYER'S HP: ";
+      //font.draw(batch, healthText, barX - 100, barY + barHeight);
+      batch.draw(heartTexture, heartX, heartY, 40, 32);
+
+      //background
+      batch.setColor(Color.RED);
+      batch.draw(whiteRegion, barX, barY, barWidth, barHeight);
+
+      //foreground
+      batch.setColor(Color.GREEN);
+      batch.draw(whiteRegion, barX, barY, barWidth * healthPercentage, barHeight);
+
+      batch.setColor(Color.WHITE);
+      batch.draw(healthFrame, barX-3, barY-3,206, 30);
+  }
+
     public void setDisposeEnemyScreen(EnemyGameScreen screen){
       this.disposeEnemyScreen = screen;
     }
@@ -418,7 +456,12 @@ public class SpaceshipScreen implements Screen {
       this.isBlinking = blinking;
     }
     @Override
-    public void show() {}
+    public void show() {
+      font = new BitmapFont();
+      font.setColor(Color.WHITE);
+      font.getData().setScale(1);
+       
+    }
 
     @Override
     public void resize(int width, int height) {}

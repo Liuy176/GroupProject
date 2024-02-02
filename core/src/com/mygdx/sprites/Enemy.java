@@ -70,7 +70,7 @@ public class Enemy extends Sprite {
         armSprite.setOrigin(0, armSprite.getHeight() / 2);
         
         setRegion(enemyTextureRegion);
-        setSize(texture.getWidth() / Constants.PPM, texture.getHeight() / Constants.PPM);
+        setSize((texture.getWidth()-8) / Constants.PPM, (texture.getHeight()-10) / Constants.PPM);
         setOrigin(getWidth() / 2, getHeight() / 2);
         defineEnemy(x, y);
     }
