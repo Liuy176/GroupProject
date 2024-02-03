@@ -4,12 +4,14 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
@@ -33,6 +35,11 @@ public class Enemy extends Sprite {
     private float deadRotationDeg;
     private EnemyGameScreen screen;
     private float optimalDistance = 3.0f;
+    private TextureRegion stand;
+    private Animation<TextureRegion> run;
+    public enum State {FALLING, JUMPING, STANDING, RUNNING, DEAD };
+    private State currState, prevState;
+    private float timer;
 
     /*private float movementDuration = 2.0f;
     private float movementTimer = 0.0f;
@@ -49,7 +56,7 @@ public class Enemy extends Sprite {
   
 
     public Enemy(World world,float x, float y, float speed, float health, Player player, EnemyGameScreen screen) {
-        
+        super(screen.getAtlas().findRegion("enemy"));
         this.world = world;
         this.speed = speed;
         this.player = player;
@@ -61,25 +68,31 @@ public class Enemy extends Sprite {
         this.isDefeated = false;
         this.deadRotationDeg = 0;
 
-        this.texture = new Texture("enemyNew.png");
-        this.enemyTextureRegion = new TextureRegion(texture);
         armTexture = new Texture("arm.png"); // Assuming you have an arm texture
         armSprite = new Sprite(armTexture);
         armSprite.flip(true, true);
         armSprite.setSize(armTexture.getWidth() / Constants.PPM, armTexture.getHeight() / Constants.PPM);
         armSprite.setOrigin(0, armSprite.getHeight() / 2);
         
-        setRegion(enemyTextureRegion);
-        setSize((texture.getWidth()-8) / Constants.PPM, (texture.getHeight()-10) / Constants.PPM);
         setOrigin(getWidth() / 2, getHeight() / 2);
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+        
+        frames.add(new TextureRegion(getTexture(), 0, 0, 17, 27));
+        frames.add(new TextureRegion(getTexture(), 17, 0, 17, 27));
+        run = new Animation<TextureRegion>(0.1f, frames);
+        frames.clear();
+        
+        stand = new TextureRegion(getTexture(), 0, 0, 17, 27);
+        setBounds(0,0, 13/Constants.PPM, 16/Constants.PPM);
+        setRegion(stand);
         defineEnemy(x, y);
     }
 
     public void update(float dt) {
 
         timeSinceLastShot += dt;
-        boolean isPlayerRight = player.getBody().getPosition().x > this.body.getPosition().x;
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
+        setRegion(getFrame(dt));
 
 
         Vector2 playerPos = player.getBody().getPosition();
@@ -101,18 +114,6 @@ public class Enemy extends Sprite {
 
         armSprite.setRotation(angle);
         armSprite.setPosition(body.getPosition().x - 0.2f + armSprite.getWidth() / 2, body.getPosition().y +0.1f-armSprite.getHeight() / 2);
-
-        if (!facingRight && isPlayerRight) {
-            this.flip(true, false);
-            armSprite.flip(false, true);
-            facingRight = true; //
-        } 
-        
-        else if (facingRight && !isPlayerRight) {
-            this.flip(true, false);
-            armSprite.flip(false, true);
-            facingRight = false; 
-        }
         
         if (distance > optimalDistance) {
             // move towards the player
@@ -139,6 +140,59 @@ public class Enemy extends Sprite {
                body.setAngularVelocity(0);
             }
         }
+    }
+
+    public TextureRegion getFrame(float delta){
+        boolean isPlayerRight = player.getBody().getPosition().x > this.body.getPosition().x;
+        currState = getState();
+
+        TextureRegion region;
+        switch (currState) {
+            case JUMPING:
+                region = stand;
+                break;
+            case RUNNING:
+                region = run.getKeyFrame(timer, true);
+                break;
+            case DEAD:
+                region = stand;
+                return region;
+            case FALLING:
+            case STANDING:
+            default:
+                region= stand;
+                break;
+        }
+
+        if (!facingRight && isPlayerRight && !region.isFlipX()) {
+            region.flip(true, false);
+            armSprite.flip(false, true);
+            facingRight = true; //
+        } 
+        
+        else if (facingRight && !isPlayerRight && region.isFlipX()) {
+            region.flip(true, false);
+            armSprite.flip(false, true);
+            facingRight = false;
+        }
+
+           
+        timer = currState == prevState ? timer + delta : 0;
+        prevState = currState;
+        return region;
+    }
+
+    public State getState(){
+        if(isDefeated)
+            return State.DEAD;
+        //else if(body.getLinearVelocity().y>0 || (body.getLinearVelocity().y < 0 && prevState == State.JUMPING))
+        //    return State.JUMPING;
+        else if(body.getLinearVelocity().y<0)
+            return State.FALLING;
+        else if(body.getLinearVelocity().x !=0)
+            return State.RUNNING;
+        else
+            return State.STANDING;
     }
 
     public void approachPlayer(Vector2 playerPosition) {

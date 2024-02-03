@@ -23,14 +23,14 @@ import com.badlogic.gdx.graphics.GL20;
 
 public class SpaceshipScreen implements Screen {
     private SpriteBatch batch;
-    private Texture img, tNave, tMissile, tEnemy1, tCandy, tWeapon;
+    private Texture img, tNave, tMissile, tEnemy1, tCandy, tWeapon, weaponBarFrame;
     private Sprite nave, missile;
     private float posX, posY, velocity, xMissile, yMissile;
     private boolean  gameover;
     private Array<Rectangle> enemies1;
   
     private long lastEnemyTime;
-    private int score, power, numEnemies;
+    private int score, power, numEnemies, damage=10;
     private boolean toIncrementScore = false;
   
     private FreeTypeFontGenerator generator;
@@ -62,7 +62,6 @@ public class SpaceshipScreen implements Screen {
     private float collisionTimer = 0f;
     private int timesCrashed;
     public float playerHealth;
-    private float weaponStrength;
 
     private EnemyGameScreen disposeEnemyScreen = null;
     private Texture heartTexture, healthFrame, white;
@@ -96,7 +95,7 @@ public class SpaceshipScreen implements Screen {
     lastEnemyTime = 0;
 
     playerHealth = health;
-    weaponStrength = 15;
+    //damage = 10;
     timesCrashed = 0;
     score = 0;
     power = 3;
@@ -120,6 +119,7 @@ public class SpaceshipScreen implements Screen {
     this.whiteRegion = new TextureRegion(white, 0,0,1,1);
     this.heartTexture = new Texture("heart.png");
     this.healthFrame = new Texture("healthFrame.png");
+    this.weaponBarFrame = new Texture("weaponBarFrame.png");
 
   }
   
@@ -186,11 +186,6 @@ public class SpaceshipScreen implements Screen {
       }else{
         
         bitmap.draw(batch, "Score: " + score, 20, Gdx.graphics.getHeight() - 20);
-        bitmap.draw(
-            batch, "GAME OVER", 
-            Gdx.graphics.getWidth() - 150, 
-            Gdx.graphics.getHeight() - 20
-            );
   
         if( Gdx.input.isKeyPressed(Input.Keys.ENTER) ){
           score = 0;
@@ -261,7 +256,7 @@ public class SpaceshipScreen implements Screen {
         this.produceCandy(tCandy, candies);
         lastCandyTime = TimeUtils.nanoTime();
       }
-      if ((TimeUtils.nanoTime() - lastWeaponTime)*0.2 > 2000000000) { // Adjust time as needed
+      if ((TimeUtils.nanoTime() - lastWeaponTime)*0.5 > 2000000000) { // Adjust time as needed
         this.produceCandy(tWeapon, weapons);
         lastWeaponTime = TimeUtils.nanoTime();
       }
@@ -281,7 +276,10 @@ public class SpaceshipScreen implements Screen {
         weapon.x -= 250 * Gdx.graphics.getDeltaTime(); // Adjust speed as needed
         if (weapon.x + tWeapon.getWidth() < 0) iter.remove();
         else if (collide(weapon.x, weapon.y, weapon.width*3, weapon.height*3, posX, posY, nave.getWidth()*4, nave.getHeight()*4)) {
-          playerHealth=100; // Restore power
+          if(damage>=100)
+            damage=100;
+          else
+            damage +=10;; // Restore power
           iter.remove();
         }
       }
@@ -329,7 +327,7 @@ public class SpaceshipScreen implements Screen {
         if(fadeOut){
           collisionTimer +=delta;
           if(collisionTimer>=1){
-            game.setScreen(new EnemyGameScreen(game, timesCrashed, 100, weaponStrength, playerHealth));
+            game.setScreen(new EnemyGameScreen(game, timesCrashed, 100, damage, playerHealth));
           }
         }
       }
@@ -396,6 +394,7 @@ public class SpaceshipScreen implements Screen {
 
     public void drawHealthBar(SpriteBatch batch, BitmapFont font) {
       float healthPercentage = playerHealth/100;
+      float weaponStrengthPercentage = (float)damage/100;
       float barWidth = 200;
       float barHeight = 24;
       float padding = 15;
@@ -403,6 +402,7 @@ public class SpaceshipScreen implements Screen {
 
       float barX = Gdx.graphics.getWidth() - barWidth - padding;
       float barY = Gdx.graphics.getHeight() - barHeight - padding;
+      float weaponBarY = barY - (barHeight + padding+5);
       float heartX = barX - heartSize - 20;
       float heartY = barY + (barHeight - heartSize) / 2;
 
@@ -418,8 +418,15 @@ public class SpaceshipScreen implements Screen {
       batch.setColor(Color.GREEN);
       batch.draw(whiteRegion, barX, barY, barWidth * healthPercentage, barHeight);
 
+      batch.setColor(Color.GRAY); // background
+      batch.draw(whiteRegion, barX, weaponBarY, barWidth, barHeight);
+
+      batch.setColor(Color.YELLOW); // foreground
+      batch.draw(whiteRegion, barX, weaponBarY, barWidth * weaponStrengthPercentage, barHeight);
+
       batch.setColor(Color.WHITE);
       batch.draw(healthFrame, barX-3, barY-3,206, 30);
+      batch.draw(weaponBarFrame, barX-3, weaponBarY-3,206, 30);
   }
 
     public void setDisposeEnemyScreen(EnemyGameScreen screen){
@@ -428,8 +435,8 @@ public class SpaceshipScreen implements Screen {
     public void setPlayerHealth(float health){
       this.playerHealth = health;
     }
-    public void setWeaponStrength(float strength){
-      this.weaponStrength = strength;
+    public void setDamage(int strength){
+      this.damage = strength;
     }
     public void setAmountOfCrashes(int num){
       this.timesCrashed = num;

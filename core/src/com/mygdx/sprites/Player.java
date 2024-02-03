@@ -32,14 +32,14 @@ public class Player extends Sprite{
     private float timer;
     private EnemyGameScreen screen;
     private float startHealth, currentHealth;
-    private Texture heartTexture, healthFrame, white;
+    private Texture heartTexture, healthFrame, white, weaponBarFrame;
     private TextureRegion whiteRegion;
     private boolean isDefeated;
     private int deadRotationDeg;
     private float damage;
 
     public Player(World world, EnemyGameScreen screen, float maxHealth, float weaponStrength, float currHealth){
-        super(screen.getAtlas().findRegion("little_mario"));
+        super(screen.getAtlas().findRegion("player"));
         this.world = world;
         this.screen = screen;
         definePlayer();
@@ -54,21 +54,18 @@ public class Player extends Sprite{
         this.whiteRegion = new TextureRegion(white, 0,0,1,1);
         this.heartTexture = new Texture("heart.png");
         this.healthFrame = new Texture("healthFrame.png");
+        this.weaponBarFrame = new Texture("weaponBarFrame.png");
         this.isDefeated = false;
         this.deadRotationDeg = 0;
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
-        for(int i =1; i<4; i++)
-            frames.add(new TextureRegion(getTexture(), i*16, 10, 16, 17));
-        run = new Animation<TextureRegion>(0.2f, frames);
-        frames.clear();
-
-        for(int i=4; i<6; i++)
-            frames.add(new TextureRegion(getTexture(), i*16, 10, 16, 17));
-        jump = new Animation<TextureRegion>(0.2f, frames);
         
-
-        stand = new TextureRegion(getTexture(), 0, 10, 16, 17);
+        frames.add(new TextureRegion(getTexture(), 0, 29, 26, 31));
+        frames.add(new TextureRegion(getTexture(), 26, 29, 26, 31));
+        run = new Animation<TextureRegion>(0.1f, frames);
+        frames.clear();
+        
+        stand = new TextureRegion(getTexture(), 0, 29, 26, 31);
         setBounds(0,0, 16/Constants.PPM, 16/Constants.PPM);
         setRegion(stand);
     }
@@ -97,7 +94,7 @@ public class Player extends Sprite{
         TextureRegion region;
         switch (currState) {
             case JUMPING:
-                region = jump.getKeyFrame(timer);
+                region = stand;
                 break;
             case RUNNING:
                 region = run.getKeyFrame(timer, true);
@@ -169,6 +166,8 @@ public class Player extends Sprite{
 
     public void drawHealthBar(SpriteBatch batch, BitmapFont font) {
         float healthPercentage = getHealthPercentage();
+        float weaponStrengthPercentage = damage / 100; 
+
         float barWidth = 200;
         float barHeight = 24;
         float padding = 15;
@@ -176,6 +175,7 @@ public class Player extends Sprite{
 
         float barX = Gdx.graphics.getWidth() - barWidth - padding;
         float barY = Gdx.graphics.getHeight() - barHeight - padding;
+        float weaponBarY = barY - (barHeight + padding+5);
         float heartX = barX - heartSize - 20;
         float heartY = barY + (barHeight - heartSize) / 2;
 
@@ -191,8 +191,15 @@ public class Player extends Sprite{
         batch.setColor(Color.GREEN);
         batch.draw(whiteRegion, barX, barY, barWidth * healthPercentage, barHeight);
 
+        batch.setColor(Color.GRAY); // background
+        batch.draw(whiteRegion, barX, weaponBarY, barWidth, barHeight);
+
+        batch.setColor(Color.YELLOW); // foreground
+        batch.draw(whiteRegion, barX, weaponBarY, barWidth * weaponStrengthPercentage, barHeight);
+
         batch.setColor(Color.WHITE);
         batch.draw(healthFrame, barX-3, barY-3,206, 30);
+        batch.draw(weaponBarFrame, barX-3, weaponBarY-3,206, 30);
     }
 
     public void takeDamage(float amount) {

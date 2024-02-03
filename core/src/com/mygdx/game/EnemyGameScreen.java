@@ -18,29 +18,16 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.TimeUtils;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -95,7 +82,7 @@ public class EnemyGameScreen implements Screen{
         this.enemyBullets = new Array<EnemyBullet>();
         this.world = new World(new Vector2(0,-10), true);
         this.debugRenderer = new Box2DDebugRenderer();
-        this.atlas = new TextureAtlas("Mario_and_Enemies.pack");
+        this.atlas = new TextureAtlas("spritePack.pack");
 
         new WorldCreator(world, map);
         this.player = new Player(world, this, playerHealth, playerWeaponStrength, currHealth);
@@ -201,9 +188,6 @@ public class EnemyGameScreen implements Screen{
         Gdx.gl.glDisable(GL20.GL_BLEND);
 
         game.getBatch().setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-        game.getBatch().begin();
-        player.drawHealthBar(game.getBatch(), font);
-        game.getBatch().end();
 
         // fade in effect
         if(fadeInOpacity>0){
@@ -300,7 +284,7 @@ public class EnemyGameScreen implements Screen{
     
     private void reset(){
         game.spaceshipScreen.setPlayerHealth(100);
-        game.spaceshipScreen.setWeaponStrength(15);
+        game.spaceshipScreen.setDamage(10);
         game.spaceshipScreen.setAmountOfCrashes(0);
         game.spaceshipScreen.setScore(0);
         game.spaceshipScreen.setGameOver(false);
