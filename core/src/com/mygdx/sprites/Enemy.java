@@ -68,7 +68,7 @@ public class Enemy extends Sprite {
         this.isDefeated = false;
         this.deadRotationDeg = 0;
 
-        armTexture = new Texture("arm.png"); // Assuming you have an arm texture
+        armTexture = new Texture("arm.png");
         armSprite = new Sprite(armTexture);
         armSprite.flip(true, true);
         armSprite.setSize(armTexture.getWidth() / Constants.PPM, armTexture.getHeight() / Constants.PPM);
@@ -99,8 +99,6 @@ public class Enemy extends Sprite {
         Vector2 enemyPos = body.getPosition();
         //dVector2 directionToPlayer = player.getBody().getPosition().sub(body.getPosition());
         //Vector2 directionToPlayer = playerPos.sub(body.getPosition()).nor();
-        Vector2 directionToPlayer = new Vector2(player.getBody().getPosition()).sub(body.getPosition()).nor();
-        float angle = directionToPlayer.angleDeg();
         float distance = enemyPos.dst(playerPos);
         //float direction = playerPos.x - enemyPos.x;
         //direction = Math.signum(direction);
@@ -111,10 +109,14 @@ public class Enemy extends Sprite {
         //body.applyLinearImpulse(new Vector2(impulse,0), body.getWorldCenter(), true);
         //Vector2 direction = playerPos.sub(body.getPosition()).nor();
         //body.setLinearVelocity(direction.scl(speed));
-
-        armSprite.setRotation(angle);
         armSprite.setPosition(body.getPosition().x - 0.2f + armSprite.getWidth() / 2, body.getPosition().y +0.1f-armSprite.getHeight() / 2);
-        
+        if(!isDefeated){
+            Vector2 directionToPlayer = new Vector2(player.getBody().getPosition()).sub(body.getPosition()).nor();
+            float angle = directionToPlayer.angleDeg();
+
+            armSprite.setRotation(angle);
+        }
+       
         if (distance > optimalDistance) {
             // move towards the player
             approachPlayer(playerPos);
@@ -130,11 +132,11 @@ public class Enemy extends Sprite {
 
         if(isDefeated){
             deadRotationDeg +=5;
-            rotate(deadRotationDeg);
+            //rotate(deadRotationDeg);
             body.setTransform(body.getPosition(), (float)Math.toRadians(deadRotationDeg));
             if(body.getPosition().y <= -1){
                body.setActive(false);
-               this.setPosition(0, -1);
+               this.setPosition(0, -5);
                body.setTransform(0, -1,0);
                body.setLinearVelocity(0,0);
                body.setAngularVelocity(0);
@@ -143,10 +145,9 @@ public class Enemy extends Sprite {
     }
 
     public TextureRegion getFrame(float delta){
-        boolean isPlayerRight = player.getBody().getPosition().x > this.body.getPosition().x;
         currState = getState();
-
         TextureRegion region;
+        boolean isPlayerRight = player.getBody().getPosition().x > this.body.getPosition().x;
         switch (currState) {
             case JUMPING:
                 region = stand;
@@ -164,18 +165,17 @@ public class Enemy extends Sprite {
                 break;
         }
 
-        if (!facingRight && isPlayerRight && !region.isFlipX()) {
-            region.flip(true, false);
-            armSprite.flip(false, true);
-            facingRight = true; //
-        } 
-        
-        else if (facingRight && !isPlayerRight && region.isFlipX()) {
-            region.flip(true, false);
+
+        if((!isPlayerRight || !facingRight) && region.isFlipX()){
+            region.flip(true,false);
             armSprite.flip(false, true);
             facingRight = false;
         }
-
+        else if((isPlayerRight || facingRight)&& !region.isFlipX()){
+            region.flip(true, false);
+            armSprite.flip(false, true);
+            facingRight = true;
+        }
            
         timer = currState == prevState ? timer + delta : 0;
         prevState = currState;
@@ -185,8 +185,8 @@ public class Enemy extends Sprite {
     public State getState(){
         if(isDefeated)
             return State.DEAD;
-        //else if(body.getLinearVelocity().y>0 || (body.getLinearVelocity().y < 0 && prevState == State.JUMPING))
-        //    return State.JUMPING;
+        else if(body.getLinearVelocity().y>0 || (body.getLinearVelocity().y < 0 && prevState == State.JUMPING))
+            return State.JUMPING;
         else if(body.getLinearVelocity().y<0)
             return State.FALLING;
         else if(body.getLinearVelocity().x !=0)
@@ -343,12 +343,13 @@ public class Enemy extends Sprite {
     }
 
     public void draw(SpriteBatch batch) {
+        setOriginCenter();
         // Update the position of the sprite to match the body
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
-        
+        if(isDefeated)setRotation(deadRotationDeg);
         // Draw the sprite
         super.draw(batch);
-        armSprite.draw(batch);
+        if(!isDefeated)armSprite.draw(batch);
     }
     public void dispose() {
         texture.dispose();
