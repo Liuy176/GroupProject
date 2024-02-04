@@ -71,7 +71,7 @@ public class Enemy extends Sprite {
         armTexture = new Texture("arm.png");
         armSprite = new Sprite(armTexture);
         armSprite.flip(true, true);
-        armSprite.setSize(armTexture.getWidth() / Constants.PPM, armTexture.getHeight() / Constants.PPM);
+        armSprite.setSize((armTexture.getWidth()-3) / Constants.PPM, (armTexture.getHeight()-2) / Constants.PPM);
         armSprite.setOrigin(0, armSprite.getHeight() / 2);
         
         setOrigin(getWidth() / 2, getHeight() / 2);
@@ -94,43 +94,32 @@ public class Enemy extends Sprite {
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
         setRegion(getFrame(dt));
 
-
         Vector2 playerPos = player.getBody().getPosition();
         Vector2 enemyPos = body.getPosition();
-        //dVector2 directionToPlayer = player.getBody().getPosition().sub(body.getPosition());
-        //Vector2 directionToPlayer = playerPos.sub(body.getPosition()).nor();
         float distance = enemyPos.dst(playerPos);
-        //float direction = playerPos.x - enemyPos.x;
-        //direction = Math.signum(direction);
 
-        //float desiredVel = direction*speed;
-        //float velChange = desiredVel - body.getLinearVelocity().x;
-        //float impulse = body.getMass() * velChange;
-        //body.applyLinearImpulse(new Vector2(impulse,0), body.getWorldCenter(), true);
-        //Vector2 direction = playerPos.sub(body.getPosition()).nor();
-        //body.setLinearVelocity(direction.scl(speed));
-        armSprite.setPosition(body.getPosition().x - 0.2f + armSprite.getWidth() / 2, body.getPosition().y +0.1f-armSprite.getHeight() / 2);
+        // edit arms position according to the direction enemy is facing
+        if(!facingRight) armSprite.setPosition(body.getPosition().x  -0.35f+ armSprite.getWidth() / 2, body.getPosition().y+0.1f -armSprite.getHeight() / 2);
+        else armSprite.setPosition(body.getPosition().x -0.2f + armSprite.getWidth() / 2, body.getPosition().y+0.1f -armSprite.getHeight() / 2);
+
         if(!isDefeated){
             Vector2 directionToPlayer = new Vector2(player.getBody().getPosition()).sub(body.getPosition()).nor();
             float angle = directionToPlayer.angleDeg();
 
             armSprite.setRotation(angle);
-        }
+        
        
-        if (distance > optimalDistance) {
-            // move towards the player
-            approachPlayer(playerPos);
-        } else {
-            
-            body.setLinearVelocity(0, body.getLinearVelocity().y);
-            
-            if (timeSinceLastShot >= shootingInterval) {
-                shoot(playerPos);
-                timeSinceLastShot = 0f; 
+            if (distance > optimalDistance) {
+                // move towards the player
+                approachPlayer(playerPos);
+            } else {
+                body.setLinearVelocity(0, body.getLinearVelocity().y);
+                if (timeSinceLastShot >= shootingInterval) {
+                    shoot(playerPos);
+                    timeSinceLastShot = 0f; 
+                }
             }
-        }
-
-        if(isDefeated){
+        } else{
             deadRotationDeg +=5;
             //rotate(deadRotationDeg);
             body.setTransform(body.getPosition(), (float)Math.toRadians(deadRotationDeg));
@@ -331,13 +320,29 @@ public class Enemy extends Sprite {
     }  
     
     public void shoot(Vector2 playerPosition) {
-        float x = body.getPosition().x;
+        /*float x = body.getPosition().x;
         boolean facingRight = playerPosition.x > x;
         float y = body.getPosition().y;
 
         x = x + (facingRight ? 1 : -1) * 0.7f;
         
         EnemyBullet bullet = new EnemyBullet(world, x, y, facingRight, 12, player);
+        screen.addEnemyBullet(bullet);
+        */
+        float armLen = armSprite.getWidth();
+
+        // arm tip position
+        float armAngleRadians = (float)Math.toRadians(armSprite.getRotation());
+        float tipXOffset = armLen * MathUtils.cos(armAngleRadians);
+        float tipYOffset = armLen * MathUtils.sin(armAngleRadians);
+    
+        // arm tim pos (taking into account player's position)
+        float bulletSpawnX = body.getPosition().x + (tipXOffset*20f) / Constants.PPM;
+        float bulletSpawnY = body.getPosition().y + tipYOffset  / Constants.PPM + 0.1f;
+    
+        // spawn the bullet
+        boolean facingRight = playerPosition.x > body.getPosition().x;
+        EnemyBullet bullet = new EnemyBullet(world, bulletSpawnX, bulletSpawnY, facingRight, 5, player);
         screen.addEnemyBullet(bullet);
 
     }
