@@ -462,6 +462,9 @@ public class SpaceshipScreen implements Screen {
     public void setIsBlinking(boolean blinking){
       this.isBlinking = blinking;
     }
+    public int getScore(){
+      return score;
+    }
     @Override
     public void show() {
       font = new BitmapFont();

@@ -49,7 +49,6 @@ public class Enemy extends Sprite {
     private float shootingInterval = 1f;
 
     private Texture texture;
-    private TextureRegion enemyTextureRegion;
     private Sprite armSprite;
     private Texture armTexture;
     private boolean facingRight = false;
@@ -108,7 +107,6 @@ public class Enemy extends Sprite {
 
             armSprite.setRotation(angle);
         
-       
             if (distance > optimalDistance) {
                 // move towards the player
                 approachPlayer(playerPos);
@@ -153,7 +151,6 @@ public class Enemy extends Sprite {
                 region= stand;
                 break;
         }
-
 
         if((!isPlayerRight || !facingRight) && region.isFlipX()){
             region.flip(true,false);
@@ -243,7 +240,6 @@ public class Enemy extends Sprite {
         fixtureDef.isSensor = true;
         body.createFixture(fixtureDef).setUserData(this);
         
-
         EdgeShape leftSideClose = new EdgeShape();
         leftSideClose.set(new Vector2(-4/Constants.PPM, 6/Constants.PPM), new Vector2(-4/Constants.PPM, -6/Constants.PPM));
         fixtureDef.shape = leftSideClose;

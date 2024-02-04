@@ -203,7 +203,7 @@ public class EnemyGameScreen implements Screen{
     }
 
     public void update(float dt){
-        handleInput(dt);
+        if(!startFade) handleInput(dt);
 
         world.step(1/60f, 6, 2);
         cameraUpdate();
@@ -276,13 +276,15 @@ public class EnemyGameScreen implements Screen{
         if(Gdx.input.isKeyPressed(Input.Keys.A) && player.getBody().getLinearVelocity().x >=-3 )
             player.getBody().applyLinearImpulse(new Vector2(-0.3f, 0), player.getBody().getWorldCenter(), true);
         if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
-            player.shoot();
+                player.shoot();
         }
         
             
     }
     
     private void reset(){
+        if(game.spaceshipScreen.getScore() > game.mainMenuScreen.getHighScore())
+            game.mainMenuScreen.setHighScore(game.spaceshipScreen.getScore());
         game.spaceshipScreen.setPlayerHealth(100);
         game.spaceshipScreen.setDamage(10);
         game.spaceshipScreen.setAmountOfCrashes(0);

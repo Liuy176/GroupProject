@@ -2,11 +2,10 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ScreenAdapter;
 
-import javax.swing.event.ChangeEvent;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -17,6 +16,7 @@ public class MenuScreen extends ScreenAdapter {
     private MyGdxGame game;
     private Stage stage;
     private Skin skin;
+    private int highScore = 0;
     
     public MenuScreen(MyGdxGame game) {
         this.game = game;
@@ -33,6 +33,9 @@ public class MenuScreen extends ScreenAdapter {
         table.setFillParent(true);
         stage.addActor(table);
 
+        // high score lable
+        String highScoreText = "High Score: " + highScore;
+        Label highScoreLabel = new Label(highScoreText, skin);
         //buttons
         TextButton playButton = new TextButton("Play", skin);
         TextButton settingsButton = new TextButton("Settings", skin);
@@ -68,6 +71,8 @@ public class MenuScreen extends ScreenAdapter {
             }
         });
 
+        // show high score
+        table.add(highScoreLabel).colspan(2).padBottom(20).row();
         // add buttons to the table
         table.add(playButton).fillX().uniformX().padBottom(10);
         table.row();
@@ -102,6 +107,13 @@ public class MenuScreen extends ScreenAdapter {
     public void dispose() {
         stage.dispose();
         skin.dispose();
+    }
+
+    public int getHighScore(){
+        return highScore;
+    }
+    public void setHighScore(int score){
+        this.highScore = score;
     }
 }
 
