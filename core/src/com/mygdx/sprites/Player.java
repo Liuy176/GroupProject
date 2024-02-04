@@ -32,7 +32,7 @@ public class Player extends Sprite{
     private float timer;
     private EnemyGameScreen screen;
     private float startHealth, currentHealth;
-    private Texture heartTexture, healthFrame, white, weaponBarFrame;
+    private Texture heartTexture, gunTexture, healthFrame, white, weaponBarFrame;
     private TextureRegion whiteRegion;
     private boolean isDefeated;
     private int deadRotationDeg;
@@ -53,6 +53,7 @@ public class Player extends Sprite{
         this.white = new Texture("white.png");
         this.whiteRegion = new TextureRegion(white, 0,0,1,1);
         this.heartTexture = new Texture("heart.png");
+        this.gunTexture = new Texture("gun.png");
         this.healthFrame = new Texture("healthFrame.png");
         this.weaponBarFrame = new Texture("weaponBarFrame.png");
         this.isDefeated = false;
@@ -182,6 +183,7 @@ public class Player extends Sprite{
         //String healthText = "PLAYER'S HP: ";
         //font.draw(batch, healthText, barX - 100, barY + barHeight);
         batch.draw(heartTexture, heartX, heartY, 40, 32);
+        batch.draw(gunTexture, heartX, weaponBarY, 40, 32);
 
         //background
         batch.setColor(Color.RED);
@@ -219,11 +221,12 @@ public class Player extends Sprite{
         }
 
         body.applyLinearImpulse(new Vector2(0, 2f), body.getWorldCenter(), true);
-        screen.startFade = true;
+        screen.setDefeated(true);
     }
 
     public void dispose(){
         heartTexture.dispose();
+        gunTexture.dispose();
         white.dispose();
         healthFrame.dispose();
     }

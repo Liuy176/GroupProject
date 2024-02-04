@@ -52,8 +52,7 @@ public class EnemyGameScreen implements Screen{
     private float viewportWidth = 18;
     private float viewportHeight = 10;
 
-    private float tileSize, mapWidth, mapHeight;
-    private int mapWidthTiles, mapHeightTiles;
+    private float tileSize =16, mapWidth, mapHeight;
     private BitmapFont font;
 
     private Texture backgroundTexture, blackTexture;
@@ -61,7 +60,7 @@ public class EnemyGameScreen implements Screen{
     private float backgroundScaleY = 0;
 
     private float fade = 0f;
-    public boolean startFade = false;
+    public boolean isDefeated = false;
     private float fadeDuration = 3f;
     private float fadeInOpacity = 1.0f; 
     private float fadeInSpeed = 0.5f; 
@@ -104,12 +103,8 @@ public class EnemyGameScreen implements Screen{
         this.camera.setToOrtho(false, 18, 10);
         this.world.setContactListener(new WorldContactListener());
 
-        this.tileSize = 16;
-        this.mapWidthTiles = map.getProperties().get("width", Integer.class);
-        this.mapHeightTiles = map.getProperties().get("height", Integer.class);
-        this.mapWidth = mapWidthTiles * tileSize / Constants.PPM;
-        this.mapHeight = mapHeightTiles * tileSize / Constants.PPM;
-
+        this.mapWidth = map.getProperties().get("width", Integer.class);
+        this.mapHeight = map.getProperties().get("height", Integer.class);
     }
 
     @Override
@@ -121,8 +116,8 @@ public class EnemyGameScreen implements Screen{
          
         // set background image properties
         backgroundTexture = new Texture("9.png");
-        float mapPixelWidth = mapWidthTiles * tileSize;
-        float mapPixelHeight = mapHeightTiles * tileSize;
+        float mapPixelWidth = mapWidth * tileSize;
+        float mapPixelHeight = mapHeight * tileSize;
         backgroundScaleX = mapPixelWidth / backgroundTexture.getWidth()/Constants.PPM;
         backgroundScaleY = mapPixelHeight / backgroundTexture.getHeight()/Constants.PPM;
     }
@@ -169,7 +164,7 @@ public class EnemyGameScreen implements Screen{
         game.getBatch().end();
 
         // add fade out effect after player crashed
-        if (startFade) {
+        if (isDefeated) {
             fade += delta / fadeDuration;
             if (fade > 1) {
                 fade = 1;
@@ -203,7 +198,7 @@ public class EnemyGameScreen implements Screen{
     }
 
     public void update(float dt){
-        if(!startFade) handleInput(dt);
+        if(!isDefeated) handleInput(dt);
 
         world.step(1/60f, 6, 2);
         cameraUpdate();
@@ -307,6 +302,9 @@ public class EnemyGameScreen implements Screen{
 
     public TextureAtlas getAtlas(){
         return atlas;
+    }
+    public void setDefeated(boolean isDefeated){
+        this.isDefeated = isDefeated;
     }
 
     @Override

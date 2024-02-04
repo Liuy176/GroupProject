@@ -64,7 +64,7 @@ public class SpaceshipScreen implements Screen {
     public float playerHealth;
 
     private EnemyGameScreen disposeEnemyScreen = null;
-    private Texture heartTexture, healthFrame, white;
+    private Texture heartTexture, healthFrame, white, gunTexture;
     private TextureRegion whiteRegion;
     private BitmapFont font;
 
@@ -78,11 +78,6 @@ public class SpaceshipScreen implements Screen {
     posY = 0;
     velocity = 10;
 
-    tMissile = new Texture("6445166.png");
-    missile  = new Sprite(tMissile);
-    xMissile = posX;
-    yMissile = posY;
-    //attack = false; */
     tCandy = new Texture("healthPickup.png");
     tWeapon = new Texture("gunPickup.png");
     candies = new Array<Rectangle>();
@@ -118,6 +113,7 @@ public class SpaceshipScreen implements Screen {
     this.white = new Texture("white.png");
     this.whiteRegion = new TextureRegion(white, 0,0,1,1);
     this.heartTexture = new Texture("heart.png");
+    this.gunTexture = new Texture("gun.png");
     this.healthFrame = new Texture("healthFrame.png");
     this.weaponBarFrame = new Texture("weaponBarFrame.png");
 
@@ -215,6 +211,11 @@ public class SpaceshipScreen implements Screen {
       //img.dispose();
       //tNave.dispose();
       //tCandy.dispose();
+      //white.dispose();
+      //healthFrame.dispose();
+      //heartTexture.dispose();
+      //gunTexture.dispose();
+      //weaponBarFrame.dispose();
     }
   
     private void moveNave(){
@@ -409,6 +410,7 @@ public class SpaceshipScreen implements Screen {
       //String healthText = "PLAYER'S HP: ";
       //font.draw(batch, healthText, barX - 100, barY + barHeight);
       batch.draw(heartTexture, heartX, heartY, 40, 32);
+      batch.draw(gunTexture, heartX, weaponBarY, 40, 32);
 
       //background
       batch.setColor(Color.RED);
