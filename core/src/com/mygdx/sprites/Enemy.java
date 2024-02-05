@@ -25,34 +25,27 @@ import com.mygdx.helpers.Constants;
 public class Enemy extends Sprite {
     private World world;
     public Body body;
-    private float speed;
-    private float damage;
+    private float speed, damage, startHealth, currentHealth, deadRotationDeg, timer;
     private Player player;
-    private float startHealth;
-    private float currentHealth;
-    public Texture white;
-    public TextureRegion whiteRegion;
-    private boolean isDefeated;
-    private float deadRotationDeg;
+    public Texture white, armTexture;
+    public TextureRegion whiteRegion, stand;
+    private boolean isDefeated, facingRight = false, movingBack = false;
     private EnemyGameScreen screen;
-    private TextureRegion stand;
     private Animation<TextureRegion> run;
     public enum State {FALLING, JUMPING, STANDING, RUNNING, DEAD };
     private State currState, prevState;
-    private float timer;
 
-    /*private float movementDuration = 2.0f;
-    private float movementTimer = 0.0f;
-    private float currentDirectionX = 0.0f;
-*/
+    private float randomActionTimer = 0f;
+    private float randomActionInterval = 3.0f;
+    private float randomActionChance = 0.8f;
+    private float moveBackDuration = 0f;
+    private float moveBackTimer = 0f;
+    private Vector2 moveBackDirection = new Vector2();
+
     private float timeSinceLastShot = 0f;
     private float shootingInterval = 1f;
 
-    private Texture texture;
     private Sprite armSprite;
-    private Texture armTexture;
-    private boolean facingRight = false;
-  
 
     public Enemy(World world,float x, float y, float speed, float health, Player player, EnemyGameScreen screen, float damage) {
         super(screen.getAtlas().findRegion("enemy"));
@@ -107,17 +100,22 @@ public class Enemy extends Sprite {
             float angle = directionToPlayer.angleDeg();
 
             armSprite.setRotation(angle);
+            updateMovement(distance, playerPos, dt);
         
-            if (distance > Constants.enemyShootingDistance) {
+           /*  if (distance > Constants.enemyShootingDistance) {
                 // move towards the player
                 approachPlayer(playerPos);
+                if(body.getLinearVelocity().x == 0){
+                    performRandomActionOrStandStill(dt);
+                }
             } else {
-                body.setLinearVelocity(0, body.getLinearVelocity().y);
+                performRandomActionOrStandStill(dt);
+                //body.setLinearVelocity(0, body.getLinearVelocity().y);
                 if (timeSinceLastShot >= shootingInterval) {
                     shoot(playerPos);
                     timeSinceLastShot = 0f; 
                 }
-            }
+            } */
         } else{
             deadRotationDeg +=5;
             //rotate(deadRotationDeg);
@@ -183,33 +181,53 @@ public class Enemy extends Sprite {
     }
 
     public void approachPlayer(Vector2 playerPosition) {
-  
-        float directionX = Math.signum(playerPosition.x - body.getPosition().x);
-        body.setLinearVelocity(directionX * speed, body.getLinearVelocity().y);
+
+            float directionX = Math.signum(playerPosition.x - body.getPosition().x);
+            body.setLinearVelocity(directionX * speed, body.getLinearVelocity().y);
     }
 
 
-    /*public void randomMovement() {
-        if (movementTimer <= 0) {
-            //choose a new direction
-            currentDirectionX = MathUtils.random(-1f, 1f);
-            movementTimer = movementDuration; // Reset the timer
-        } else {
-            // continue moving in the current direction
-            body.setLinearVelocity(currentDirectionX * speed, body.getLinearVelocity().y);
-            movementTimer -= Gdx.graphics.getDeltaTime(); // decrease the timer
+     private void performRandomActionOrStandStill(float dt) {
+        randomActionTimer += dt;
+        if (randomActionTimer >= randomActionInterval) {
+            randomActionTimer = 0f;
+            
+            if (MathUtils.random() < randomActionChance) {
+                // movement in random direction
+                float randomDirection = MathUtils.randomBoolean() ? 1f : -1f;
+                body.applyForceToCenter(new Vector2(randomDirection * 40f, 0), true);
+
+            }
         }
     }
 
-    private void performRandomActionOrStandStill() {
-        if (MathUtils.randomBoolean()) {
-            speed = 3; 
+    private void updateMovement(float distance, Vector2 playerPos, float dt) {
+        if (movingBack) {
+            moveBackTimer += dt;
+            if (moveBackTimer < moveBackDuration) {
+                body.applyForceToCenter(moveBackDirection, true);
+            } else {
+                movingBack = false; // End of intentional movement
+            }
         } else {
-            speed = 0;
+            if (distance > Constants.enemyShootingDistance) {
+                // move towards the player
+                approachPlayer(playerPos);
+                if(body.getLinearVelocity().x == 0){
+                    performRandomActionOrStandStill(dt);
+                }
+            } else {
+                performRandomActionOrStandStill(dt);
+                //body.setLinearVelocity(0, body.getLinearVelocity().y);
+                if (timeSinceLastShot >= shootingInterval) {
+                    shoot(playerPos);
+                    timeSinceLastShot = 0f; 
+                }
+            }
         }
-        randomMovement();
     }
-    */
+
+    
 
     private void defineEnemy(float x, float y) {
         BodyDef bodyDef = new BodyDef();
@@ -258,7 +276,7 @@ public class Enemy extends Sprite {
         body.applyLinearImpulse(new Vector2(0, 3), body.getWorldCenter(), true);
     }
 
-    public void moveBack() {
+    /*public void moveBack() {
         if(speed >3)
             body.applyLinearImpulse(new Vector2(-30,0), body.getWorldCenter(), true);
         else
@@ -270,6 +288,23 @@ public class Enemy extends Sprite {
             body.applyLinearImpulse(new Vector2(30,0), body.getWorldCenter(), true);
         else
             body.applyLinearImpulse(new Vector2(6,0), body.getWorldCenter(), true);
+    }*/
+
+    // movement methods to prevent enemies getting stuck when running into a wall
+    public void moveBack() {
+        float forceMagnitude = speed > 3 ? -4f : -3f;
+        moveBackDirection.set(forceMagnitude, 0);
+        moveBackDuration = 0.3f;
+        moveBackTimer = 0f;
+        movingBack = true;
+    }
+    
+    public void moveForward() {
+        float forceMagnitude = speed > 3 ? 4f : 3f;
+        moveBackDirection.set(forceMagnitude, 0);
+        moveBackDuration = 0.3f;
+        moveBackTimer = 0f;
+        movingBack = true;
     }
 
     public void takeDamage() {
@@ -317,25 +352,16 @@ public class Enemy extends Sprite {
     }  
     
     public void shoot(Vector2 playerPosition) {
-        /*float x = body.getPosition().x;
-        boolean facingRight = playerPosition.x > x;
-        float y = body.getPosition().y;
-
-        x = x + (facingRight ? 1 : -1) * 0.7f;
-        
-        EnemyBullet bullet = new EnemyBullet(world, x, y, facingRight, 12, player);
-        screen.addEnemyBullet(bullet);
-        */
         float armLen = armSprite.getWidth();
 
         // arm tip position
-        float armAngleRadians = (float)Math.toRadians(armSprite.getRotation());
-        float tipXOffset = armLen * MathUtils.cos(armAngleRadians);
-        float tipYOffset = armLen * MathUtils.sin(armAngleRadians);
+        float armAngle = (float)Math.toRadians(armSprite.getRotation());
+        float armXOffset = armLen * MathUtils.cos(armAngle);
+        float armYOffset = armLen * MathUtils.sin(armAngle);
     
         // arm tim pos (taking into account player's position)
-        float bulletSpawnX = body.getPosition().x + (tipXOffset*20f) / Constants.PPM;
-        float bulletSpawnY = body.getPosition().y + tipYOffset  / Constants.PPM + 0.1f;
+        float bulletSpawnX = body.getPosition().x + (armXOffset*20f) / Constants.PPM;
+        float bulletSpawnY = body.getPosition().y + armYOffset  / Constants.PPM + 0.1f;
     
         // spawn the bullet
         boolean facingRight = playerPosition.x > body.getPosition().x;
@@ -359,8 +385,8 @@ public class Enemy extends Sprite {
     }
 
     public void dispose() {
-        texture.dispose();
         armTexture.dispose();
+        white.dispose();
     }
 
 }

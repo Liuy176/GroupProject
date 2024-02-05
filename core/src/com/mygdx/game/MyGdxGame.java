@@ -1,6 +1,11 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.helpers.Constants;
+
+import java.lang.invoke.ConstantCallSite;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -23,7 +28,7 @@ public class MyGdxGame extends Game {
         this.ortographicCamera.setToOrtho(false, screenWidth, screenHeight);
 
 		this.mainMenuScreen = new MenuScreen(this);
-		this.spaceshipScreen = new SpaceshipScreen(this, 100);
+		this.spaceshipScreen = new SpaceshipScreen(this, Constants.maxPlayerHealth);
 
         setScreen(mainMenuScreen); //menu screen appears after starting the game
     }

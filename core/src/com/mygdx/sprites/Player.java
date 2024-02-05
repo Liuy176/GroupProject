@@ -166,12 +166,12 @@ public class Player extends Sprite{
     }
 
     public void drawHealthBar(SpriteBatch batch, BitmapFont font) {
-        float healthPercentage = getHealthPercentage();
-        float weaponStrengthPercentage = damage / 100; 
+        float healthPercentage = currentHealth/Constants.maxPlayerHealth;
+        float weaponStrengthPercentage = (float)damage/Constants.maxWeaponPower;
 
-        float barWidth = 200;
-        float barHeight = 24;
-        float padding = 15;
+        float barWidth = Constants.healthBarWidth;
+        float barHeight = Constants.healthBarHeight;
+        float padding = Constants.healthBarPadding;
         float heartSize = 32;
 
         float barX = Gdx.graphics.getWidth() - barWidth - padding;
@@ -200,8 +200,8 @@ public class Player extends Sprite{
         batch.draw(whiteRegion, barX, weaponBarY, barWidth * weaponStrengthPercentage, barHeight);
 
         batch.setColor(Color.WHITE);
-        batch.draw(healthFrame, barX-3, barY-3,206, 30);
-        batch.draw(weaponBarFrame, barX-3, weaponBarY-3,206, 30);
+        batch.draw(healthFrame, barX-3, barY-3, barWidth*1.03f, barHeight*1.25f);
+        batch.draw(weaponBarFrame, barX-3, weaponBarY-3,barWidth*1.03f, barHeight*1.25f);
     }
 
     public void takeDamage(float amount) {

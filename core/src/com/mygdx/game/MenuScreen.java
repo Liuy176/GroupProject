@@ -61,7 +61,7 @@ public class MenuScreen implements Screen {
         enemyModeButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new EnemyGameScreen(game,0, 500, 60, 5000)); // Switch to Enemy Game Screen
+                game.setScreen(new EnemyGameScreen(game,5, 50000, 60, 50000)); // Switch to Enemy Game Screen
             }
         });
 

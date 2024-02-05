@@ -94,7 +94,7 @@ public class EnemyGameScreen implements Screen{
         for(int i = 0; i<enemyCount; i++ ){
             float damage = 6 + random.nextInt(4) + (roundNumber/2);
             int enemyHealth = 60 + random.nextInt(61) + 60*(roundNumber/2);
-            float enemySpeed = 1 + random.nextInt(2+(roundNumber/4)); 
+            float enemySpeed = 1 + random.nextInt(2+(roundNumber/3)); 
             int x = 450 + random.nextInt(300);
             int y = 300;
 
@@ -281,7 +281,7 @@ public class EnemyGameScreen implements Screen{
     private void reset(){
         if(game.spaceshipScreen.getScore() > game.mainMenuScreen.getHighScore())
             game.mainMenuScreen.setHighScore(game.spaceshipScreen.getScore());
-        game.spaceshipScreen.setPlayerHealth(100);
+        game.spaceshipScreen.setPlayerHealth(Constants.maxPlayerHealth);
         game.spaceshipScreen.setDamage(10);
         game.spaceshipScreen.setAmountOfCrashes(0);
         game.spaceshipScreen.setScore(0);

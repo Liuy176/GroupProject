@@ -14,11 +14,10 @@ import com.mygdx.helpers.Constants;
 
 public class EnemyBullet extends Sprite {
     private World world;
-    private Player player;
     private Enemy enemy;
     private Body body;
     private float speed, distanceLimit, distanceTraveled;
-    private boolean facingRight, toRemove;
+    private boolean  toRemove;
     private Vector2 startPosition, direction;
 
     private Texture bulletTexture;
@@ -27,9 +26,7 @@ public class EnemyBullet extends Sprite {
 
     public EnemyBullet(World world, float x, float y, boolean facingRight, float speed, Player player, Enemy enemy) {
         this.world = world;
-        this.player = player;
         this.speed = speed;
-        this.facingRight = facingRight;
         this.enemy = enemy;
         this.startPosition = new Vector2(x, y);
         this.distanceLimit = 20;
