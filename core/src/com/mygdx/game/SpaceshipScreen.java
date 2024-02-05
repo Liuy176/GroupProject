@@ -115,14 +115,16 @@ public class SpaceshipScreen implements Screen {
   
     @Override
     public void render(float delta) {
-      if(!isBlinking) // can't pause/unpause shortly before swithcing to another screen
+      if(!isBlinking) {// can't pause/unpause shortly before swithcing to another screen
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) paused = !paused;
+        if(paused && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) paused = false;
+      }
 
       if(!paused){
         this.moveNave();
         this.moveEnemies(delta);
         this.moveCandy();
-      }
+      } 
 
       if(disposeEnemyScreen!=null) {
         disposeEnemyScreen.dispose();
@@ -152,7 +154,6 @@ public class SpaceshipScreen implements Screen {
       ScreenUtils.clear(1, 0, 0, 1);
       batch.begin();
       batch.draw(img, 0, 0);
-      drawHealthBar(game.getBatch(), font);
      //if (paused) bitmap.draw...
       if(!gameover){
         
@@ -169,6 +170,9 @@ public class SpaceshipScreen implements Screen {
         }
          
         bitmap.draw(batch, "Score: " + score, 20, Gdx.graphics.getHeight() - 20);
+
+        drawHealthBar(game.getBatch(), font);
+        if(paused && !isBlinking) bitmap.draw(batch, "Press SPACE to continue...", (Gdx.graphics.getWidth()/2)-135, (Gdx.graphics.getHeight()/2)+20);
 
       }else{
         
@@ -251,7 +255,7 @@ public class SpaceshipScreen implements Screen {
         if (candy.x + tCandy.getWidth() < 0) iter.remove();
         else if (collide(candy.x, candy.y, candy.width*3, candy.height*3, posX, posY, nave.getWidth()*4, nave.getHeight()*4)) {
           // Restore power
-          if(playerHealth>=Constants.maxPlayerHealth)
+          if(playerHealth + Constants.healthPowerUpValue>=Constants.maxPlayerHealth)
             playerHealth=Constants.maxPlayerHealth;
           else
             playerHealth += Constants.healthPowerUpValue;
@@ -264,7 +268,7 @@ public class SpaceshipScreen implements Screen {
         weapon.x -= Constants.weaponPowerUpMovementSpeed * Gdx.graphics.getDeltaTime(); // Adjust speed as needed
         if (weapon.x + tWeapon.getWidth() < 0) iter.remove();
         else if (collide(weapon.x, weapon.y, weapon.width*3, weapon.height*3, posX, posY, nave.getWidth()*4, nave.getHeight()*4)) {
-          if(damage>=Constants.maxWeaponPower)
+          if(damage + Constants.weaponPowerUpValue>=Constants.maxWeaponPower)
             damage=Constants.maxWeaponPower;
           else
             damage += Constants.weaponPowerUpValue;
