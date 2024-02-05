@@ -51,7 +51,7 @@ public class WorldContactListener implements ContactListener{
   
             if(other.getUserData() instanceof Player){
                 Player player = (Player) other.getUserData();
-                player.takeDamage(10);
+                player.takeDamage(bullet.getEnemy().getDamage());
             }
         }
 

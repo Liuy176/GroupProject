@@ -157,7 +157,7 @@ public class Player extends Sprite{
         float x = body.getPosition().x + (facingRight ? 1 : -1) * 0.7f;
         float y = body.getPosition().y;
     
-        Bullet bullet = new Bullet(world, x, y, facingRight, 10);
+        Bullet bullet = new Bullet(world, x, y, facingRight, Constants.bulletSpeed);
         screen.addBullet(bullet);
     }
 

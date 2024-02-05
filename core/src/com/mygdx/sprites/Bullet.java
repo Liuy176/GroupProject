@@ -17,7 +17,7 @@ import com.mygdx.helpers.Constants;
 public class Bullet extends Sprite {
     private World world;
     private Body body;
-    private float speed, distanceLimit, distanceTraveled;
+    private float speed, distanceTraveled;
     private boolean facingRight, toRemove;
 
     private Vector2 startPosition;
@@ -29,7 +29,6 @@ public class Bullet extends Sprite {
         this.speed = speed;
         this.facingRight = facingRight;
         this.startPosition = new Vector2(x, y);
-        this.distanceLimit = 20;
         this.distanceTraveled = 0;
         this.toRemove = false;
 
@@ -72,7 +71,7 @@ public class Bullet extends Sprite {
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
 
         distanceTraveled = startPosition.dst(body.getPosition().x, body.getPosition().y);
-        if (distanceTraveled > distanceLimit) {
+        if (distanceTraveled > Constants.bulletDistanceLimit) {
             this.toRemove = true; 
         }
         

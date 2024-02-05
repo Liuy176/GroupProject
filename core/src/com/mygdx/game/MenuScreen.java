@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.ScreenAdapter;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -12,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class MenuScreen extends ScreenAdapter {
+public class MenuScreen implements Screen {
     private MyGdxGame game;
     private Stage stage;
     private Skin skin;
@@ -60,7 +61,7 @@ public class MenuScreen extends ScreenAdapter {
         enemyModeButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new EnemyGameScreen(game,0, 500, 60, 500)); // Switch to Enemy Game Screen
+                game.setScreen(new EnemyGameScreen(game,0, 500, 60, 5000)); // Switch to Enemy Game Screen
             }
         });
 
@@ -114,6 +115,18 @@ public class MenuScreen extends ScreenAdapter {
     }
     public void setHighScore(int score){
         this.highScore = score;
+    }
+
+    @Override
+    public void pause() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'pause'");
+    }
+
+    @Override
+    public void resume() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'resume'");
     }
 }
 

@@ -40,7 +40,7 @@ public class EnemyGameScreen implements Screen{
     private OrthogonalTiledMapRenderer renderer;
 
     private World world;
-    private Box2DDebugRenderer debugRenderer;
+    //private Box2DDebugRenderer debugRenderer;
     private Player player;
 
     private TextureAtlas atlas;
@@ -80,7 +80,7 @@ public class EnemyGameScreen implements Screen{
         this.bullets = new Array<Bullet>();
         this.enemyBullets = new Array<EnemyBullet>();
         this.world = new World(new Vector2(0,-10), true);
-        this.debugRenderer = new Box2DDebugRenderer();
+        //this.debugRenderer = new Box2DDebugRenderer();
         this.atlas = new TextureAtlas("spritePack.pack");
 
         new WorldCreator(world, map);
@@ -92,12 +92,13 @@ public class EnemyGameScreen implements Screen{
 
         // create enemies for the given round (while keeping some aspects of their properties random)
         for(int i = 0; i<enemyCount; i++ ){
-            int enemyHealth = 60 + random.nextInt(61) + 60*(roundNumber/3);
-            float enemySpeed = 1 + random.nextInt(3+(roundNumber/4)); 
+            float damage = 6 + random.nextInt(4) + (roundNumber/2);
+            int enemyHealth = 60 + random.nextInt(61) + 60*(roundNumber/2);
+            float enemySpeed = 1 + random.nextInt(2+(roundNumber/4)); 
             int x = 450 + random.nextInt(300);
             int y = 300;
 
-            enemies.add(new Enemy(world, x,y, enemySpeed, enemyHealth, player, this));
+            enemies.add(new Enemy(world, x,y, enemySpeed, enemyHealth, player, this, damage));
         }
 
         this.camera.setToOrtho(false, 18, 10);
@@ -145,7 +146,7 @@ public class EnemyGameScreen implements Screen{
         game.getBatch().end();
 
         renderer.render();
-        debugRenderer.render(world, camera.combined);
+        //debugRenderer.render(world, camera.combined);
         game.getBatch().setProjectionMatrix(camera.combined);  
 
         game.getBatch().begin();
@@ -325,13 +326,12 @@ public class EnemyGameScreen implements Screen{
         blackTexture.dispose();
         renderer.dispose();
         world.dispose();
-        debugRenderer.dispose();
+       // debugRenderer.dispose();
         font.dispose();
         backgroundTexture.dispose();
         atlas.dispose();
         shapeRenderer.dispose();
         player.dispose();
-       
     }
     
 }

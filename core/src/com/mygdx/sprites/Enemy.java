@@ -26,6 +26,7 @@ public class Enemy extends Sprite {
     private World world;
     public Body body;
     private float speed;
+    private float damage;
     private Player player;
     private float startHealth;
     private float currentHealth;
@@ -34,7 +35,6 @@ public class Enemy extends Sprite {
     private boolean isDefeated;
     private float deadRotationDeg;
     private EnemyGameScreen screen;
-    private float optimalDistance = 3.0f;
     private TextureRegion stand;
     private Animation<TextureRegion> run;
     public enum State {FALLING, JUMPING, STANDING, RUNNING, DEAD };
@@ -54,10 +54,11 @@ public class Enemy extends Sprite {
     private boolean facingRight = false;
   
 
-    public Enemy(World world,float x, float y, float speed, float health, Player player, EnemyGameScreen screen) {
+    public Enemy(World world,float x, float y, float speed, float health, Player player, EnemyGameScreen screen, float damage) {
         super(screen.getAtlas().findRegion("enemy"));
         this.world = world;
         this.speed = speed;
+        this.damage = damage;
         this.player = player;
         this.screen = screen;
         this.startHealth = health;
@@ -107,7 +108,7 @@ public class Enemy extends Sprite {
 
             armSprite.setRotation(angle);
         
-            if (distance > optimalDistance) {
+            if (distance > Constants.enemyShootingDistance) {
                 // move towards the player
                 approachPlayer(playerPos);
             } else {
@@ -338,7 +339,7 @@ public class Enemy extends Sprite {
     
         // spawn the bullet
         boolean facingRight = playerPosition.x > body.getPosition().x;
-        EnemyBullet bullet = new EnemyBullet(world, bulletSpawnX, bulletSpawnY, facingRight, 5, player);
+        EnemyBullet bullet = new EnemyBullet(world, bulletSpawnX, bulletSpawnY, facingRight, Constants.bulletSpeed, player, this);
         screen.addEnemyBullet(bullet);
 
     }
@@ -352,6 +353,11 @@ public class Enemy extends Sprite {
         super.draw(batch);
         if(!isDefeated)armSprite.draw(batch);
     }
+
+    public float getDamage(){
+        return damage;
+    }
+
     public void dispose() {
         texture.dispose();
         armTexture.dispose();
