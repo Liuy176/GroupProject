@@ -270,7 +270,7 @@ public class EnemyGameScreen implements Screen{
 
     public void handleInput(float dt){
         if(!paused){
-            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.getJumpCounter() < 2)
+            if((Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isKeyJustPressed(Input.Keys.W)) && player.getJumpCounter() < 2)
                 player.jump();
             if(Gdx.input.isKeyPressed(Input.Keys.D) && player.getBody().getLinearVelocity().x <=3 )
                 player.getBody().applyLinearImpulse(new Vector2(0.3f, 0), player.getBody().getWorldCenter(), true);

@@ -55,7 +55,7 @@ public class SpaceshipScreen implements Screen {
     private float lastAsteroidBatchX = 0;
     private float timeSinceLastAsteroidPair = 0f;
     private float pairGenInterval = 1f;
-    private boolean fadeOut = false;
+    private boolean fadeOut = false, firstCrash = true, collided = false;
     private float fadeOutSpeed = 0.5f;
     private float fadeOutOpacity = 0.0f;
     private float collisionTimer = 0f;
@@ -186,6 +186,9 @@ public class SpaceshipScreen implements Screen {
         batch.begin();
         batch.setColor(0, 0, 0, fadeOutOpacity);
         batch.draw(img, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        if(fadeOutOpacity>=1 && firstCrash){
+          bitmap.draw(batch, "Crashed! \n ... \n ⓘ Defeat the enemies on the asteroid to be able to continue your journey!", 100, Gdx.graphics.getHeight() / 3);
+        }
         batch.setColor(1, 1, 1, 1); // Reset color
         batch.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
@@ -304,8 +307,9 @@ public class SpaceshipScreen implements Screen {
         }
   
         // Check for collision with the ship
-        if (collide(enemy.x, enemy.y, enemy.width*2, enemy.height*2, posX, posY, nave.getWidth()*4, nave.getHeight()*4)) {
+        if (collide(enemy.x, enemy.y, enemy.width*2, enemy.height*2, posX, posY, nave.getWidth()*4, nave.getHeight()*4) && !collided) {
           if (!gameover) {
+            collided = true;
             isBlinking = true;
             blinkStartTime = TimeUtils.nanoTime();
             paused = true; 
@@ -318,7 +322,9 @@ public class SpaceshipScreen implements Screen {
 
         if(fadeOut){
           collisionTimer +=delta;
-          if(collisionTimer>=1){
+          if((collisionTimer>=1 && !firstCrash) || collisionTimer>=20){
+            collided = false;
+            firstCrash = false;
             game.setScreen(new EnemyGameScreen(game, timesCrashed, Constants.maxPlayerHealth, damage, playerHealth));
           }
         }

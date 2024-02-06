@@ -14,7 +14,7 @@ public final class Constants {
     // edit values below to change difficulty and edit other aspects of gameplay
 
     // SpaceshipScreen elements
-    public static final float asteroidBatchDistance = 250; // distance between the 2 asteroids where player needs to fly through
+    public static final float asteroidBatchDistance = 240; // distance between the 2 asteroids where player needs to fly through
     public static final int xPosOfUfoAtStart = 200;
     public static final float frequencyOfHealthPowerUp = 0.4f; // how often power up shows up
     public static final float frequencyOfWeaponPowerUp = 0.3f; // how often power up shows up
