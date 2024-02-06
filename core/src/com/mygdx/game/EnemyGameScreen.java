@@ -143,14 +143,10 @@ public class EnemyGameScreen implements Screen{
 
         // palyer's health bar (top right)
         player.drawHealthBar(game.getBatch(), font);
-
-        game.getBatch().end();
-
-        renderer.render();
         //debugRenderer.render(world, camera.combined);
-        game.getBatch().setProjectionMatrix(camera.combined);  
+        game.getBatch().setProjectionMatrix(camera.combined); 
+        renderer.render();
 
-        game.getBatch().begin();
         player.draw(game.getBatch());
 
         for (Bullet bullet : bullets) {
@@ -163,14 +159,20 @@ public class EnemyGameScreen implements Screen{
             enemy.drawHealthBar(game.getBatch());
             enemy.draw(game.getBatch());
         }
+
+        if(paused) {
+            game.getBatch().setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+            game.spaceshipScreen.getBitmap().draw(game.getBatch(), "Press SPACE to continue...", (Gdx.graphics.getWidth()/2)-135, (Gdx.graphics.getHeight()/2)+20);
+            game.getBatch().setProjectionMatrix(camera.combined);
+        }
+
         game.getBatch().end();
 
         // add fade out effect after player crashed
         if (isDefeated) {
             fade += delta / fadeDuration;
             if (fade > 1) {
-                fade = 1;
-                //this.dispose();
+                fade = 1;;
                 this.reset();
                 game.setScreen(new GameOverScreen(game));
             }

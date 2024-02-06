@@ -454,6 +454,9 @@ public class SpaceshipScreen implements Screen {
     public void setIsBlinking(boolean blinking){
       this.isBlinking = blinking;
     }
+    public BitmapFont getBitmap(){
+      return bitmap;
+    }
     public int getScore(){
       return score;
     }
