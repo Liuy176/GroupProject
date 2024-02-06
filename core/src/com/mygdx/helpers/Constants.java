@@ -30,6 +30,7 @@ public final class Constants {
     public static final int bulletSpeed = 10;
     public static final int maxPlayerHealth = 100;
     public static final int maxWeaponPower = 60;
+    public static final int initialWeaponPower = 12;
 
 
     // properties of health and weapon bars in the top right corner

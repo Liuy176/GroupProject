@@ -60,7 +60,7 @@ public class EnemyGameScreen implements Screen{
     private float backgroundScaleY = 0;
 
     private float fade = 0f;
-    public boolean isDefeated = false;
+    public boolean isDefeated = false, paused = false;
     private float fadeDuration = 3f;
     private float fadeInOpacity = 1.0f; 
     private float fadeInSpeed = 0.5f; 
@@ -131,6 +131,7 @@ public class EnemyGameScreen implements Screen{
         }
 
         update(delta);
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -200,49 +201,50 @@ public class EnemyGameScreen implements Screen{
 
     public void update(float dt){
         if(!isDefeated) handleInput(dt);
-
-        world.step(1/60f, 6, 2);
-        cameraUpdate();
         game.getBatch().setProjectionMatrix(camera.combined);
-        player.update(dt);
+        
+        if(!paused){
+            world.step(1/60f, 6, 2);
+            cameraUpdate();
+            player.update(dt);
 
-        for (Enemy enemy : enemies) {
-            enemy.update(dt);
-        }
+            for (Enemy enemy : enemies) {
+                enemy.update(dt);
+            }
 
-        for (int i = 0; i < bullets.size; i++) {
-            Bullet bullet = bullets.get(i);
-            bullet.update(dt);
-                
-                if (bullet.getToRemove()) {
-                    bullets.removeIndex(i);
-                    world.destroyBody(bullet.getBody()); 
-                    i--;
+            for (int i = 0; i < bullets.size; i++) {
+                Bullet bullet = bullets.get(i);
+                bullet.update(dt);
+                    
+                    if (bullet.getToRemove()) {
+                        bullets.removeIndex(i);
+                        world.destroyBody(bullet.getBody()); 
+                        i--;
+                    }
+            }
+            for (int j = 0; j < enemyBullets.size; j++) {
+                EnemyBullet bullet = enemyBullets.get(j);
+                bullet.update(dt);
+                    
+                    if (bullet.getToRemove()) {
+                        enemyBullets.removeIndex(j);
+                        world.destroyBody(bullet.getBody()); 
+                        j--;
+                    }
+            }
+
+            // move back to spaceship game mode if player has defeated all enemies
+            if(enemyCount==0){
+                fade += dt / fadeDuration;
+                if (fade > 1) {
+                    fade = 1;
+                    game.spaceshipScreen.setPlayerHealth(player.getCurrentHealth());
+                    game.spaceshipScreen.restart(true);
+                    game.spaceshipScreen.setDisposeEnemyScreen(this);
+                    game.setScreen(game.spaceshipScreen);
                 }
-        }
-        for (int j = 0; j < enemyBullets.size; j++) {
-            EnemyBullet bullet = enemyBullets.get(j);
-            bullet.update(dt);
-                
-                if (bullet.getToRemove()) {
-                    enemyBullets.removeIndex(j);
-                    world.destroyBody(bullet.getBody()); 
-                    j--;
-                }
-        }
-
-        // move back to spaceship game mode if player has defeated all enemies
-        if(enemyCount==0){
-            fade += dt / fadeDuration;
-            if (fade > 1) {
-                fade = 1;
-                game.spaceshipScreen.setPlayerHealth(player.getCurrentHealth());
-                game.spaceshipScreen.restart(true);
-                game.spaceshipScreen.setDisposeEnemyScreen(this);
-                game.setScreen(game.spaceshipScreen);
             }
         }
-        
         renderer.setView(camera);
     }
 
@@ -265,17 +267,20 @@ public class EnemyGameScreen implements Screen{
 
 
     public void handleInput(float dt){
-        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
-            player.getBody().applyLinearImpulse(new Vector2(0,4f), player.getBody().getWorldCenter(), true);
-        if(Gdx.input.isKeyPressed(Input.Keys.D) && player.getBody().getLinearVelocity().x <=3 )
-            player.getBody().applyLinearImpulse(new Vector2(0.3f, 0), player.getBody().getWorldCenter(), true);
-        if(Gdx.input.isKeyPressed(Input.Keys.A) && player.getBody().getLinearVelocity().x >=-3 )
-            player.getBody().applyLinearImpulse(new Vector2(-0.3f, 0), player.getBody().getWorldCenter(), true);
-        if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
-                player.shoot();
-        }
-        
-            
+        if(!paused){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.getJumpCounter() < 2)
+                player.jump();
+            if(Gdx.input.isKeyPressed(Input.Keys.D) && player.getBody().getLinearVelocity().x <=3 )
+                player.getBody().applyLinearImpulse(new Vector2(0.3f, 0), player.getBody().getWorldCenter(), true);
+            if(Gdx.input.isKeyPressed(Input.Keys.A) && player.getBody().getLinearVelocity().x >=-3 )
+                player.getBody().applyLinearImpulse(new Vector2(-0.3f, 0), player.getBody().getWorldCenter(), true);
+            if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
+                    player.shoot();
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) pause();
+        } else {
+            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) resume();
+        }   
     }
     
     private void reset(){
@@ -312,10 +317,14 @@ public class EnemyGameScreen implements Screen{
     public void resize(int width, int height) {}
 
     @Override
-    public void pause() {}
+    public void pause() {
+        paused = true;
+    }
 
     @Override
-    public void resume() {}
+    public void resume() {
+        paused = false;
+    }
 
     @Override
     public void hide() {}
@@ -326,7 +335,7 @@ public class EnemyGameScreen implements Screen{
         blackTexture.dispose();
         renderer.dispose();
         world.dispose();
-       // debugRenderer.dispose();
+        //debugRenderer.dispose();
         font.dispose();
         backgroundTexture.dispose();
         atlas.dispose();

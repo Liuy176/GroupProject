@@ -35,7 +35,7 @@ public class Player extends Sprite{
     private Texture heartTexture, gunTexture, healthFrame, white, weaponBarFrame;
     private TextureRegion whiteRegion;
     private boolean isDefeated;
-    private int deadRotationDeg;
+    private int deadRotationDeg, jumpcounter = 0;
     private float damage;
 
     public Player(World world, EnemyGameScreen screen, float maxHealth, float weaponStrength, float currHealth){
@@ -72,8 +72,11 @@ public class Player extends Sprite{
     }
 
     public void update(float delta){
-        setPosition(body.getPosition().x-getWidth()/2, body.getPosition().y - getHeight()/2);
+        if(facingRight) setPosition((body.getPosition().x-getWidth()/2) + 0.2f, body.getPosition().y - getHeight()/2);
+        else setPosition((body.getPosition().x-getWidth()/2) - 0.2f, body.getPosition().y - getHeight()/2);
+        
         setRegion(getFrame(delta));
+        if(body.getLinearVelocity().y ==0) jumpcounter = 0;
 
         if(isDefeated){
             deadRotationDeg +=0;
@@ -155,7 +158,7 @@ public class Player extends Sprite{
     public void shoot() {
         
         float x = body.getPosition().x + (facingRight ? 1 : -1) * 0.7f;
-        float y = body.getPosition().y;
+        float y = body.getPosition().y+0.2f;
     
         Bullet bullet = new Bullet(world, x, y, facingRight, Constants.bulletSpeed);
         screen.addBullet(bullet);
@@ -224,6 +227,12 @@ public class Player extends Sprite{
         screen.setDefeated(true);
     }
 
+    public void jump(){
+        body.setLinearVelocity(body.getLinearVelocity().x, 0);
+        body.applyLinearImpulse(new Vector2(0,5.5f), body.getWorldCenter(), true);
+        jumpcounter++;  // for double jump
+    }
+
     public void dispose(){
         heartTexture.dispose();
         gunTexture.dispose();
@@ -245,5 +254,8 @@ public class Player extends Sprite{
     }
     public float getDamage(){
         return damage;
+    }
+    public int getJumpCounter(){
+        return jumpcounter;
     }
 }

@@ -37,7 +37,7 @@ public class Enemy extends Sprite {
 
     private float randomActionTimer = 0f;
     private float randomActionInterval = 3.0f;
-    private float randomActionChance = 0.8f;
+    private float randomActionChance = 1.0f;
     private float moveBackDuration = 0f;
     private float moveBackTimer = 0f;
     private Vector2 moveBackDirection = new Vector2();

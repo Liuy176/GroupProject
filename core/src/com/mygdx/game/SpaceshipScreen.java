@@ -30,7 +30,7 @@ public class SpaceshipScreen implements Screen {
     private boolean  gameover;
     private Array<Rectangle> enemies1;
 
-    private int score, damage=12;
+    private int score, damage=Constants.initialWeaponPower;
     private boolean toIncrementScore = false;
   
     private FreeTypeFontGenerator generator;
