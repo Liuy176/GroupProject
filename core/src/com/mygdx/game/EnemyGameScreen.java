@@ -8,6 +8,7 @@ import com.mygdx.sprites.EnemyBullet;
 import com.mygdx.sprites.Player;
 import com.mygdx.sprites.Bullet;
 
+import java.util.HashMap;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
@@ -75,7 +76,8 @@ public class EnemyGameScreen implements Screen{
         this.game = game;
         this.camera = new OrthographicCamera();
         this.mapLoader = new TmxMapLoader();
-        this.map = mapLoader.load("map4.tmx");
+        this.random = new Random();
+        this.map = mapLoader.load("map7.tmx");
         this.renderer = new OrthogonalTiledMapRenderer(map, 1/Constants.PPM);
         this.bullets = new Array<Bullet>();
         this.enemyBullets = new Array<EnemyBullet>();
@@ -86,7 +88,6 @@ public class EnemyGameScreen implements Screen{
         new WorldCreator(world, map);
         this.player = new Player(world, this, playerHealth, playerWeaponStrength, currHealth);
         this.blackTexture = new Texture("BlackScreen.jpg");
-        this.random = new Random();
         this.enemies = new Array<Enemy>();
         this.enemyCount = 1+roundNumber;
 
@@ -96,7 +97,7 @@ public class EnemyGameScreen implements Screen{
             int enemyHealth = 60 + random.nextInt(61) + 60*(roundNumber/2);
             float enemySpeed = 1 + random.nextInt(2+(roundNumber/3)); 
             int x = 450 + random.nextInt(300);
-            int y = 300;
+            int y = 340;
 
             enemies.add(new Enemy(world, x,y, enemySpeed, enemyHealth, player, this, damage));
         }
@@ -300,6 +301,15 @@ public class EnemyGameScreen implements Screen{
         game.spaceshipScreen.clearEnemies();
     }
 
+    private String getRandomMap(){
+        HashMap<Integer, String> map = new HashMap<Integer, String>();
+        map.put(0, "map4.tmx");
+        map.put(1, "map5.tmx");
+        map.put(2, "map6.tmx");
+        map.put(3, "map7.tmx");
+        int randomNr = random.nextInt(4);
+        return map.get(randomNr);
+    }
     public void addBullet(Bullet bullet) {
         bullets.add(bullet);
     }

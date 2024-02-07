@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.mygdx.sprites.Bullet;
 import com.mygdx.sprites.Enemy;
 import com.mygdx.sprites.EnemyBullet;
+import com.mygdx.sprites.Ground;
 import com.mygdx.sprites.Player;
 
 public class WorldContactListener implements ContactListener{
@@ -67,6 +68,14 @@ public class WorldContactListener implements ContactListener{
             Fixture enemyFix = (fixA.getUserData().equals("enemyBackupRight")) ? fixA : fixB;
             Enemy enemy = (Enemy) enemyFix.getBody().getUserData();
             enemy.moveBack();
+        }
+
+        if(fixA.getUserData() != null && fixB.getUserData() != null && (fixA.getUserData().equals("jumpSensor")|| fixB.getUserData().equals("jumpSensor"))){
+            Fixture fix = (fixA.getUserData().equals("jumpSensor")) ? fixA : fixB;
+            Fixture other = fix == fixA ? fixB: fixA;
+            Player player = (Player) fix.getBody().getUserData();
+
+            if ("ground".equals(other.getUserData())) player.setJumpCounter(0);
         }
 
     }

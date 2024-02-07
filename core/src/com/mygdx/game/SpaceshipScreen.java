@@ -187,7 +187,7 @@ public class SpaceshipScreen implements Screen {
         batch.setColor(0, 0, 0, fadeOutOpacity);
         batch.draw(img, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         if(fadeOutOpacity>=1 && firstCrash){
-          bitmap.draw(batch, "Crashed! \n ... \n ⓘ Defeat the enemies on the asteroid to be able to continue your journey!", 100, Gdx.graphics.getHeight() / 3);
+          bitmap.draw(batch, "Crashed! \n ... \n \nⓘ Defeat the enemies inhabiting the asteroid to be able to continue your journey!", 100, Gdx.graphics.getHeight() / 3);
         }
         batch.setColor(1, 1, 1, 1); // Reset color
         batch.end();

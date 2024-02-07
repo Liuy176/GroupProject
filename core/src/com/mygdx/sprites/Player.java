@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -76,7 +77,6 @@ public class Player extends Sprite{
         else setPosition((body.getPosition().x-getWidth()/2) - 0.2f, body.getPosition().y - getHeight()/2);
         
         setRegion(getFrame(delta));
-        if(body.getLinearVelocity().y ==0) jumpcounter = 0;
 
         if(isDefeated){
             deadRotationDeg +=0;
@@ -141,9 +141,10 @@ public class Player extends Sprite{
 
     public void definePlayer(){
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(32/Constants.PPM,200/Constants.PPM);
+        bodyDef.position.set(32/Constants.PPM,340/Constants.PPM);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(bodyDef);
+        body.setUserData(this);
  
         FixtureDef fixture = new FixtureDef();
         PolygonShape playerShape = new PolygonShape();
@@ -152,7 +153,13 @@ public class Player extends Sprite{
         fixture.shape = playerShape;
         fixture.filter.categoryBits = Constants.CATEGORY_PLAYER;
         fixture.filter.maskBits = Constants.CATEGORY_GROUND | Constants.CATEGORY_ENEMY_BULLET;
-        body.createFixture(fixture).setUserData(this);;
+        body.createFixture(fixture).setUserData(this);
+
+        EdgeShape leftSideClose = new EdgeShape();
+        leftSideClose.set(new Vector2(-3/Constants.PPM, -8/Constants.PPM), new Vector2(3/Constants.PPM, -8/Constants.PPM));
+        fixture.shape = leftSideClose;
+        fixture.isSensor = true;
+        body.createFixture(fixture).setUserData("jumpSensor");
     }
 
     public void shoot() {
@@ -257,5 +264,8 @@ public class Player extends Sprite{
     }
     public int getJumpCounter(){
         return jumpcounter;
+    }
+    public void setJumpCounter(int count){
+        this.jumpcounter = count;
     }
 }
