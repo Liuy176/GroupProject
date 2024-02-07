@@ -77,7 +77,7 @@ public class EnemyGameScreen implements Screen{
         this.camera = new OrthographicCamera();
         this.mapLoader = new TmxMapLoader();
         this.random = new Random();
-        this.map = mapLoader.load("map7.tmx");
+        this.map = mapLoader.load(getRandomMap());
         this.renderer = new OrthogonalTiledMapRenderer(map, 1/Constants.PPM);
         this.bullets = new Array<Bullet>();
         this.enemyBullets = new Array<EnemyBullet>();
