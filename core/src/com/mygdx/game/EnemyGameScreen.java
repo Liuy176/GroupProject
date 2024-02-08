@@ -80,6 +80,8 @@ public class EnemyGameScreen implements Screen{
         gameMaps.put(3, "map7.tmx");
         gameMaps.put(4, "map8.tmx");
         gameMaps.put(5, "map9.tmx");
+        gameMaps.put(6, "map10.tmx");
+        gameMaps.put(7, "map11.tmx");
 
         this.game = game;
         this.camera = new OrthographicCamera();
@@ -97,11 +99,11 @@ public class EnemyGameScreen implements Screen{
         this.player = new Player(world, this, playerHealth, playerWeaponStrength, currHealth);
         this.blackTexture = new Texture("BlackScreen.jpg");
         this.enemies = new Array<Enemy>();
-        this.enemyCount = 1+roundNumber;
+        this.enemyCount = roundNumber+random.nextInt(2);
 
         // create enemies for the given round (while keeping some aspects of their properties random)
         for(int i = 0; i<enemyCount; i++ ){
-            float damage = 6 + random.nextInt(4) + (roundNumber/2);
+            float damage = 6 + random.nextInt(4) + (roundNumber/3);
             int enemyHealth = 60 + random.nextInt(61) + 60*(roundNumber/2);
             float enemySpeed = 1 + random.nextInt(2+(roundNumber/3)); 
             int x = 450 + random.nextInt(300);
@@ -148,10 +150,8 @@ public class EnemyGameScreen implements Screen{
         
         // background
         game.getBatch().draw(backgroundTexture, 0, 0, backgroundTexture.getWidth() * backgroundScaleX, backgroundTexture.getHeight() * backgroundScaleY);
-        game.getBatch().setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
-        // palyer's health bar (top right)
-        player.drawHealthBar(game.getBatch(), font);
+
         //debugRenderer.render(world, camera.combined);
         game.getBatch().setProjectionMatrix(camera.combined); 
         renderer.render();
@@ -169,11 +169,14 @@ public class EnemyGameScreen implements Screen{
             enemy.draw(game.getBatch());
         }
 
+        game.getBatch().setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+
+        // palyer's health bar (top right)
+        player.drawHealthBar(game.getBatch(), font);
         if(paused) {
-            game.getBatch().setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
             game.spaceshipScreen.getBitmap().draw(game.getBatch(), "Press SPACE to continue...", (Gdx.graphics.getWidth()/2)-135, (Gdx.graphics.getHeight()/2)+20);
-            game.getBatch().setProjectionMatrix(camera.combined);
         }
+        game.getBatch().setProjectionMatrix(camera.combined);
 
         game.getBatch().end();
 
@@ -310,7 +313,7 @@ public class EnemyGameScreen implements Screen{
     }
 
     private String getRandomMap(HashMap<Integer, String> map){
-        int randomNr = random.nextInt(6);
+        int randomNr = random.nextInt(8);
         return map.get(randomNr);
     }
     public void addBullet(Bullet bullet) {

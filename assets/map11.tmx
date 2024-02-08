@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="52" height="24" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="152">
+ <tileset firstgid="1" source="UntitledNew1.tsx"/>
+ <tileset firstgid="325" source="asteroidTiles.tsx"/>
+ <layer id="1" name="Tile Layer 1" width="52" height="24">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRMApGwSgYBYTAAkYGhsWMA+2KUQADwzk+QH5bCMSLBqkfcYU9NnGQ2DUg3gzEW4D4Jhl+ApmRQMNw2AQ0eysR5qP7hZCfQOproXLFSPKbsIgtIFIsF40PAxYMiDRzDeomGB8Xjc0vyH7Cpf4mFnF09deIVIdMxyP5xwuI84G4gM40jI2MyTXPlwr+yccivgUaR8T6g9JwgaWJiUjprg/I7gfiCUTQuNIYrWhy/UNvd1LLf6P+GZw0Lv8AAC1G8JY=
+  </data>
+ </layer>
+ <objectgroup id="3" name="ground">
+  <object id="121" x="16" y="272" width="800" height="112"/>
+  <object id="136" x="64" y="240" width="32" height="32"/>
+  <object id="137" x="160" y="240" width="32" height="16"/>
+  <object id="138" x="208" y="208" width="32" height="16"/>
+  <object id="139" x="272" y="176" width="32" height="16"/>
+  <object id="140" x="224" y="256" width="128" height="16"/>
+  <object id="141" x="240" y="240" width="96" height="16"/>
+  <object id="142" x="256" y="224" width="64" height="16"/>
+ </objectgroup>
+ <objectgroup id="4" name="ground2">
+  <object id="152" x="416" y="272">
+   <polygon points="0,0 0,-16 48,-16 64,0"/>
+  </object>
+  <object id="147" x="416" y="272">
+   <polygon points="0,0 0,-16 48,-16 64,0"/>
+  </object>
+  <object id="148" x="512" y="272">
+   <polygon points="0,0 0,-32 16,-32 48,0"/>
+  </object>
+  <object id="149" x="592" y="272">
+   <polygon points="0,0 0,-16 32,-16 48,0"/>
+  </object>
+  <object id="150" x="672" y="272">
+   <polygon points="0,0 0,-16 32,-16 48,0"/>
+  </object>
+  <object id="151" x="752" y="272">
+   <polygon points="0,0 16,-16 32,0 0,0"/>
+  </object>
+ </objectgroup>
+ <objectgroup id="2" name="border">
+  <object id="1" x="0" y="0" width="16" height="384"/>
+  <object id="2" x="816" y="0" width="16" height="384"/>
+  <object id="3" x="16" y="0" width="800" height="16"/>
+ </objectgroup>
+</map>

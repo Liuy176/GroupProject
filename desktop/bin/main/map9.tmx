@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="52" height="24" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="120">
+ <tileset firstgid="1" source="UntitledNew1.tsx"/>
+ <tileset firstgid="325" source="asteroidTiles.tsx"/>
+ <layer id="1" name="Tile Layer 1" width="52" height="24">
+  <data encoding="base64" compression="zlib">
+   eJztlNsJgDAMRds5XcXHBj420LqBj1UEtzGFFkKotP5YwXsgVJPb5OanSgEAAAAAgDcodG4HAIA/MtLbMye8Pym6mMbWpwfzKoqaoon05P0W+t71fd3nDooz4kf2CtXXgCY002o7ip5iYLXS7Wl9GOEr5X9yOetjc+HrXsN1J8sZpuN95P1D5ORMvk/L9oyd/v7XTrlPbj/Y5x/7XBB8xF0=
+  </data>
+ </layer>
+ <objectgroup id="3" name="ground">
+  <object id="5" x="16" y="304" width="800" height="80"/>
+  <object id="111" x="80" y="288" width="32" height="16"/>
+  <object id="112" x="144" y="272" width="32" height="32"/>
+  <object id="113" x="208" y="288" width="32" height="16"/>
+  <object id="114" x="288" y="288" width="80" height="16"/>
+  <object id="115" x="304" y="272" width="32" height="16"/>
+  <object id="116" x="448" y="272" width="32" height="32"/>
+  <object id="117" x="576" y="272" width="48" height="32"/>
+  <object id="118" x="672" y="288" width="32" height="16"/>
+  <object id="119" x="752" y="272" width="64" height="32"/>
+ </objectgroup>
+ <objectgroup id="4" name="ground2"/>
+ <objectgroup id="2" name="border">
+  <object id="1" x="0" y="0" width="16" height="384"/>
+  <object id="2" x="816" y="0" width="16" height="384"/>
+  <object id="3" x="16" y="0" width="800" height="16"/>
+ </objectgroup>
+</map>

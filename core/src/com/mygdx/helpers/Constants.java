@@ -26,10 +26,10 @@ public final class Constants {
 
     //EnemyGameScreen elements
     public static final int bulletDistanceLimit = 25; // fhow far bullet can travel before despawning
-    public static final float enemyShootingDistance = 3.5f; // from how close does enemy start shooting at player
+    public static final float enemyShootingDistance = 4f; // from how close does enemy start shooting at player
     public static final int bulletSpeed = 10;
-    public static final int maxPlayerHealth = 100;
-    public static final int maxWeaponPower = 60;
+    public static final int maxPlayerHealth = 150;
+    public static final int maxWeaponPower = 120;
     public static final int initialWeaponPower = 12;
 
 

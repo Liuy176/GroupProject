@@ -109,7 +109,7 @@ public class SpaceshipScreen implements Screen {
     this.heartTexture = new Texture("heart.png");
     this.gunTexture = new Texture("gun.png");
     this.healthFrame = new Texture("healthFrame.png");
-    this.weaponBarFrame = new Texture("weaponBarFrame.png");
+    this.weaponBarFrame = new Texture("weaponBarFrame2.png");
 
   }
   

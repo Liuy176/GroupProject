@@ -36,7 +36,7 @@ public class Player extends Sprite{
     private Texture heartTexture, gunTexture, healthFrame, white, weaponBarFrame;
     private TextureRegion whiteRegion;
     private boolean isDefeated;
-    private int deadRotationDeg, jumpcounter = 0;
+    private int deadRotationDeg, jumpcounter = 2;
     private float damage;
 
     public Player(World world, EnemyGameScreen screen, float maxHealth, float weaponStrength, float currHealth){
@@ -56,7 +56,7 @@ public class Player extends Sprite{
         this.heartTexture = new Texture("heart.png");
         this.gunTexture = new Texture("gun.png");
         this.healthFrame = new Texture("healthFrame.png");
-        this.weaponBarFrame = new Texture("weaponBarFrame.png");
+        this.weaponBarFrame = new Texture("weaponBarFrame2.png");
         this.isDefeated = false;
         this.deadRotationDeg = 0;
 
