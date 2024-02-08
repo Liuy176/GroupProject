@@ -73,11 +73,19 @@ public class EnemyGameScreen implements Screen{
 
     public EnemyGameScreen(MyGdxGame game, int roundNumber, float playerHealth, float playerWeaponStrength, float currHealth){
 
+        HashMap<Integer, String> gameMaps = new HashMap<Integer, String>();
+        gameMaps.put(0, "map4.tmx");
+        gameMaps.put(1, "map5.tmx");
+        gameMaps.put(2, "map6.tmx");
+        gameMaps.put(3, "map7.tmx");
+        gameMaps.put(4, "map8.tmx");
+        gameMaps.put(5, "map9.tmx");
+
         this.game = game;
         this.camera = new OrthographicCamera();
         this.mapLoader = new TmxMapLoader();
         this.random = new Random();
-        this.map = mapLoader.load(getRandomMap());
+        this.map = mapLoader.load(getRandomMap(gameMaps));
         this.renderer = new OrthogonalTiledMapRenderer(map, 1/Constants.PPM);
         this.bullets = new Array<Bullet>();
         this.enemyBullets = new Array<EnemyBullet>();
@@ -301,13 +309,8 @@ public class EnemyGameScreen implements Screen{
         game.spaceshipScreen.clearEnemies();
     }
 
-    private String getRandomMap(){
-        HashMap<Integer, String> map = new HashMap<Integer, String>();
-        map.put(0, "map4.tmx");
-        map.put(1, "map5.tmx");
-        map.put(2, "map6.tmx");
-        map.put(3, "map7.tmx");
-        int randomNr = random.nextInt(4);
+    private String getRandomMap(HashMap<Integer, String> map){
+        int randomNr = random.nextInt(6);
         return map.get(randomNr);
     }
     public void addBullet(Bullet bullet) {
