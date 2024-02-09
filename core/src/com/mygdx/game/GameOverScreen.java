@@ -5,19 +5,26 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class GameOverScreen implements Screen {
     private MyGdxGame game;
-    private BitmapFont gameOverFont;
     private SpriteBatch spriteBatch;
+    private Texture background;
+    private String finalScore;
+
+    private float fade = 1f; // Start fully black
+    private float fadeDuration = 2f; // Duration of the fade effect
 
     public GameOverScreen(MyGdxGame game) {
         this.game = game;
         spriteBatch = new SpriteBatch();
-        gameOverFont = new BitmapFont();
-        gameOverFont.setColor(Color.WHITE);
+        background = new Texture("gameOver.png");
+        String finalScore = "Final Score: " + game.spaceshipScreen.getScore();
+
     }
 
     @Override
@@ -29,8 +36,22 @@ public class GameOverScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        if (fade > 0) {
+            fade -= delta / fadeDuration;
+            fade = Math.max(fade, 0); // Ensure fade does not become negative
+        }
+
         spriteBatch.begin();
-        gameOverFont.draw(spriteBatch, "GAME OVER", Gdx.graphics.getWidth() / 2.3f, Gdx.graphics.getHeight() / 2f);
+        spriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        if (fade > 0) {
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            spriteBatch.setColor(0, 0, 0, fade);
+            spriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            spriteBatch.setColor(1, 1, 1, 1); // Reset color to opaque
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+        }
         spriteBatch.end();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
@@ -43,7 +64,7 @@ public class GameOverScreen implements Screen {
     @Override
     public void dispose() {
         spriteBatch.dispose();
-        gameOverFont.dispose();
+        background.dispose();
     }
 
     @Override

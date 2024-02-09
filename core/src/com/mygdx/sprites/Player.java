@@ -29,6 +29,7 @@ public class Player extends Sprite{
     private State currState, prevState;
     private Animation<TextureRegion> run;
     private Animation<TextureRegion> jump;
+    private Animation<TextureRegion> idle;
     private boolean facingRight;
     private float timer;
     private EnemyGameScreen screen;
