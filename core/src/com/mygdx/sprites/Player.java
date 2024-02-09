@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -16,13 +17,16 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.EnemyGameScreen;
+import com.mygdx.game.MyGdxGame;
 import com.mygdx.helpers.Constants;
+import com.mygdx.helpers.Shaders;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.utils.Array;
 
 public class Player extends Sprite{
     private World world;
+    private MyGdxGame game;
     private Body body;
     private TextureRegion stand;
     public enum State {FALLING, JUMPING, STANDING, RUNNING, DEAD };
@@ -37,12 +41,14 @@ public class Player extends Sprite{
     private Texture heartTexture, gunTexture, healthFrame, white, weaponBarFrame;
     private TextureRegion whiteRegion;
     private boolean isDefeated;
-    private int deadRotationDeg, jumpcounter = 2;
+    private int deadRotationDeg, jumpcounter = 2, isDamaged = 10;
     private float damage;
+    private Shaders shader;
 
-    public Player(World world, EnemyGameScreen screen, float maxHealth, float weaponStrength, float currHealth){
+    public Player(MyGdxGame game, World world, EnemyGameScreen screen, float maxHealth, float weaponStrength, float currHealth){
         super(screen.getAtlas().findRegion("player"));
         this.world = world;
+        this.game = game;
         this.screen = screen;
         definePlayer();
         currState = State.STANDING;
@@ -60,6 +66,7 @@ public class Player extends Sprite{
         this.weaponBarFrame = new Texture("weaponBarFrame2.png");
         this.isDefeated = false;
         this.deadRotationDeg = 0;
+        this.shader = new Shaders();
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
         
@@ -91,6 +98,21 @@ public class Player extends Sprite{
                body.setAngularVelocity(0);
             }
         }
+    }
+
+    public void draw(SpriteBatch batch) {
+        float damageEffectIntensity;
+        if(isDamaged<10){
+            damageEffectIntensity = 0.5f;
+            isDamaged++;
+        }else {damageEffectIntensity = 0.0f;}
+
+        game.getBatch().setShader(shader.getShaderProgram());
+        shader.getShaderProgram().setUniformf("u_damageEffect", damageEffectIntensity);
+    
+        super.draw(batch);
+    
+        game.getBatch().setShader(null);
     }
 
     public TextureRegion getFrame(float delta){
@@ -217,6 +239,7 @@ public class Player extends Sprite{
 
     public void takeDamage(float amount) {
         currentHealth -= amount;
+        isDamaged = 0;
         if (currentHealth <= 0) {
             currentHealth = 0;
             playerDies();

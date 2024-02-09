@@ -8,10 +8,12 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
@@ -21,6 +23,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mygdx.game.EnemyGameScreen;
 import com.mygdx.helpers.Constants;
+import com.mygdx.helpers.Shaders;
 
 public class Enemy extends Sprite {
     private World world;
@@ -46,6 +49,8 @@ public class Enemy extends Sprite {
     private float shootingInterval = 1f;
 
     private Sprite armSprite;
+    private int isDamaged = 10;
+    private Shaders shader;
 
     public Enemy(World world,float x, float y, float speed, float health, Player player, EnemyGameScreen screen, float damage) {
         super(screen.getAtlas().findRegion("enemy"));
@@ -60,6 +65,7 @@ public class Enemy extends Sprite {
         this.whiteRegion = new TextureRegion(white, 0,0,1,1);
         this.isDefeated = false;
         this.deadRotationDeg = 0;
+        this.shader = new Shaders();
 
         armTexture = new Texture("arm.png");
         armSprite = new Sprite(armTexture);
@@ -309,6 +315,7 @@ public class Enemy extends Sprite {
 
     public void takeDamage() {
         currentHealth -= player.getDamage();
+        isDamaged=0;
         if (currentHealth <= 0) {
             currentHealth = 0;
             enemyDies();
@@ -371,13 +378,22 @@ public class Enemy extends Sprite {
     }
 
     public void draw(SpriteBatch batch) {
+        float damageEffectIntensity;
+        if(isDamaged<10){
+            damageEffectIntensity = 0.5f;
+            isDamaged++;
+        }else {damageEffectIntensity = 0.0f;}
+
+        batch.setShader(shader.getShaderProgram());
+        shader.getShaderProgram().setUniformf("u_damageEffect", damageEffectIntensity);
         setOriginCenter();
         // Update the position of the sprite to match the body
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
         if(isDefeated)setRotation(deadRotationDeg);
         // Draw the sprite
-        super.draw(batch);
+        super.draw(batch); 
         if(!isDefeated)armSprite.draw(batch);
+        batch.setShader(null);
     }
 
     public float getDamage(){
@@ -387,6 +403,7 @@ public class Enemy extends Sprite {
     public void dispose() {
         armTexture.dispose();
         white.dispose();
+        shader.dispose();
     }
 
 }

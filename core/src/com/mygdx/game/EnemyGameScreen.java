@@ -96,7 +96,7 @@ public class EnemyGameScreen implements Screen{
         this.atlas = new TextureAtlas("spritePack.pack");
 
         new WorldCreator(world, map);
-        this.player = new Player(world, this, playerHealth, playerWeaponStrength, currHealth);
+        this.player = new Player(game, world, this, playerHealth, playerWeaponStrength, currHealth);
         this.blackTexture = new Texture("BlackScreen.jpg");
         this.enemies = new Array<Enemy>();
         this.enemyCount = roundNumber+random.nextInt(2);
