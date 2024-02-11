@@ -41,7 +41,7 @@ public class EnemyGameScreen implements Screen{
     private OrthogonalTiledMapRenderer renderer;
 
     private World world;
-    //private Box2DDebugRenderer debugRenderer;
+    private Box2DDebugRenderer debugRenderer;
     private Player player;
 
     private TextureAtlas atlas;
@@ -92,7 +92,7 @@ public class EnemyGameScreen implements Screen{
         this.bullets = new Array<Bullet>();
         this.enemyBullets = new Array<EnemyBullet>();
         this.world = new World(new Vector2(0,-10), true);
-        //this.debugRenderer = new Box2DDebugRenderer();
+        this.debugRenderer = new Box2DDebugRenderer();
         this.atlas = new TextureAtlas("spritePack.pack");
 
         new WorldCreator(world, map);
@@ -152,7 +152,7 @@ public class EnemyGameScreen implements Screen{
         game.getBatch().draw(backgroundTexture, 0, 0, backgroundTexture.getWidth() * backgroundScaleX, backgroundTexture.getHeight() * backgroundScaleY);
 
 
-        //debugRenderer.render(world, camera.combined);
+        debugRenderer.render(world, camera.combined);
         game.getBatch().setProjectionMatrix(camera.combined); 
         renderer.render();
 
@@ -190,13 +190,7 @@ public class EnemyGameScreen implements Screen{
             }
         }
 
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(0, 0, 0, fade);
-        shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        shapeRenderer.end();
-        Gdx.gl.glDisable(GL20.GL_BLEND);
+        fadeOut(fade);
 
         game.getBatch().setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
@@ -312,6 +306,16 @@ public class EnemyGameScreen implements Screen{
         game.spaceshipScreen.clearEnemies();
     }
 
+    private void fadeOut(float fadeIndex){
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(0, 0, 0, fade);
+        shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+    }
+
     private String getRandomMap(HashMap<Integer, String> map){
         int randomNr = random.nextInt(8);
         return map.get(randomNr);
@@ -353,7 +357,7 @@ public class EnemyGameScreen implements Screen{
         blackTexture.dispose();
         renderer.dispose();
         world.dispose();
-        //debugRenderer.dispose();
+        debugRenderer.dispose();
         font.dispose();
         backgroundTexture.dispose();
         atlas.dispose();

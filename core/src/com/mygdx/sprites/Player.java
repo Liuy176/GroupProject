@@ -179,7 +179,7 @@ public class Player extends Sprite{
         body.createFixture(fixture).setUserData(this);
 
         EdgeShape leftSideClose = new EdgeShape();
-        leftSideClose.set(new Vector2(-3/Constants.PPM, -8/Constants.PPM), new Vector2(3/Constants.PPM, -8/Constants.PPM));
+        leftSideClose.set(new Vector2(-4/Constants.PPM, -8/Constants.PPM), new Vector2(4/Constants.PPM, -8/Constants.PPM));
         fixture.shape = leftSideClose;
         fixture.isSensor = true;
         body.createFixture(fixture).setUserData("jumpSensor");

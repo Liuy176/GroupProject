@@ -31,7 +31,7 @@ public class MenuScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         skin = new Skin(Gdx.files.internal("uiskin.json"));
-        background = new Texture("9.png");
+        background = new Texture("menuScreen.png");
 
         Table table = new Table();
         table.setFillParent(true);

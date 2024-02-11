@@ -45,6 +45,7 @@ public class Bullet extends Sprite {
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(x , y );
         bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.bullet = true;
         bodyDef.gravityScale = 0; 
         body = world.createBody(bodyDef);
 

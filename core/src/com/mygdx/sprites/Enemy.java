@@ -282,20 +282,6 @@ public class Enemy extends Sprite {
         body.applyLinearImpulse(new Vector2(0, 3), body.getWorldCenter(), true);
     }
 
-    /*public void moveBack() {
-        if(speed >3)
-            body.applyLinearImpulse(new Vector2(-30,0), body.getWorldCenter(), true);
-        else
-            body.applyLinearImpulse(new Vector2(-6,0), body.getWorldCenter(), true);
-    }
-
-    public void moveForward() {
-        if(speed >3)
-            body.applyLinearImpulse(new Vector2(30,0), body.getWorldCenter(), true);
-        else
-            body.applyLinearImpulse(new Vector2(6,0), body.getWorldCenter(), true);
-    }*/
-
     // movement methods to prevent enemies getting stuck when running into a wall
     public void moveBack() {
         float forceMagnitude = speed > 3 ? -4f : -3f;
