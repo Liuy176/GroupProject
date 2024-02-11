@@ -5,22 +5,22 @@ filter: Nearest,Nearest
 repeat: none
 ufo
   rotate: false
-  xy: 0, 62
+  xy: 0, 6
   size: 116, 25
   orig: 116, 25
   offset: 0, 0
   index: -1
 player
   rotate: false
-  xy: 0, 29
-  size: 52, 31
-  orig: 52, 31
+  xy: 116, 0
+  size: 81, 31
+  orig: 81, 31
   offset: 0, 0
   index: -1
 enemy
   rotate: false
-  xy: 0, 0
-  size: 34, 27
-  orig: 34, 27
+  xy: 197, 4
+  size: 53, 27
+  orig: 53, 27
   offset: 0, 0
   index: -1

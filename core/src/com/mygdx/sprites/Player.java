@@ -32,7 +32,7 @@ public class Player extends Sprite{
     public enum State {FALLING, JUMPING, STANDING, RUNNING, DEAD };
     private State currState, prevState;
     private Animation<TextureRegion> run;
-    private Animation<TextureRegion> jump;
+    private TextureRegion jump;
     private Animation<TextureRegion> idle;
     private boolean facingRight;
     private float timer;
@@ -70,12 +70,13 @@ public class Player extends Sprite{
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
         
-        frames.add(new TextureRegion(getTexture(), 0, 29, 26, 31));
-        frames.add(new TextureRegion(getTexture(), 26, 29, 26, 31));
+        frames.add(new TextureRegion(getTexture(), 116, 0, 26, 31));
+        frames.add(new TextureRegion(getTexture(), 142, 0, 26, 31));
         run = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
         
-        stand = new TextureRegion(getTexture(), 0, 29, 26, 31);
+        stand = new TextureRegion(getTexture(), 116, 0, 26, 31);
+        jump = new TextureRegion(getTexture(),168, 0, 29, 31);
         setBounds(0,0, 16/Constants.PPM, 16/Constants.PPM);
         setRegion(stand);
     }
@@ -121,7 +122,7 @@ public class Player extends Sprite{
         TextureRegion region;
         switch (currState) {
             case JUMPING:
-                region = stand;
+                region = jump;
                 break;
             case RUNNING:
                 region = run.getKeyFrame(timer, true);

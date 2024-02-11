@@ -31,7 +31,7 @@ public class Enemy extends Sprite {
     private float speed, damage, startHealth, currentHealth, deadRotationDeg, timer;
     private Player player;
     public Texture white, armTexture;
-    public TextureRegion whiteRegion, stand;
+    public TextureRegion whiteRegion, stand, jump;
     private boolean isDefeated, facingRight = false, movingBack = false;
     private EnemyGameScreen screen;
     private Animation<TextureRegion> run;
@@ -76,12 +76,13 @@ public class Enemy extends Sprite {
         setOrigin(getWidth() / 2, getHeight() / 2);
         Array<TextureRegion> frames = new Array<TextureRegion>();
         
-        frames.add(new TextureRegion(getTexture(), 0, 0, 17, 27));
-        frames.add(new TextureRegion(getTexture(), 17, 0, 17, 27));
+        frames.add(new TextureRegion(getTexture(), 197, 4, 17, 27));
+        frames.add(new TextureRegion(getTexture(), 214, 4, 17, 27));
         run = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
         
-        stand = new TextureRegion(getTexture(), 0, 0, 17, 27);
+        stand = new TextureRegion(getTexture(), 197, 4, 17, 27);
+        jump = new TextureRegion(getTexture(), 231, 4, 19, 27);
         setBounds(0,0, 13/Constants.PPM, 16/Constants.PPM);
         setRegion(stand);
         defineEnemy(x, y);
@@ -142,7 +143,7 @@ public class Enemy extends Sprite {
         boolean isPlayerRight = player.getBody().getPosition().x > this.body.getPosition().x;
         switch (currState) {
             case JUMPING:
-                region = stand;
+                region = jump;
                 break;
             case RUNNING:
                 region = run.getKeyFrame(timer, true);
