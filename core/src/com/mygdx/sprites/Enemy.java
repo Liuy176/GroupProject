@@ -37,6 +37,7 @@ public class Enemy extends Sprite {
     private Animation<TextureRegion> run;
     public enum State {FALLING, JUMPING, STANDING, RUNNING, DEAD };
     private State currState, prevState;
+    private Fixture fix;
 
     private float randomActionTimer = 0f;
     private float randomActionInterval = 3.0f;
@@ -252,7 +253,8 @@ public class Enemy extends Sprite {
         fixtureDef.density = 1f;
         fixtureDef.filter.categoryBits = Constants.CATEGORY_ENEMY;
         fixtureDef.filter.maskBits = Constants.CATEGORY_GROUND | Constants.CATEGORY_BULLET;
-        body.createFixture(fixtureDef);
+        fix = body.createFixture(fixtureDef);
+        fix.setUserData("enemy");
 
         EdgeShape rightSide = new EdgeShape();
         rightSide.set(new Vector2(7/Constants.PPM, 6/Constants.PPM), new Vector2(7/Constants.PPM, -6/Constants.PPM));

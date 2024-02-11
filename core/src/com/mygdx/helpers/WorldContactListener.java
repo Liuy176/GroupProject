@@ -36,14 +36,14 @@ public class WorldContactListener implements ContactListener{
             Fixture other = bulletFixture == fixA ? fixB: fixA;
             Bullet bullet = (Bullet) bulletFixture.getUserData();
             bullet.setToRemove(true);
-
+            
             if(other.getUserData() instanceof Enemy){
                 Enemy enemy = (Enemy) other.getUserData();
                 enemy.takeDamage();
-            } /*else if (other.getUserData() !=null &&( other.getUserData().equals("enemyBackupLeft") || other.getUserData().equals("enemyBackupRight"))){
-                Enemy enemy = (Enemy) other.getBody().getUserData();
-                enemy.takeDamage();
-            }*/
+            } else if("enemy".equals(other.getUserData())){
+                Enemy enemy1 = (Enemy) other.getBody().getUserData();
+                enemy1.takeDamage();
+            }
         }
 
         // player takes damage if hit by enemy's bullet
