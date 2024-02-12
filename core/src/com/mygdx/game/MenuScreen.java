@@ -1,7 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.ScreenAdapter;
-
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -20,6 +20,7 @@ public class MenuScreen implements Screen {
     private Skin skin;
     private int highScore = 0;
     private Texture background;
+    private Music backgroundMusic;
     
     public MenuScreen(MyGdxGame game) {
         this.game = game;
@@ -51,6 +52,7 @@ public class MenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(game.spaceshipScreen);
+                restartMusic();
             }
         });
 
@@ -85,6 +87,10 @@ public class MenuScreen implements Screen {
         table.add(enemyModeButton).fillX().uniformX().padBottom(10);
         table.row();
         table.add(exitButton).fillX().uniformX();
+
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Liu.mp3"));
+        backgroundMusic.setLooping(true);
+        backgroundMusic.play();
     }
     
 
@@ -104,6 +110,14 @@ public class MenuScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
+    }
+
+    public void restartMusic() {
+        if (backgroundMusic.isPlaying()) {
+            backgroundMusic.stop();
+        }
+        
+        backgroundMusic.play();
     }
 
     @Override

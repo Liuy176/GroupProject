@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -66,6 +67,7 @@ public class SpaceshipScreen implements Screen {
     private Texture heartTexture, healthFrame, white, gunTexture;
     private TextureRegion whiteRegion;
     private BitmapFont font;
+    //private Music backgroundMusic;
 
   public SpaceshipScreen(MyGdxGame game, float health){
     this.game = game;
@@ -466,11 +468,19 @@ public class SpaceshipScreen implements Screen {
     public int getScore(){
       return score;
     }
+    //public Music getMusic(){
+    //  return backgroundMusic;
+    //}
     @Override
     public void show() {
       font = new BitmapFont();
       font.setColor(Color.WHITE);
       font.getData().setScale(1);
+
+                    
+      //backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Liu.mp3"));       
+      //backgroundMusic.setLooping(true);      
+      //backgroundMusic.play();
     }
 
     @Override
