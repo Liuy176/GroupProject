@@ -1,11 +1,12 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -21,9 +22,14 @@ public class MenuScreen implements Screen {
     private int highScore = 0;
     private Texture background;
     private Music backgroundMusic;
+    private FreeTypeFontGenerator gen;
+    private BitmapFont font;
     
     public MenuScreen(MyGdxGame game) {
         this.game = game;
+        gen = new FreeTypeFontGenerator(Gdx.files.internal("pixelmix.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        font = gen.generateFont(param);
     }
 
     @Override
@@ -51,7 +57,7 @@ public class MenuScreen implements Screen {
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(game.spaceshipScreen);
+                game.setScreen(game.spaceshipScreen); // start the game
                 restartMusic();
             }
         });
@@ -66,27 +72,29 @@ public class MenuScreen implements Screen {
         enemyModeButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new EnemyGameScreen(game,5, 50000, 60, 50000)); // Switch to Enemy Game Screen
+                game.setScreen(new EnemyGameScreen(game,5, 50000, 60, 50000)); // switch to Enemy Game Screen
             }
         });
 
         exitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.exit(); // when pressed 'exit'
+                Gdx.app.exit(); // exit the application
             }
         });
 
         // show high score
         table.add(highScoreLabel).colspan(2).padBottom(20).row();
         // add buttons to the table
-        table.add(playButton).fillX().uniformX().padBottom(10);
         table.row();
-        table.add(settingsButton).fillX().uniformX().padBottom(10);
         table.row();
-        table.add(enemyModeButton).fillX().uniformX().padBottom(10);
+        table.add(playButton).fillX().uniformX().padRight(20).padBottom(10).width(400).height(60);
         table.row();
-        table.add(exitButton).fillX().uniformX();
+        table.add(settingsButton).fillX().uniformX().padRight(20).padBottom(10).width(400).height(60);
+        table.row();
+        table.add(enemyModeButton).fillX().uniformX().padRight(20).padBottom(10).width(400).height(60);
+        table.row();
+        table.add(exitButton).fillX().uniformX().padRight(20).width(400).height(60);
 
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Liu.mp3"));
         backgroundMusic.setLooping(true);
@@ -130,6 +138,7 @@ public class MenuScreen implements Screen {
         stage.dispose();
         skin.dispose();
         background.dispose();
+        gen.dispose();
     }
 
     public int getHighScore(){

@@ -282,7 +282,7 @@ public class EnemyGameScreen implements Screen{
                 player.getBody().applyLinearImpulse(new Vector2(0.3f, 0), player.getBody().getWorldCenter(), true);
             if(Gdx.input.isKeyPressed(Input.Keys.A) && player.getBody().getLinearVelocity().x >=-3 )
                 player.getBody().applyLinearImpulse(new Vector2(-0.3f, 0), player.getBody().getWorldCenter(), true);
-            if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
+            if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
                     player.shoot();
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) pause();
