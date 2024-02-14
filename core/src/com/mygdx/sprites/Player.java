@@ -17,7 +17,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.EnemyGameScreen;
-import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.SpaceBlastGame;
 import com.mygdx.helpers.Constants;
 import com.mygdx.helpers.Shaders;
 import com.badlogic.gdx.physics.box2d.Filter;
@@ -26,7 +26,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class Player extends Sprite{
     private World world;
-    private MyGdxGame game;
+    private SpaceBlastGame game;
     private Body body;
     private TextureRegion stand;
     public enum State {FALLING, JUMPING, STANDING, RUNNING, DEAD };
@@ -45,7 +45,7 @@ public class Player extends Sprite{
     private float damage;
     private Shaders shader;
 
-    public Player(MyGdxGame game, World world, EnemyGameScreen screen, float maxHealth, float weaponStrength, float currHealth){
+    public Player(SpaceBlastGame game, World world, EnemyGameScreen screen, float maxHealth, float weaponStrength, float currHealth){
         super(screen.getAtlas().findRegion("player"));
         this.world = world;
         this.game = game;

@@ -41,7 +41,7 @@ public class SpaceshipScreen implements Screen {
     private long lastCandyTime, lastWeaponTime;
     
     private boolean paused; 
-    private MyGdxGame game;
+    private SpaceBlastGame game;
     
     private float gravity = 0.5f; 
     private float jumpVelocity = -10f; 
@@ -69,7 +69,7 @@ public class SpaceshipScreen implements Screen {
     private BitmapFont font;
     //private Music backgroundMusic;
 
-  public SpaceshipScreen(MyGdxGame game, float health){
+  public SpaceshipScreen(SpaceBlastGame game, float health){
     this.game = game;
     batch = game.getBatch();
     img = new Texture("9.png");

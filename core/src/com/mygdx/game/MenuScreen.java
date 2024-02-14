@@ -20,7 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class MenuScreen implements Screen {
-    private MyGdxGame game;
+    private SpaceBlastGame game;
     private Stage stage;
     private Skin skin;
     private int highScore;
@@ -32,7 +32,7 @@ public class MenuScreen implements Screen {
     private LabelStyle labelStyle;
     private FreeTypeFontParameter param;
     
-    public MenuScreen(MyGdxGame game) {
+    public MenuScreen(SpaceBlastGame game) {
         this.game = game;
         highScore = game.loadHighScore();
         gen = new FreeTypeFontGenerator(Gdx.files.internal("pixelmix.ttf"));
@@ -74,29 +74,25 @@ public class MenuScreen implements Screen {
 
         // button listeners
         playButton.addListener(new ChangeListener() {
-            @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(game.spaceshipScreen); // start the game
+                game.setScreen(game.getSpaceshipScreen()); // start the game
                 restartMusic();
             }
         });
 
-        settingsButton.addListener(new ChangeListener() {
-            @Override                  
+        settingsButton.addListener(new ChangeListener() {                
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new GameOverScreen(game));
+                game.setScreen(new GameOverScreen(game, 0));
             }
         });
 
         enemyModeButton.addListener(new ChangeListener() {
-            @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(new EnemyGameScreen(game,5, 50000, 60, 50000)); // switch to Enemy Game Screen
             }
         });
 
         exitButton.addListener(new ChangeListener() {
-            @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Gdx.app.exit(); // exit the application
             }
@@ -166,6 +162,18 @@ public class MenuScreen implements Screen {
     }
     public void setHighScore(int score){
         this.highScore = score;
+    }
+    public Stage getStage(){
+        return stage;
+    }
+    public Skin getSkin(){
+        return skin;
+    }
+    public LabelStyle getLabelStyle(){
+        return labelStyle;
+    }
+    public BitmapFont getFont(){
+        return font;
     }
 
     @Override

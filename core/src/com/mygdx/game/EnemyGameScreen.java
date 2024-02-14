@@ -34,7 +34,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 
 public class EnemyGameScreen implements Screen{
-    private MyGdxGame game;
+    private SpaceBlastGame game;
     private OrthographicCamera camera;
     private TmxMapLoader mapLoader;
     private TiledMap map;
@@ -71,7 +71,7 @@ public class EnemyGameScreen implements Screen{
     public int enemyCount;
 
 
-    public EnemyGameScreen(MyGdxGame game, int roundNumber, float playerHealth, float playerWeaponStrength, float currHealth){
+    public EnemyGameScreen(SpaceBlastGame game, int roundNumber, float playerHealth, float playerWeaponStrength, float currHealth){
 
         HashMap<Integer, String> gameMaps = new HashMap<Integer, String>();
         gameMaps.put(0, "map4.tmx");
@@ -174,7 +174,7 @@ public class EnemyGameScreen implements Screen{
         // palyer's health bar (top right)
         player.drawHealthBar(game.getBatch(), font);
         if(paused) {
-            game.spaceshipScreen.getBitmap().draw(game.getBatch(), "Press SPACE to continue...", (Gdx.graphics.getWidth()/2)-135, (Gdx.graphics.getHeight()/2)+20);
+            game.getSpaceshipScreen().getBitmap().draw(game.getBatch(), "Press SPACE to continue...", (Gdx.graphics.getWidth()/2)-135, (Gdx.graphics.getHeight()/2)+20);
         }
         game.getBatch().setProjectionMatrix(camera.combined);
 
@@ -184,9 +184,10 @@ public class EnemyGameScreen implements Screen{
         if (isDefeated) {
             fade += delta / fadeDuration;
             if (fade > 1) {
-                fade = 1;;
+                fade = 1;
+                int score = game.getSpaceshipScreen().getScore();
                 this.reset();
-                game.setScreen(new GameOverScreen(game));
+                game.setScreen(new GameOverScreen(game, score));
             }
         }
 
@@ -246,10 +247,10 @@ public class EnemyGameScreen implements Screen{
                 fade += dt / fadeDuration;
                 if (fade > 1) {
                     fade = 1;
-                    game.spaceshipScreen.setPlayerHealth(player.getCurrentHealth());
-                    game.spaceshipScreen.restart(true);
-                    game.spaceshipScreen.setDisposeEnemyScreen(this);
-                    game.setScreen(game.spaceshipScreen);
+                    game.getSpaceshipScreen().setPlayerHealth(player.getCurrentHealth());
+                    game.getSpaceshipScreen().restart(true);
+                    game.getSpaceshipScreen().setDisposeEnemyScreen(this);
+                    game.setScreen(game.getSpaceshipScreen());
                 }
             }
         }
@@ -292,20 +293,20 @@ public class EnemyGameScreen implements Screen{
     }
     
     private void reset(){
-        if(game.spaceshipScreen.getScore() > game.mainMenuScreen.getHighScore()){
-            game.mainMenuScreen.setHighScore(game.spaceshipScreen.getScore());
-            game.saveHighScore(game.spaceshipScreen.getScore());
+        if(game.getSpaceshipScreen().getScore() > game.getMenu().getHighScore()){
+            game.getMenu().setHighScore(game.getSpaceshipScreen().getScore());
+            game.saveHighScore(game.getSpaceshipScreen().getScore());
         }
-        game.spaceshipScreen.setPlayerHealth(Constants.maxPlayerHealth);
-        game.spaceshipScreen.setDamage(12);
-        game.spaceshipScreen.setAmountOfCrashes(0);
-        game.spaceshipScreen.setScore(0);
-        game.spaceshipScreen.setGameOver(false);
-        game.spaceshipScreen.setFadeOut(false);
-        game.spaceshipScreen.setFadeOpacity(0f);
-        game.spaceshipScreen.setIsBlinking(false);
-        game.spaceshipScreen.clearCandies();
-        game.spaceshipScreen.clearEnemies();
+        game.getSpaceshipScreen().setPlayerHealth(Constants.maxPlayerHealth);
+        game.getSpaceshipScreen().setDamage(12);
+        game.getSpaceshipScreen().setAmountOfCrashes(0);
+        game.getSpaceshipScreen().setScore(0);
+        game.getSpaceshipScreen().setGameOver(false);
+        game.getSpaceshipScreen().setFadeOut(false);
+        game.getSpaceshipScreen().setFadeOpacity(0f);
+        game.getSpaceshipScreen().setIsBlinking(false);
+        game.getSpaceshipScreen().clearCandies();
+        game.getSpaceshipScreen().clearEnemies();
     }
 
     private void fadeOut(float fadeIndex){

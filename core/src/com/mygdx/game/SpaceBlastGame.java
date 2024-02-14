@@ -12,14 +12,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
-public class MyGdxGame extends Game {
+public class SpaceBlastGame extends Game {
 	private int screenWidth, screenHeight;
 	private OrthographicCamera ortographicCamera;
-	public MenuScreen mainMenuScreen;
-	public SpaceshipScreen spaceshipScreen;
+	private MenuScreen mainMenuScreen;
+	private SpaceshipScreen spaceshipScreen;
 	private SpriteBatch batch;
 
-	public MyGdxGame() {}
+	public SpaceBlastGame() {}
 
     @Override
     public void create() {
@@ -35,21 +35,31 @@ public class MyGdxGame extends Game {
         setScreen(mainMenuScreen); //menu screen appears after starting the game
     }
 
+	// function to save high score for future game sessions
 	public void saveHighScore(int highScore) {
-		Preferences prefs = (Preferences) Gdx.app.getPreferences("MyGamePreferences");
+		Preferences prefs = (Preferences) Gdx.app.getPreferences("SpaceBlast");
 		prefs.putInteger("highScore", highScore);
 		try{prefs.flush();}
 		catch (Exception e){}
 	}
 
+	// function to load high score when launching the game
 	public int loadHighScore() {
-		Preferences prefs = (Preferences) Gdx.app.getPreferences("MyGamePreferences");
+		Preferences prefs = (Preferences) Gdx.app.getPreferences("SpaceBlast");
 		return prefs.getInteger("highScore", 0);
 	}
 	
 
 	public void render(){
 		super.render();
+	}
+
+	public MenuScreen getMenu(){
+		return mainMenuScreen;
+	}
+
+	public SpaceshipScreen getSpaceshipScreen(){
+		return spaceshipScreen;
 	}
 
 	public int getScreenHeight() {

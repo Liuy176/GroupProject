@@ -9,26 +9,60 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class GameOverScreen implements Screen {
-    private MyGdxGame game;
+    private SpaceBlastGame game;
     private SpriteBatch spriteBatch;
     private Texture background;
-    private String finalScore;
-
+    private Stage stage;
+    private Skin skin;
+    private Label scoreLabel;
+    private Label instructionLabel;
+    private TextButton toMenuButton;
     private float fade = 1f; // start from black color
     private float fadeDuration = 2f;
+    private int finalScore;
 
-    public GameOverScreen(MyGdxGame game) {
+    public GameOverScreen(SpaceBlastGame game, int score) {
         this.game = game;
-        spriteBatch = new SpriteBatch();
+        spriteBatch = game.getBatch();
         background = new Texture("gameOver.png");
-        String finalScore = "Final Score: " + game.spaceshipScreen.getScore();
+        finalScore = score;
+        stage = new Stage(new ScreenViewport());
 
     }
 
     @Override
     public void show() {
+        instructionLabel = new Label("Press SPACE to restart", game.getMenu().getLabelStyle());
+        scoreLabel = new Label("Final Score: " + finalScore, game.getMenu().getLabelStyle());
+        toMenuButton = new TextButton("To Main Menu", game.getMenu().getSkin());
+
+        instructionLabel.setPosition(Gdx.graphics.getWidth() / 2 - instructionLabel.getWidth() / 2, 50);
+        scoreLabel.setPosition(Gdx.graphics.getWidth() / 2 - scoreLabel.getWidth() / 2, 650);
+        toMenuButton.setPosition(Gdx.graphics.getWidth() / 2 - toMenuButton.getWidth() / 2, 200);
+        toMenuButton.setWidth(140);
+        toMenuButton.setHeight(50);
+        toMenuButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                // TODO Auto-generated method stub
+                game.setScreen(game.getMenu());
+            };
+        });
+        stage.addActor(instructionLabel);
+        stage.addActor(scoreLabel);
+        stage.addActor(toMenuButton);
     }
 
     @Override
@@ -55,10 +89,12 @@ public class GameOverScreen implements Screen {
         spriteBatch.end();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            game.spaceshipScreen.dispose();
-            this.dispose();
-            game.setScreen(game.mainMenuScreen); 
+            game.setScreen(game.getSpaceshipScreen()); // start the game
+            game.getMenu().restartMusic();
         }
+
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
     }
 
     @Override
