@@ -250,6 +250,7 @@ public class EnemyGameScreen implements Screen{
                     game.getSpaceshipScreen().setPlayerHealth(player.getCurrentHealth());
                     game.getSpaceshipScreen().restart(true);
                     game.getSpaceshipScreen().setDisposeEnemyScreen(this);
+                    game.getSpaceshipScreen().setScore(game.getSpaceshipScreen().getScoreWhenCrashed());
                     game.setScreen(game.getSpaceshipScreen());
                 }
             }

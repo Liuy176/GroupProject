@@ -31,7 +31,7 @@ public class SpaceshipScreen implements Screen {
     private boolean  gameover;
     private Array<Rectangle> enemies1;
 
-    private int score, damage=Constants.initialWeaponPower;
+    private int score, damage=Constants.initialWeaponPower, scoreWhenCrashed;
     private boolean toIncrementScore = false;
   
     private FreeTypeFontGenerator generator;
@@ -106,12 +106,12 @@ public class SpaceshipScreen implements Screen {
     blinkStartTime = 0f;
     paused=false; 
     
-    this.white = new Texture("white.png");
-    this.whiteRegion = new TextureRegion(white, 0,0,1,1);
-    this.heartTexture = new Texture("heart.png");
-    this.gunTexture = new Texture("gun.png");
-    this.healthFrame = new Texture("healthFrame.png");
-    this.weaponBarFrame = new Texture("weaponBarFrame2.png");
+    white = new Texture("white.png");
+    whiteRegion = new TextureRegion(white, 0,0,1,1);
+    heartTexture = new Texture("heart.png");
+    gunTexture = new Texture("gun.png");
+    healthFrame = new Texture("healthFrame.png");
+    weaponBarFrame = new Texture("weaponBarFrame2.png");
 
   }
   
@@ -136,6 +136,7 @@ public class SpaceshipScreen implements Screen {
       if (isBlinking) {
         float elapsed = (TimeUtils.nanoTime() - blinkStartTime) *0.000000001f;
         if (elapsed > blinkDuration) {
+            scoreWhenCrashed = score;
             isBlinking = false;
             paused = false;
             isShipVisible = true;
@@ -376,8 +377,6 @@ public class SpaceshipScreen implements Screen {
       }
       
       public void restart(boolean isPaused) {
-        //score = 0;
-        //power = 3;
         if(!isPaused) score = 0;
         posX = Constants.xPosOfUfoAtStart;
         enemies1.clear();
@@ -461,6 +460,9 @@ public class SpaceshipScreen implements Screen {
     }
     public void setIsBlinking(boolean blinking){
       this.isBlinking = blinking;
+    }
+    public int getScoreWhenCrashed(){
+      return scoreWhenCrashed;
     }
     public BitmapFont getBitmap(){
       return bitmap;

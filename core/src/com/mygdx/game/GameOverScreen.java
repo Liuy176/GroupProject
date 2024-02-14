@@ -38,12 +38,14 @@ public class GameOverScreen implements Screen {
         spriteBatch = game.getBatch();
         background = new Texture("gameOver.png");
         finalScore = score;
-        stage = new Stage(new ScreenViewport());
 
     }
 
     @Override
     public void show() {
+        stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
+
         instructionLabel = new Label("Press SPACE to restart", game.getMenu().getLabelStyle());
         scoreLabel = new Label("Final Score: " + finalScore, game.getMenu().getLabelStyle());
         toMenuButton = new TextButton("To Main Menu", game.getMenu().getSkin());
@@ -78,6 +80,12 @@ public class GameOverScreen implements Screen {
         spriteBatch.begin();
         spriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
+        spriteBatch.end();
+
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
+
+        spriteBatch.begin();
         if (fade > 0) {
             Gdx.gl.glEnable(GL20.GL_BLEND);
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -92,9 +100,6 @@ public class GameOverScreen implements Screen {
             game.setScreen(game.getSpaceshipScreen()); // start the game
             game.getMenu().restartMusic();
         }
-
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
     }
 
     @Override
@@ -113,6 +118,8 @@ public class GameOverScreen implements Screen {
     public void resume() {}
 
     @Override
-    public void hide() {}
+    public void hide() {
+        Gdx.input.setInputProcessor(null);
+    }
 }
 
