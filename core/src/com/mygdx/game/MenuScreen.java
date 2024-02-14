@@ -31,20 +31,34 @@ public class MenuScreen implements Screen {
     private TextButtonStyle style;
     private LabelStyle labelStyle;
     private FreeTypeFontParameter param;
+    private TextButton playButton, settingsButton, enemyModeButton, exitButton;
     
     public MenuScreen(SpaceBlastGame game) {
         this.game = game;
-        highScore = game.loadHighScore("medium");
+        highScore = game.loadHighScore(game.getDif());
         gen = new FreeTypeFontGenerator(Gdx.files.internal("pixelmix.ttf"));
         labelStyle = new LabelStyle();
         param = new FreeTypeFontParameter();
         param.size = 26;
         font = gen.generateFont(param);
         labelStyle.font = font;
+        skin = new Skin(Gdx.files.internal("uiskin.json"));
 
+        // button style
+        style = new TextButtonStyle();
+        style.up = skin.newDrawable("default-round", Color.ROYAL);
+        style.down = skin.newDrawable("default-round-down", Color.GRAY);
+        style.font = font;
+
+        //buttons
+        playButton = new TextButton("Play", style);
+        settingsButton = new TextButton("Settings", style);
+        enemyModeButton = new TextButton("Go to Enemy Mode", style); // the button to test the enemy game mode
+        exitButton = new TextButton("Exit", style);
         // start music
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Liu.mp3"));
         backgroundMusic.setLooping(true);
+        updateVol();
         backgroundMusic.play();
     }
 
@@ -53,27 +67,16 @@ public class MenuScreen implements Screen {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
         background = new Texture("menuScreen.png");
 
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
         //table.setDebug(true); 
-        style = new TextButtonStyle();
-        style.up = skin.newDrawable("default-round", Color.ROYAL);
-        style.down = skin.newDrawable("default-round-down", Color.GRAY);
-        style.font = font;
-
 
         // high score lable
         String highScoreText = "High Score: " + highScore;
         Label highScoreLabel = new Label(highScoreText, labelStyle);
-        //buttons
-        TextButton playButton = new TextButton("Play", style);
-        TextButton settingsButton = new TextButton("Settings", style);
-        TextButton enemyModeButton = new TextButton("Go to Enemy Mode", style); // the button to test the enemy game mode
-        TextButton exitButton = new TextButton("Exit", style);
 
         highScoreLabel.setFontScale(1.1f); // make label bigger
 
@@ -140,8 +143,17 @@ public class MenuScreen implements Screen {
         if (backgroundMusic.isPlaying()) {
             backgroundMusic.stop();
         }
-        
         backgroundMusic.play();
+    }
+
+    public void updateVol(){
+        if(backgroundMusic !=null){
+            backgroundMusic.setVolume(game.getVol());
+        }
+    }
+
+    public void updateHighScore(){
+        highScore = game.loadHighScore(game.getDif());
     }
 
     @Override

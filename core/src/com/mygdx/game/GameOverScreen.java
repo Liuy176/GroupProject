@@ -59,7 +59,6 @@ public class GameOverScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 // TODO Auto-generated method stub
-                game.getMenu().getMusic().stop();
                 game.setScreen(game.getMenu());
             };
         });

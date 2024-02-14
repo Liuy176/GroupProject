@@ -41,6 +41,7 @@ public class Settings implements Screen{
             public void changed(ChangeEvent event, Actor actor) {
                 float volume = volumeSlider.getValue() / 100;
                 game.saveVol(volume);
+                game.getMenu().updateVol();
             }
         });
         
@@ -53,6 +54,7 @@ public class Settings implements Screen{
         difficultySelectBox.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                     game.saveDifficulty(difficultySelectBox.getSelected());
+                    game.getMenu().updateHighScore();
             }
         });
 

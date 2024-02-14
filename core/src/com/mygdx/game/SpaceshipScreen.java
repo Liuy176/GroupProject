@@ -359,9 +359,9 @@ public class SpaceshipScreen implements Screen {
         private void produceAsteroidPair(float delta) {
           timeSinceLastAsteroidPair += delta;
             if (timeSinceLastAsteroidPair > pairGenInterval) {
-                float baseY = MathUtils.random(0, Gdx.graphics.getHeight() - tEnemy1.getHeight() * 2 - Constants.asteroidBatchDistance);
+                float baseY = MathUtils.random(0, Gdx.graphics.getHeight() - tEnemy1.getHeight() * 2 - Constants.getAsteroidBatchDistance(game.getDif()));
                 float y1 = baseY;
-                float y2 = baseY + tEnemy1.getHeight() + Constants.asteroidBatchDistance;
+                float y2 = baseY + tEnemy1.getHeight() + Constants.getAsteroidBatchDistance(game.getDif());
         
                 createAsteroid(Gdx.graphics.getWidth(), y1);
                 createAsteroid(Gdx.graphics.getWidth(), y2);
