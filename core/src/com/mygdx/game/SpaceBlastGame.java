@@ -3,10 +3,6 @@ package com.mygdx.game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.helpers.Constants;
 
-import java.lang.invoke.ConstantCallSite;
-import java.util.concurrent.ConcurrentHashMap;
-
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -18,6 +14,7 @@ public class SpaceBlastGame extends Game {
 	private MenuScreen mainMenuScreen;
 	private SpaceshipScreen spaceshipScreen;
 	private SpriteBatch batch;
+	private Preferences pref;
 
 	public SpaceBlastGame() {}
 
@@ -28,7 +25,7 @@ public class SpaceBlastGame extends Game {
         this.screenHeight = Gdx.graphics.getHeight();
         this.ortographicCamera = new OrthographicCamera();
         this.ortographicCamera.setToOrtho(false, screenWidth, screenHeight);
-
+		this.pref = (Preferences) Gdx.app.getPreferences("SpaceBlast");
 		this.mainMenuScreen = new MenuScreen(this);
 		this.spaceshipScreen = new SpaceshipScreen(this, Constants.maxPlayerHealth);
 
@@ -36,20 +33,39 @@ public class SpaceBlastGame extends Game {
     }
 
 	// function to save high score for future game sessions
-	public void saveHighScore(int highScore) {
-		Preferences prefs = (Preferences) Gdx.app.getPreferences("SpaceBlast");
-		prefs.putInteger("highScore", highScore);
-		try{prefs.flush();}
+	public void saveHighScore(int highScore, String mode) {
+		pref.putInteger(mode, highScore);
+		try{pref.flush();}
 		catch (Exception e){}
 	}
 
 	// function to load high score when launching the game
-	public int loadHighScore() {
-		Preferences prefs = (Preferences) Gdx.app.getPreferences("SpaceBlast");
-		return prefs.getInteger("highScore", 0);
+	public int loadHighScore(String mode) {
+		return pref.getInteger(mode, 0);
+	}
+
+	// function to save set volume for future sessions
+	public void saveVol(float volume){
+		pref.putFloat("volume", volume);
+		pref.flush();
 	}
 	
+	// function to load previously saved volume value
+	public float getVol(){
+		return pref.getFloat("volume", 0.5f);
+	}
 
+	// function to save set difficulty for future sessions
+	public void saveDifficulty(String dif){
+		pref.putString("difficulty", dif);
+		pref.flush();
+	}
+
+	// function to load previously saved difficulty value
+	public String getDif(){
+		return pref.getString("difficulty", "Medium");
+	}
+	
 	public void render(){
 		super.render();
 	}

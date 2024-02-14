@@ -34,13 +34,18 @@ public class MenuScreen implements Screen {
     
     public MenuScreen(SpaceBlastGame game) {
         this.game = game;
-        highScore = game.loadHighScore();
+        highScore = game.loadHighScore("medium");
         gen = new FreeTypeFontGenerator(Gdx.files.internal("pixelmix.ttf"));
         labelStyle = new LabelStyle();
         param = new FreeTypeFontParameter();
         param.size = 26;
         font = gen.generateFont(param);
         labelStyle.font = font;
+
+        // start music
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Liu.mp3"));
+        backgroundMusic.setLooping(true);
+        backgroundMusic.play();
     }
 
     @Override
@@ -70,7 +75,7 @@ public class MenuScreen implements Screen {
         TextButton enemyModeButton = new TextButton("Go to Enemy Mode", style); // the button to test the enemy game mode
         TextButton exitButton = new TextButton("Exit", style);
 
-        highScoreLabel.setFontScale(1.3f); // make label bigger
+        highScoreLabel.setFontScale(1.1f); // make label bigger
 
         // button listeners
         playButton.addListener(new ChangeListener() {
@@ -82,7 +87,7 @@ public class MenuScreen implements Screen {
 
         settingsButton.addListener(new ChangeListener() {                
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new GameOverScreen(game, 0));
+                game.setScreen(new Settings(game));
             }
         });
 
@@ -110,11 +115,6 @@ public class MenuScreen implements Screen {
         table.add(enemyModeButton).fillX().uniformX().padLeft(85).padBottom(20).width(400).height(45);
         table.row();
         table.add(exitButton).fillX().uniformX().padLeft(85).width(400).height(45);
-
-        // start music
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Liu.mp3"));
-        backgroundMusic.setLooping(true);
-        backgroundMusic.play();
     }
     
 
@@ -174,6 +174,12 @@ public class MenuScreen implements Screen {
     }
     public BitmapFont getFont(){
         return font;
+    }
+    public Music getMusic(){
+        return backgroundMusic;
+    }
+    public TextButtonStyle getButtonStyle(){
+        return style;
     }
 
     @Override

@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -25,7 +26,6 @@ public class GameOverScreen implements Screen {
     private SpriteBatch spriteBatch;
     private Texture background;
     private Stage stage;
-    private Skin skin;
     private Label scoreLabel;
     private Label instructionLabel;
     private TextButton toMenuButton;
@@ -48,20 +48,32 @@ public class GameOverScreen implements Screen {
 
         instructionLabel = new Label("Press SPACE to restart", game.getMenu().getLabelStyle());
         scoreLabel = new Label("Final Score: " + finalScore, game.getMenu().getLabelStyle());
-        toMenuButton = new TextButton("To Main Menu", game.getMenu().getSkin());
+        toMenuButton = new TextButton("To Main Menu", game.getMenu().getButtonStyle());
 
         instructionLabel.setPosition(Gdx.graphics.getWidth() / 2 - instructionLabel.getWidth() / 2, 50);
         scoreLabel.setPosition(Gdx.graphics.getWidth() / 2 - scoreLabel.getWidth() / 2, 650);
         toMenuButton.setPosition(Gdx.graphics.getWidth() / 2 - toMenuButton.getWidth() / 2, 200);
-        toMenuButton.setWidth(140);
+        toMenuButton.setWidth(240);
         toMenuButton.setHeight(50);
         toMenuButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 // TODO Auto-generated method stub
+                game.getMenu().getMusic().stop();
                 game.setScreen(game.getMenu());
             };
         });
+
+        // make label change
+        instructionLabel.addAction(Actions.run(()-> instructionLabel.addAction(Actions.forever(
+            Actions.sequence(
+                Actions.color(new Color(1,0,0,1),1),
+                Actions.delay(0.5f), 
+                Actions.color(new Color(1, 1, 1, 1), 1), 
+                Actions.delay(0.5f)
+            )
+        ))));
+
         stage.addActor(instructionLabel);
         stage.addActor(scoreLabel);
         stage.addActor(toMenuButton);
@@ -104,8 +116,8 @@ public class GameOverScreen implements Screen {
 
     @Override
     public void dispose() {
-        spriteBatch.dispose();
         background.dispose();
+        stage.dispose();
     }
 
     @Override
