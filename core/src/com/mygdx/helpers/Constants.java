@@ -17,9 +17,9 @@ public final class Constants {
     //public static final float asteroidBatchDistance = 240; // distance between the 2 asteroids where player needs to fly through
 
     // distance between the 2 asteroids where player needs to fly through
-    private static final float asteroidDistanceEasy = 300;
-    private static final float asteroidDistanceMedium = 240;
-    private static final float asteroidDistanceHard = 210;
+    private static final float asteroidDistanceEasy = 340;
+    private static final float asteroidDistanceMedium = 300;
+    private static final float asteroidDistanceHard = 270;
 
     public static float getAsteroidBatchDistance(String difficulty) {
         switch (difficulty) {

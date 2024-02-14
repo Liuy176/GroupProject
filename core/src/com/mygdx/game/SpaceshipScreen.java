@@ -55,7 +55,7 @@ public class SpaceshipScreen implements Screen {
 
     private float lastAsteroidBatchX = 0;
     private float timeSinceLastAsteroidPair = 0f;
-    private float pairGenInterval = 1f;
+    private float pairGenInterval = 1.4f;
     private boolean fadeOut = false, firstCrash = true, collided = false;
     private float fadeOutSpeed = 0.5f;
     private float fadeOutOpacity = 0.0f;
@@ -169,7 +169,7 @@ public class SpaceshipScreen implements Screen {
         }
   
         for(Rectangle enemy : enemies1 ){
-          batch.draw(tEnemy1, enemy.x, enemy.y, enemy.width * 2, enemy.height*2);
+          batch.draw(tEnemy1, enemy.x, enemy.y, enemy.width * 3, enemy.height*3);
         }
          
         bitmap.draw(batch, "Score: " + score, 20, Gdx.graphics.getHeight() - 20);
@@ -310,7 +310,7 @@ public class SpaceshipScreen implements Screen {
         }
   
         // Check for collision with the ship
-        if (collide(enemy.x, enemy.y, enemy.width*2, enemy.height*2, posX, posY, nave.getWidth()*4, nave.getHeight()*4) && !collided) {
+        if (collide(enemy.x, enemy.y, enemy.width*3, enemy.height*3, posX, posY, nave.getWidth()*4, nave.getHeight()*4) && !collided) {
           if (!gameover) {
             collided = true;
             isBlinking = true;
@@ -359,7 +359,7 @@ public class SpaceshipScreen implements Screen {
         private void produceAsteroidPair(float delta) {
           timeSinceLastAsteroidPair += delta;
             if (timeSinceLastAsteroidPair > pairGenInterval) {
-                float baseY = MathUtils.random(0, Gdx.graphics.getHeight() - tEnemy1.getHeight() * 2 - Constants.getAsteroidBatchDistance(game.getDif()));
+                float baseY = MathUtils.random(0, Gdx.graphics.getHeight() - tEnemy1.getHeight() - Constants.getAsteroidBatchDistance(game.getDif()));
                 float y1 = baseY;
                 float y2 = baseY + tEnemy1.getHeight() + Constants.getAsteroidBatchDistance(game.getDif());
         
@@ -470,19 +470,12 @@ public class SpaceshipScreen implements Screen {
     public int getScore(){
       return score;
     }
-    //public Music getMusic(){
-    //  return backgroundMusic;
-    //}
+
     @Override
     public void show() {
       font = new BitmapFont();
       font.setColor(Color.WHITE);
       font.getData().setScale(1);
-
-                    
-      //backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Liu.mp3"));       
-      //backgroundMusic.setLooping(true);      
-      //backgroundMusic.play();
     }
 
     @Override
