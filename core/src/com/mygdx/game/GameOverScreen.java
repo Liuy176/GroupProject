@@ -16,8 +16,8 @@ public class GameOverScreen implements Screen {
     private Texture background;
     private String finalScore;
 
-    private float fade = 1f; // Start fully black
-    private float fadeDuration = 2f; // Duration of the fade effect
+    private float fade = 1f; // start from black color
+    private float fadeDuration = 2f;
 
     public GameOverScreen(MyGdxGame game) {
         this.game = game;
@@ -38,7 +38,7 @@ public class GameOverScreen implements Screen {
 
         if (fade > 0) {
             fade -= delta / fadeDuration;
-            fade = Math.max(fade, 0); // Ensure fade does not become negative
+            fade = Math.max(fade, 0); // fade > 0
         }
 
         spriteBatch.begin();
@@ -49,7 +49,7 @@ public class GameOverScreen implements Screen {
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
             spriteBatch.setColor(0, 0, 0, fade);
             spriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            spriteBatch.setColor(1, 1, 1, 1); // Reset color to opaque
+            spriteBatch.setColor(1, 1, 1, 1);
             Gdx.gl.glDisable(GL20.GL_BLEND);
         }
         spriteBatch.end();

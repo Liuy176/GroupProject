@@ -6,8 +6,10 @@ import com.mygdx.helpers.Constants;
 import java.lang.invoke.ConstantCallSite;
 import java.util.concurrent.ConcurrentHashMap;
 
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class MyGdxGame extends Game {
@@ -32,6 +34,19 @@ public class MyGdxGame extends Game {
 
         setScreen(mainMenuScreen); //menu screen appears after starting the game
     }
+
+	public void saveHighScore(int highScore) {
+		Preferences prefs = (Preferences) Gdx.app.getPreferences("MyGamePreferences");
+		prefs.putInteger("highScore", highScore);
+		try{prefs.flush();}
+		catch (Exception e){}
+	}
+
+	public int loadHighScore() {
+		Preferences prefs = (Preferences) Gdx.app.getPreferences("MyGamePreferences");
+		return prefs.getInteger("highScore", 0);
+	}
+	
 
 	public void render(){
 		super.render();

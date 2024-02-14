@@ -292,8 +292,10 @@ public class EnemyGameScreen implements Screen{
     }
     
     private void reset(){
-        if(game.spaceshipScreen.getScore() > game.mainMenuScreen.getHighScore())
+        if(game.spaceshipScreen.getScore() > game.mainMenuScreen.getHighScore()){
             game.mainMenuScreen.setHighScore(game.spaceshipScreen.getScore());
+            game.saveHighScore(game.spaceshipScreen.getScore());
+        }
         game.spaceshipScreen.setPlayerHealth(Constants.maxPlayerHealth);
         game.spaceshipScreen.setDamage(12);
         game.spaceshipScreen.setAmountOfCrashes(0);

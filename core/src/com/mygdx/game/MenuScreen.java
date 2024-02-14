@@ -23,7 +23,7 @@ public class MenuScreen implements Screen {
     private MyGdxGame game;
     private Stage stage;
     private Skin skin;
-    private int highScore = 0;
+    private int highScore;
     private Texture background;
     private Music backgroundMusic;
     private FreeTypeFontGenerator gen;
@@ -34,6 +34,7 @@ public class MenuScreen implements Screen {
     
     public MenuScreen(MyGdxGame game) {
         this.game = game;
+        highScore = game.loadHighScore();
         gen = new FreeTypeFontGenerator(Gdx.files.internal("pixelmix.ttf"));
         labelStyle = new LabelStyle();
         param = new FreeTypeFontParameter();
@@ -114,6 +115,7 @@ public class MenuScreen implements Screen {
         table.row();
         table.add(exitButton).fillX().uniformX().padLeft(85).width(400).height(45);
 
+        // start music
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Liu.mp3"));
         backgroundMusic.setLooping(true);
         backgroundMusic.play();
