@@ -3,6 +3,7 @@ package com.mygdx.helpers;
 
 public final class Constants {
 
+    // pixels per meter
     public static final float PPM = 16.0f;
 
     public static final short CATEGORY_PLAYER = 0x0001; // 0001 in binary
@@ -14,13 +15,13 @@ public final class Constants {
     // edit values below to change difficulty and edit other aspects of gameplay
 
     // SpaceshipScreen elements
-    //public static final float asteroidBatchDistance = 240; // distance between the 2 asteroids where player needs to fly through
 
     // distance between the 2 asteroids where player needs to fly through
     private static final float asteroidDistanceEasy = 340;
     private static final float asteroidDistanceMedium = 295;
     private static final float asteroidDistanceHard = 265;
 
+    // distance based on difficulty
     public static float getAsteroidBatchDistance(String difficulty) {
         switch (difficulty) {
             case "Easy":
@@ -41,10 +42,12 @@ public final class Constants {
     public static final int healthPowerUpValue = 50; // how much health does player regain after claiming the power up
     public static final int weaponPowerUpValue = 6; // how much extra weapon power does player get after claiming the power up
 
+    // time interval between spawning asteroid batches
     public static final float asteroidIntervalEasy = 1.4f;
-    public static final float asteroidIntervalMid = 1.1f;
+    public static final float asteroidIntervalMid = 1.2f;
     public static final float asteroidIntervalHard = 0.88f;
 
+    // time intervals accoirding to difficulty
     public static float getAsteroidInterval(String difficulty) {
         switch (difficulty) {
             case "Easy":
@@ -56,11 +59,13 @@ public final class Constants {
                 return asteroidIntervalMid;
         }
     }
-    //public static final int asteroidMovementSpeed = 400;
+    
+    // asteroid movement speed
     public static final int asteroidSpeedEasy = 350;
     public static final int asteroidSpeedMid = 420;
     public static final int asteroidSpeedHard = 600;
 
+    // asteroid movement speed according to difficulty
     public static float getAsteroidSpeed(String difficulty) {
         switch (difficulty) {
             case "Easy":

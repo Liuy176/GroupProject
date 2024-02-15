@@ -23,14 +23,14 @@ public class WorldCreator {
         Fixture fix;
 
 
-        // Create ground objects from the tiled map editor
+        // create ground objects from the tiled map editor
         for(MapObject object: map.getLayers().get(1).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             new Ground(world, map, rect);
         }
 
-        // Create polygon-shaped objects from the tiled map editor
+        // create polygon-shaped objects from the tiled map editor
         for (MapObject object : map.getLayers().get(2).getObjects().getByType(PolygonMapObject.class)) {
             PolygonMapObject polyObject = (PolygonMapObject) object;
             Polygon polygon = polyObject.getPolygon();
@@ -60,7 +60,7 @@ public class WorldCreator {
             fixture.filter.maskBits = Constants.CATEGORY_PLAYER | Constants.CATEGORY_ENEMY | Constants.CATEGORY_BULLET | Constants.CATEGORY_ENEMY_BULLET;
         }
 
-        // Create border objects from the tiled map editor
+        // create border objects from the tiled map editor
         for(MapObject object: map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 

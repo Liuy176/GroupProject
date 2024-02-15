@@ -13,6 +13,7 @@ public abstract class InteractiveObject {
     public Rectangle bounds;
     public Body body;
 
+    // for objects in Tiled map
     public InteractiveObject(World world, TiledMap map, Rectangle bounds){
         this.world = world;
         this.map = map;

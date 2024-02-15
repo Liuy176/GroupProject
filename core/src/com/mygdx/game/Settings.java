@@ -14,10 +14,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class Settings implements Screen{
-    private Stage stage;
-    private Skin skin;
+    private final Stage stage;
+    private final Skin skin;
     private Slider volumeSlider;
-    private SelectBox<String> difficultySelectBox;
+    private SelectBox<String> difficultySelect;
     private TextButton backButton;
     private Label volumeLabel, difficultyLabel;
 
@@ -33,7 +33,7 @@ public class Settings implements Screen{
     public void show() {
         Gdx.input.setInputProcessor(stage);
 
-        // volume Slider
+        // game music volume slider
         volumeLabel = new Label("Volume", game.getMenu().getLabelStyle());
         volumeSlider = new Slider(0, 100, 1, false, skin);
         volumeSlider.setValue(game.getVol() * 100);
@@ -48,17 +48,17 @@ public class Settings implements Screen{
 
         // game difficulty selector
         difficultyLabel = new Label("Difficulty", game.getMenu().getLabelStyle());
-        difficultySelectBox = new SelectBox<>(skin);
-        difficultySelectBox.setItems("Easy", "Medium", "Hard");
-        difficultySelectBox.setSelected(game.getDif()); 
-        difficultySelectBox.addListener(new ChangeListener() {
+        difficultySelect = new SelectBox<>(skin);
+        difficultySelect.setItems("Easy", "Medium", "Hard");
+        difficultySelect.setSelected(game.getDif()); 
+        difficultySelect.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                    game.saveDifficulty(difficultySelectBox.getSelected());
+                    game.saveDifficulty(difficultySelect.getSelected());
                     game.getMenu().updateHighScore();
             }
         });
 
-        // button to return
+        // button to return to menu
         backButton = new TextButton("Back", game.getMenu().getButtonStyle());
         backButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
@@ -66,13 +66,14 @@ public class Settings implements Screen{
             }
         });
 
+        // adjust position
         volumeLabel.setPosition(100, 300);
         volumeSlider.setPosition(100, 250);
         volumeSlider.setWidth(300);
         
         difficultyLabel.setPosition(100, 200);
-        difficultySelectBox.setPosition(100, 150);
-        difficultySelectBox.setWidth(300);
+        difficultySelect.setPosition(100, 150);
+        difficultySelect.setWidth(300);
         
         backButton.setPosition(100, 50);
         backButton.setSize(100, 50);
@@ -80,7 +81,7 @@ public class Settings implements Screen{
         stage.addActor(volumeLabel);
         stage.addActor(volumeSlider);
         stage.addActor(difficultyLabel);
-        stage.addActor(difficultySelectBox);
+        stage.addActor(difficultySelect);
         stage.addActor(backButton);
     }
 

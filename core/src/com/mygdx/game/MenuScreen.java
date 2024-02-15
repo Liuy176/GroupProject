@@ -43,6 +43,7 @@ public class MenuScreen implements Screen {
         font = gen.generateFont(param);
         labelStyle.font = font;
         skin = new Skin(Gdx.files.internal("uiskin.json"));
+        background = new Texture("menuScreen.png");
 
         // button style
         style = new TextButtonStyle();
@@ -55,6 +56,7 @@ public class MenuScreen implements Screen {
         settingsButton = new TextButton("Settings", style);
         enemyModeButton = new TextButton("Go to Enemy Mode", style); // the button to test the enemy game mode
         exitButton = new TextButton("Exit", style);
+
         // start music
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Liu.mp3"));
         backgroundMusic.setLooping(true);
@@ -67,7 +69,6 @@ public class MenuScreen implements Screen {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
-        background = new Texture("menuScreen.png");
 
         Table table = new Table();
         table.setFillParent(true);
@@ -77,7 +78,6 @@ public class MenuScreen implements Screen {
         // high score lable
         String highScoreText = "High Score: " + highScore;
         Label highScoreLabel = new Label(highScoreText, labelStyle);
-
         highScoreLabel.setFontScale(1.1f); // make label bigger
 
         // button listeners
@@ -96,7 +96,7 @@ public class MenuScreen implements Screen {
 
         enemyModeButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new EnemyGameScreen(game,5, 50000, 60, 50000)); // switch to Enemy Game Screen
+                game.setScreen(new EnemyGameScreen(game,5, 50, 60, 50)); // switch to Enemy Game Screen
             }
         });
 
@@ -126,6 +126,7 @@ public class MenuScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        // draw background
         game.getBatch().begin();
         game.getBatch().draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         game.getBatch().end();
@@ -195,15 +196,9 @@ public class MenuScreen implements Screen {
     }
 
     @Override
-    public void pause() {
-        // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'pause'");
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-        // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'resume'");
-    }
+    public void resume() {}
 }
 

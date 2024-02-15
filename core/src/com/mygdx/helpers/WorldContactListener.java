@@ -8,7 +8,6 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.mygdx.sprites.Bullet;
 import com.mygdx.sprites.Enemy;
 import com.mygdx.sprites.EnemyBullet;
-import com.mygdx.sprites.Ground;
 import com.mygdx.sprites.Player;
 
 public class WorldContactListener implements ContactListener{
@@ -36,7 +35,7 @@ public class WorldContactListener implements ContactListener{
             Fixture other = bulletFixture == fixA ? fixB: fixA;
             Bullet bullet = (Bullet) bulletFixture.getUserData();
 
-            // don't remove bullet if it touches the outer sensor of the enemy!!
+            // don't remove bullet if it touches any of the sensors connected to the enemy!!
             if(!(other.getUserData() instanceof Enemy) && !("enemyBackupRight".equals(other.getUserData())) && !("enemyBackupLeft").equals(other.getUserData())){
                 bullet.setToRemove(true);;
             }
@@ -45,6 +44,7 @@ public class WorldContactListener implements ContactListener{
                 Enemy enemy = (Enemy) other.getUserData();
                 enemy.takeDamage();
             } else */
+
             // take damage when enemy hit by bullet
             if("enemy".equals(other.getUserData())){
                 Enemy enemy1 = (Enemy) other.getBody().getUserData();
@@ -57,7 +57,7 @@ public class WorldContactListener implements ContactListener{
             Fixture bulletFixture = (fixA.getUserData() instanceof EnemyBullet) ? fixA : fixB;
             Fixture other = bulletFixture == fixA ? fixB: fixA;
             EnemyBullet bullet = (EnemyBullet) bulletFixture.getUserData();
-            bullet.setToRemove(true);;
+            bullet.setToRemove(true);; //remove enemy bullet
 
   
             if(other.getUserData() instanceof Player){
@@ -80,6 +80,7 @@ public class WorldContactListener implements ContactListener{
             enemy.moveBack();
         }
 
+        // reset player's ability to make double jump whenever the player touches the ground
         if(fixA.getUserData() != null && fixB.getUserData() != null && (fixA.getUserData().equals("jumpSensor")|| fixB.getUserData().equals("jumpSensor"))){
             Fixture fix = (fixA.getUserData().equals("jumpSensor")) ? fixA : fixB;
             Fixture other = fix == fixA ? fixB: fixA;

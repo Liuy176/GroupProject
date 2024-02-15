@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -41,7 +40,7 @@ public class Player extends Sprite{
     private Texture heartTexture, gunTexture, healthFrame, white, weaponBarFrame;
     private TextureRegion whiteRegion;
     private boolean isDefeated;
-    private int deadRotationDeg, jumpcounter = 2, isDamaged = 10;
+    private int /*deadRotationDeg,*/ jumpcounter = 2, isDamaged = 10;
     private float damage;
     private Shaders shader;
 
@@ -50,11 +49,11 @@ public class Player extends Sprite{
         this.world = world;
         this.game = game;
         this.screen = screen;
-        definePlayer();
-        currState = State.STANDING;
-        prevState = State.STANDING;
-        timer = 0;
-        facingRight = true;
+        this.definePlayer();
+        this.currState = State.STANDING;
+        this.prevState = State.STANDING;
+        this.timer = 0;
+        this.facingRight = true;
         this.damage = weaponStrength;
         this.startHealth = maxHealth;
         this.currentHealth = currHealth;
@@ -65,18 +64,9 @@ public class Player extends Sprite{
         this.healthFrame = new Texture("healthFrame.png");
         this.weaponBarFrame = new Texture("weaponBarFrame2.png");
         this.isDefeated = false;
-        this.deadRotationDeg = 0;
+        //this.deadRotationDeg = 0;
         this.shader = new Shaders();
 
-        Array<TextureRegion> frames = new Array<TextureRegion>();
-        
-        frames.add(new TextureRegion(getTexture(), 116, 0, 26, 31));
-        frames.add(new TextureRegion(getTexture(), 142, 0, 26, 31));
-        run = new Animation<TextureRegion>(0.1f, frames);
-        frames.clear();
-        
-        stand = new TextureRegion(getTexture(), 116, 0, 26, 31);
-        jump = new TextureRegion(getTexture(),168, 0, 29, 31);
         setBounds(0,0, 16/Constants.PPM, 16/Constants.PPM);
         setRegion(stand);
     }
@@ -88,9 +78,9 @@ public class Player extends Sprite{
         setRegion(getFrame(delta));
 
         if(isDefeated){
-            deadRotationDeg +=0;
-            rotate(deadRotationDeg);
-            body.setTransform(body.getPosition(), (float)Math.toRadians(deadRotationDeg));
+            //deadRotationDeg +=0;
+            //rotate(deadRotationDeg);
+            //body.setTransform(body.getPosition(), (float)Math.toRadians(deadRotationDeg));
             if(body.getPosition().y <= -1){
                body.setActive(false);
                this.setPosition(0, -1);
@@ -103,6 +93,8 @@ public class Player extends Sprite{
 
     public void draw(SpriteBatch batch) {
         float damageEffectIntensity;
+
+        // managing the duration of player's texture becoming red after being damaged
         if(isDamaged<10){
             damageEffectIntensity = 0.5f;
             isDamaged++;
@@ -112,7 +104,6 @@ public class Player extends Sprite{
         shader.getShaderProgram().setUniformf("u_damageEffect", damageEffectIntensity);
     
         super.draw(batch);
-    
         game.getBatch().setShader(null);
     }
 
@@ -184,6 +175,16 @@ public class Player extends Sprite{
         fixture.shape = leftSideClose;
         fixture.isSensor = true;
         body.createFixture(fixture).setUserData("jumpSensor");
+
+        // create running animation
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+        frames.add(new TextureRegion(getTexture(), 116, 0, 26, 31));
+        frames.add(new TextureRegion(getTexture(), 142, 0, 26, 31));
+        run = new Animation<TextureRegion>(0.1f, frames);
+        frames.clear();
+        
+        stand = new TextureRegion(getTexture(), 116, 0, 26, 31);
+        jump = new TextureRegion(getTexture(),168, 0, 29, 31);
     }
 
     public void shoot() {
@@ -214,8 +215,6 @@ public class Player extends Sprite{
         float heartX = barX - heartSize - 20;
         float heartY = barY + (barHeight - heartSize) / 2;
 
-        //String healthText = "PLAYER'S HP: ";
-        //font.draw(batch, healthText, barX - 100, barY + barHeight);
         batch.draw(heartTexture, heartX, heartY, 40, 32);
         batch.draw(gunTexture, heartX, weaponBarY, 40, 32);
 

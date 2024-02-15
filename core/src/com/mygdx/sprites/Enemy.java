@@ -1,19 +1,15 @@
 package com.mygdx.sprites;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
@@ -45,7 +41,6 @@ public class Enemy extends Sprite {
     private float moveBackDuration = 0f;
     private float moveBackTimer = 0f;
     private Vector2 moveBackDirection = new Vector2();
-
     private float timeSinceLastShot = 0f;
     private float shootingInterval = 1f;
 
@@ -77,6 +72,7 @@ public class Enemy extends Sprite {
         setOrigin(getWidth() / 2, getHeight() / 2);
         Array<TextureRegion> frames = new Array<TextureRegion>();
         
+        // run annimation
         frames.add(new TextureRegion(getTexture(), 197, 4, 17, 27));
         frames.add(new TextureRegion(getTexture(), 214, 4, 17, 27));
         run = new Animation<TextureRegion>(0.1f, frames);
@@ -93,7 +89,7 @@ public class Enemy extends Sprite {
 
         timeSinceLastShot += dt;
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
-        setRegion(getFrame(dt));
+        setRegion(getFrame(dt)); // set appropriate texture
 
         Vector2 playerPos = player.getBody().getPosition();
         Vector2 enemyPos = body.getPosition();
@@ -107,27 +103,16 @@ public class Enemy extends Sprite {
             Vector2 directionToPlayer = new Vector2(player.getBody().getPosition()).sub(body.getPosition()).nor();
             float angle = directionToPlayer.angleDeg();
 
+            // move, point weapon at the player
             armSprite.setRotation(angle);
             updateMovement(distance, playerPos, dt);
         
-           /*  if (distance > Constants.enemyShootingDistance) {
-                // move towards the player
-                approachPlayer(playerPos);
-                if(body.getLinearVelocity().x == 0){
-                    performRandomActionOrStandStill(dt);
-                }
-            } else {
-                performRandomActionOrStandStill(dt);
-                //body.setLinearVelocity(0, body.getLinearVelocity().y);
-                if (timeSinceLastShot >= shootingInterval) {
-                    shoot(playerPos);
-                    timeSinceLastShot = 0f; 
-                }
-            } */
         } else{
+            // start rotating (animation for when enemy gets defeated)
             deadRotationDeg +=5;
-            //rotate(deadRotationDeg);
             body.setTransform(body.getPosition(), (float)Math.toRadians(deadRotationDeg));
+
+            // after being defeated, store enemy's body under the map (was to lazy to completely remove it)
             if(body.getPosition().y <= -1){
                body.setActive(false);
                this.setPosition(0, -5);
@@ -138,6 +123,7 @@ public class Enemy extends Sprite {
         }
     }
 
+    // get appropriate texture for the enemy
     public TextureRegion getFrame(float delta){
         currState = getState();
         TextureRegion region;
@@ -159,6 +145,7 @@ public class Enemy extends Sprite {
                 break;
         }
 
+        // manage flipping enemmy's arm and body textures
         if((!isPlayerRight || !facingRight) && region.isFlipX()){
             region.flip(true,false);
             armSprite.flip(false, true);
@@ -188,13 +175,13 @@ public class Enemy extends Sprite {
             return State.STANDING;
     }
 
+    // move closer to player
     public void approachPlayer(Vector2 playerPosition) {
-
             float directionX = Math.signum(playerPosition.x - body.getPosition().x);
             body.setLinearVelocity(directionX * speed, body.getLinearVelocity().y);
     }
 
-
+    // possibility of enemy moving in a random direction
      private void performRandomActionOrStandStill(float dt) {
         randomActionTimer += dt;
         if (randomActionTimer >= randomActionInterval) {
@@ -204,29 +191,27 @@ public class Enemy extends Sprite {
                 // movement in random direction
                 float randomDirection = MathUtils.randomBoolean() ? 1f : -1f;
                 body.applyForceToCenter(new Vector2(randomDirection * 40f, 0), true);
-
             }
         }
     }
 
+    // manage enemy's movement
     private void updateMovement(float distance, Vector2 playerPos, float dt) {
         if (movingBack) {
             moveBackTimer += dt;
             if (moveBackTimer < moveBackDuration) {
                 body.applyForceToCenter(moveBackDirection, true);
             } else {
-                movingBack = false; // End of intentional movement
+                movingBack = false; 
             }
         } else {
             if (distance > Constants.enemyShootingDistance) {
-                // move towards the player
                 approachPlayer(playerPos);
                 if(body.getLinearVelocity().x == 0){
                     performRandomActionOrStandStill(dt);
                 }
             } else {
                 performRandomActionOrStandStill(dt);
-                //body.setLinearVelocity(0, body.getLinearVelocity().y);
                 if (timeSinceLastShot >= shootingInterval) {
                     shoot(playerPos);
                     timeSinceLastShot = 0f; 
@@ -234,8 +219,6 @@ public class Enemy extends Sprite {
             }
         }
     }
-
-    
 
     private void defineEnemy(float x, float y) {
         BodyDef bodyDef = new BodyDef();
@@ -249,6 +232,7 @@ public class Enemy extends Sprite {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(4 / Constants.PPM, 7 / Constants.PPM);
 
+        // create fixture for enemy's body
         fixtureDef.shape = shape;
         fixtureDef.density = 1f;
         fixtureDef.filter.categoryBits = Constants.CATEGORY_ENEMY;
@@ -256,24 +240,28 @@ public class Enemy extends Sprite {
         fix = body.createFixture(fixtureDef);
         fix.setUserData("enemy");
 
+        // create sensor on enemy's right side
         EdgeShape rightSide = new EdgeShape();
         rightSide.set(new Vector2(7/Constants.PPM, 6/Constants.PPM), new Vector2(7/Constants.PPM, -6/Constants.PPM));
         fixtureDef.shape = rightSide;
         fixtureDef.isSensor = true;
         body.createFixture(fixtureDef).setUserData(this);
 
+        // create sensor on enemy's left side
         EdgeShape leftSide = new EdgeShape();
         leftSide.set(new Vector2(-7/Constants.PPM, 6/Constants.PPM), new Vector2(-7/Constants.PPM, -6/Constants.PPM));
         fixtureDef.shape = leftSide;
         fixtureDef.isSensor = true;
         body.createFixture(fixtureDef).setUserData(this);
         
+        // another sensor on enemy's left
         EdgeShape leftSideClose = new EdgeShape();
         leftSideClose.set(new Vector2(-4/Constants.PPM, 6/Constants.PPM), new Vector2(-4/Constants.PPM, -6/Constants.PPM));
         fixtureDef.shape = leftSideClose;
         fixtureDef.isSensor = true;
         body.createFixture(fixtureDef).setUserData("enemyBackupLeft");
 
+        // another sensor on enemy's right
         EdgeShape rightSideClose = new EdgeShape();
         rightSideClose.set(new Vector2(4/Constants.PPM, 6/Constants.PPM), new Vector2(4/Constants.PPM, -6/Constants.PPM));
         fixtureDef.shape = rightSideClose;
@@ -285,7 +273,7 @@ public class Enemy extends Sprite {
         body.applyLinearImpulse(new Vector2(0, 3), body.getWorldCenter(), true);
     }
 
-    // movement methods to prevent enemies getting stuck when running into a wall
+    // 2 movement methods to prevent enemies getting stuck when running into a wall
     public void moveBack() {
         float forceMagnitude = speed > 3 ? -4f : -3f;
         moveBackDirection.set(forceMagnitude, 0);
@@ -293,7 +281,6 @@ public class Enemy extends Sprite {
         moveBackTimer = 0f;
         movingBack = true;
     }
-    
     public void moveForward() {
         float forceMagnitude = speed > 3 ? 4f : 3f;
         moveBackDirection.set(forceMagnitude, 0);
@@ -336,7 +323,7 @@ public class Enemy extends Sprite {
         float barX = this.getX() + (this.getWidth() - barWidth) / 2;
         float barY = this.getY() + this.getHeight() + padding;
 
-        //background
+        //background color
         batch.setColor(Color.RED);
         batch.draw(whiteRegion, barX, barY, barWidth, barHeight);
 
@@ -368,6 +355,8 @@ public class Enemy extends Sprite {
 
     public void draw(SpriteBatch batch) {
         float damageEffectIntensity;
+
+        // managing the length of enemy's texture becoming red after being damaged
         if(isDamaged<10){
             damageEffectIntensity = 0.5f;
             isDamaged++;
@@ -376,10 +365,10 @@ public class Enemy extends Sprite {
         batch.setShader(shader.getShaderProgram());
         shader.getShaderProgram().setUniformf("u_damageEffect", damageEffectIntensity);
         setOriginCenter();
-        // Update the position of the sprite to match the body
+        // update the position of the sprite to match the body
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
         if(isDefeated)setRotation(deadRotationDeg);
-        // Draw the sprite
+        // draw the sprite
         super.draw(batch); 
         if(!isDefeated)armSprite.draw(batch);
         batch.setShader(null);

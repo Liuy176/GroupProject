@@ -71,9 +71,8 @@ public class EnemyBullet extends Sprite {
     }
 
     public void update(float dt) {
-        
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
-
+        // check if bullet has travelled set distance and we need to remove it
         distanceTraveled = startPosition.dst(body.getPosition().x, body.getPosition().y);
         if (distanceTraveled > distanceLimit) {
             this.toRemove = true; 

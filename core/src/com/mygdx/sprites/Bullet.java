@@ -18,7 +18,7 @@ public class Bullet extends Sprite {
     private float speed, distanceTraveled;
     private boolean facingRight, toRemove;
 
-    private Vector2 startPosition;
+    private Vector2 startPos;
     private Texture bulletTexture;
     private TextureRegion bulletTextureRegion;
 
@@ -26,10 +26,9 @@ public class Bullet extends Sprite {
         this.world = world;
         this.speed = speed;
         this.facingRight = facingRight;
-        this.startPosition = new Vector2(x, y);
+        this.startPos = new Vector2(x, y);
         this.distanceTraveled = 0;
         this.toRemove = false;
-
         this.bulletTexture = new Texture("bullet-1.png.png");
         this.bulletTextureRegion = new TextureRegion(bulletTexture);
 
@@ -61,7 +60,6 @@ public class Bullet extends Sprite {
         body.createFixture(fixtureDef).setUserData(this);
 
         shape.dispose();
-        
         body.setLinearVelocity((facingRight ? 1 : -1) * speed, 0); 
     }
 
@@ -69,11 +67,11 @@ public class Bullet extends Sprite {
         
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
 
-        distanceTraveled = startPosition.dst(body.getPosition().x, body.getPosition().y);
+        // check if bullet has travelled set distance and we need to remove it
+        distanceTraveled = startPos.dst(body.getPosition().x, body.getPosition().y);
         if (distanceTraveled > Constants.bulletDistanceLimit) {
             this.toRemove = true; 
         }
-        
     }
 
     public void draw(SpriteBatch batch) {

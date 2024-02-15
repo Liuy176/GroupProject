@@ -23,12 +23,12 @@ public class SpaceBlastGame extends Game {
 		this.batch = new SpriteBatch();
 		this.screenWidth = Gdx.graphics.getWidth();
         this.screenHeight = Gdx.graphics.getHeight();
-        this.ortographicCamera = new OrthographicCamera();
+		this.ortographicCamera = new OrthographicCamera();
         this.ortographicCamera.setToOrtho(false, screenWidth, screenHeight);
 		this.pref = (Preferences) Gdx.app.getPreferences("SpaceBlast");
 		this.mainMenuScreen = new MenuScreen(this);
 		this.spaceshipScreen = new SpaceshipScreen(this, Constants.maxPlayerHealth);
-
+		
         setScreen(mainMenuScreen); //menu screen appears after starting the game
     }
 

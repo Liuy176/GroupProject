@@ -2,18 +2,15 @@ package com.mygdx.helpers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 
+// shaders used for changing player's and enemy texture color when they get hit by a bullet
 public class Shaders{
-     private ShaderProgram shaderProgram;
+     private final ShaderProgram shaderProgram;
 
      public Shaders(){
-        String vertexShader = Gdx.files.internal("vertex_shader.glsl").readString();
-        String fragmentShader = Gdx.files.internal("fragment_shader.glsl").readString();
-        shaderProgram = new ShaderProgram(vertexShader, fragmentShader);
-        if (!shaderProgram.isCompiled()) {
-            throw new GdxRuntimeException("Could not compile shader: " + shaderProgram.getLog());
-        }
+        String vertex = Gdx.files.internal("vertex_shader.glsl").readString();
+        String fragment = Gdx.files.internal("fragment_shader.glsl").readString();
+        shaderProgram = new ShaderProgram(vertex, fragment);
      }
 
      public ShaderProgram getShaderProgram(){

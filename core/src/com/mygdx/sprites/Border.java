@@ -11,7 +11,7 @@ import com.mygdx.helpers.Constants;
 
 public class Border extends InteractiveObject{
 
-    public Fixture fix;
+    public final Fixture fix;
     
     // Creates border around the map
     public Border(World world, TiledMap map, Rectangle bounds){
