@@ -55,7 +55,7 @@ public class SpaceshipScreen implements Screen {
 
     private float lastAsteroidBatchX = 0;
     private float timeSinceLastAsteroidPair = 0f;
-    private float pairGenInterval = 1.4f;
+    private float pairGenInterval = 1.2f;
     private boolean fadeOut = false, firstCrash = true, collided = false;
     private float fadeOutSpeed = 0.5f;
     private float fadeOutOpacity = 0.0f;
@@ -359,7 +359,7 @@ public class SpaceshipScreen implements Screen {
         private void produceAsteroidPair(float delta) {
           timeSinceLastAsteroidPair += delta;
             if (timeSinceLastAsteroidPair > pairGenInterval) {
-                float baseY = MathUtils.random(0, Gdx.graphics.getHeight() - tEnemy1.getHeight() - Constants.getAsteroidBatchDistance(game.getDif()));
+                float baseY = MathUtils.random(0, Gdx.graphics.getHeight() - tEnemy1.getHeight()*2 - Constants.getAsteroidBatchDistance(game.getDif()));
                 float y1 = baseY;
                 float y2 = baseY + tEnemy1.getHeight() + Constants.getAsteroidBatchDistance(game.getDif());
         

@@ -35,12 +35,18 @@ public class WorldContactListener implements ContactListener{
             Fixture bulletFixture = (fixA.getUserData() instanceof Bullet) ? fixA : fixB;
             Fixture other = bulletFixture == fixA ? fixB: fixA;
             Bullet bullet = (Bullet) bulletFixture.getUserData();
-            bullet.setToRemove(true);
+
+            // don't remove bullet if it touches the outer sensor of the enemy!!
+            if(!(other.getUserData() instanceof Enemy) && !("enemyBackupRight".equals(other.getUserData())) && !("enemyBackupLeft").equals(other.getUserData())){
+                bullet.setToRemove(true);;
+            }
             
-            if(other.getUserData() instanceof Enemy){
+            /*if(other.getUserData() instanceof Enemy){
                 Enemy enemy = (Enemy) other.getUserData();
                 enemy.takeDamage();
-            } else if("enemy".equals(other.getUserData())){
+            } else */
+            // take damage when enemy hit by bullet
+            if("enemy".equals(other.getUserData())){
                 Enemy enemy1 = (Enemy) other.getBody().getUserData();
                 enemy1.takeDamage();
             }
@@ -52,6 +58,7 @@ public class WorldContactListener implements ContactListener{
             Fixture other = bulletFixture == fixA ? fixB: fixA;
             EnemyBullet bullet = (EnemyBullet) bulletFixture.getUserData();
             bullet.setToRemove(true);;
+
   
             if(other.getUserData() instanceof Player){
                 Player player = (Player) other.getUserData();
