@@ -28,7 +28,7 @@ public class SpaceBlastGame extends Game {
 		this.pref = (Preferences) Gdx.app.getPreferences("SpaceBlast");
 		this.mainMenuScreen = new MenuScreen(this);
 		this.spaceshipScreen = new SpaceshipScreen(this, Constants.maxPlayerHealth);
-		
+
         setScreen(mainMenuScreen); //menu screen appears after starting the game
     }
 
@@ -64,6 +64,15 @@ public class SpaceBlastGame extends Game {
 	// function to load previously saved difficulty value
 	public String getDif(){
 		return pref.getString("difficulty", "Medium");
+	}
+
+	public void saveGameVol(float gameVol){
+		pref.putFloat("gameVolume", gameVol);
+		pref.flush();
+	}
+	
+	public float getGameVol(){
+		return pref.getFloat("gameVolume", 0.5f);
 	}
 	
 	public void render(){

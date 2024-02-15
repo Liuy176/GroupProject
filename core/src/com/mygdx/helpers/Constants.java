@@ -43,9 +43,9 @@ public final class Constants {
     public static final int weaponPowerUpValue = 6; // how much extra weapon power does player get after claiming the power up
 
     // time interval between spawning asteroid batches
-    public static final float asteroidIntervalEasy = 1.4f;
-    public static final float asteroidIntervalMid = 1.2f;
-    public static final float asteroidIntervalHard = 0.88f;
+    private static final float asteroidIntervalEasy = 1.4f;
+    private static final float asteroidIntervalMid = 1.2f;
+    private static final float asteroidIntervalHard = 0.88f;
 
     // time intervals accoirding to difficulty
     public static float getAsteroidInterval(String difficulty) {
@@ -61,9 +61,9 @@ public final class Constants {
     }
     
     // asteroid movement speed
-    public static final int asteroidSpeedEasy = 350;
-    public static final int asteroidSpeedMid = 420;
-    public static final int asteroidSpeedHard = 600;
+    private static final int asteroidSpeedEasy = 350;
+    private static final int asteroidSpeedMid = 420;
+    private static final int asteroidSpeedHard = 600;
 
     // asteroid movement speed according to difficulty
     public static float getAsteroidSpeed(String difficulty) {

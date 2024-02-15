@@ -25,7 +25,7 @@ public class MenuScreen implements Screen {
     private Skin skin;
     private int highScore;
     private Texture background;
-    private Music backgroundMusic;
+    private Music backgroundMusic, buttonClick;
     private FreeTypeFontGenerator gen;
     private BitmapFont font;
     private TextButtonStyle style;
@@ -58,7 +58,8 @@ public class MenuScreen implements Screen {
         exitButton = new TextButton("Exit", style);
 
         // start music
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Liu.mp3"));
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Liu.mp3")); // original sound by Yixin
+        buttonClick = Gdx.audio.newMusic(Gdx.files.internal("button.mp3")); // sound from: https://pixabay.com/sound-effects/button-124476/
         backgroundMusic.setLooping(true);
         updateVol();
         backgroundMusic.play();
@@ -83,6 +84,7 @@ public class MenuScreen implements Screen {
         // button listeners
         playButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
+                buttonClick.play();
                 game.setScreen(game.getSpaceshipScreen()); // start the game
                 restartMusic();
             }
@@ -90,18 +92,21 @@ public class MenuScreen implements Screen {
 
         settingsButton.addListener(new ChangeListener() {                
             public void changed(ChangeEvent event, Actor actor) {
+                buttonClick.play();
                 game.setScreen(new Settings(game));
             }
         });
 
         enemyModeButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
+                buttonClick.play();
                 game.setScreen(new EnemyGameScreen(game,5, 50, 60, 50)); // switch to Enemy Game Screen
             }
         });
 
         exitButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
+                buttonClick.play();
                 Gdx.app.exit(); // exit the application
             }
         });
@@ -153,6 +158,11 @@ public class MenuScreen implements Screen {
         }
     }
 
+    public void updateGameVol(){
+        buttonClick.setVolume(game.getGameVol());
+
+    }
+
     public void updateHighScore(){
         highScore = game.loadHighScore(game.getDif());
     }
@@ -193,6 +203,9 @@ public class MenuScreen implements Screen {
     }
     public TextButtonStyle getButtonStyle(){
         return style;
+    }
+    public Music getButtonSound(){
+        return buttonClick;
     }
 
     @Override
