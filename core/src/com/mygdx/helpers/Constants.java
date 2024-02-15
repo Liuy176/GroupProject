@@ -40,10 +40,41 @@ public final class Constants {
     public static final int weaponPowerUpMovementSpeed = 250;
     public static final int healthPowerUpValue = 50; // how much health does player regain after claiming the power up
     public static final int weaponPowerUpValue = 6; // how much extra weapon power does player get after claiming the power up
-    public static final int asteroidMovementSpeed = 400;
+
+    public static final float asteroidIntervalEasy = 1.4f;
+    public static final float asteroidIntervalMid = 1.1f;
+    public static final float asteroidIntervalHard = 0.88f;
+
+    public static float getAsteroidInterval(String difficulty) {
+        switch (difficulty) {
+            case "Easy":
+                return asteroidIntervalEasy;
+            case "Hard":
+                return asteroidIntervalHard;
+            case "Medium":
+            default:
+                return asteroidIntervalMid;
+        }
+    }
+    //public static final int asteroidMovementSpeed = 400;
+    public static final int asteroidSpeedEasy = 350;
+    public static final int asteroidSpeedMid = 420;
+    public static final int asteroidSpeedHard = 600;
+
+    public static float getAsteroidSpeed(String difficulty) {
+        switch (difficulty) {
+            case "Easy":
+                return asteroidSpeedEasy;
+            case "Hard":
+                return asteroidSpeedHard;
+            case "Medium":
+            default:
+                return asteroidSpeedMid;
+        }
+    }
 
     //EnemyGameScreen elements
-    public static final int bulletDistanceLimit = 25; // fhow far bullet can travel before despawning
+    public static final int bulletDistanceLimit = 20; // fhow far bullet can travel before despawning
     public static final float enemyShootingDistance = 4f; // from how close does enemy start shooting at player
     public static final int bulletSpeed = 10;
     public static final int maxPlayerHealth = 200;

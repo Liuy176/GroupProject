@@ -55,7 +55,7 @@ public class SpaceshipScreen implements Screen {
 
     private float lastAsteroidBatchX = 0;
     private float timeSinceLastAsteroidPair = 0f;
-    private float pairGenInterval = 1.2f;
+    private float pairGenInterval;
     private boolean fadeOut = false, firstCrash = true, collided = false;
     private float fadeOutSpeed = 0.5f;
     private float fadeOutOpacity = 0.0f;
@@ -77,6 +77,7 @@ public class SpaceshipScreen implements Screen {
     nave = new Sprite(tNave);
     posX = Constants.xPosOfUfoAtStart;
     posY = 0;
+    pairGenInterval = Constants.getAsteroidInterval(game.getDif());
 
     tCandy = new Texture("healthPickup.png");
     tWeapon = new Texture("gunPickup.png");
@@ -290,7 +291,7 @@ public class SpaceshipScreen implements Screen {
   
       for (Iterator<Rectangle> iter = enemies1.iterator(); iter.hasNext();) {
         Rectangle enemy = iter.next();
-        enemy.x -= Constants.asteroidMovementSpeed * Gdx.graphics.getDeltaTime();
+        enemy.x -= Constants.getAsteroidSpeed(game.getDif()) * Gdx.graphics.getDeltaTime();
         
         if (enemy.x < lastAsteroidBatchX) {
           lastAsteroidBatchX = enemy.x;
@@ -299,7 +300,7 @@ public class SpaceshipScreen implements Screen {
         if (enemy.x + enemy.width < 0) {
           iter.remove();
         }
-        if(enemy.x < posX && enemy.x + Constants.asteroidMovementSpeed * Gdx.graphics.getDeltaTime() >= Constants.xPosOfUfoAtStart){
+        if(enemy.x < posX && enemy.x + Constants.getAsteroidSpeed(game.getDif()) * Gdx.graphics.getDeltaTime() >= Constants.xPosOfUfoAtStart){
           if(!toIncrementScore){
             toIncrementScore =true;
           }
