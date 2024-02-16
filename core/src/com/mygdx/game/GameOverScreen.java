@@ -53,7 +53,7 @@ public class GameOverScreen implements Screen {
         toMenuButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.getMenu().getButtonSound().play();
+                //game.getMenu().getButtonSound().play(game.getGameVol());
                 game.setScreen(game.getMenu());
             };
         });

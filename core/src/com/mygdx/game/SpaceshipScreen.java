@@ -67,7 +67,12 @@ public class SpaceshipScreen implements Screen {
     private Texture heartTexture, healthFrame, white, gunTexture;
     private TextureRegion whiteRegion;
     private BitmapFont font;
-    //private Music backgroundMusic;
+    
+    private String fullText = "Crashed... \n\n\nDefeat the enemies inhabiting the asteroid \n\nto continue your journey!";
+    private StringBuilder currentText = new StringBuilder();
+    private float charTimer = 0;
+    private float charInterval = 0.04f; 
+    private int charIndex = 0;
 
   public SpaceshipScreen(SpaceBlastGame game, float health){
     this.game = game;
@@ -158,7 +163,7 @@ public class SpaceshipScreen implements Screen {
       ScreenUtils.clear(1, 0, 0, 1);
       batch.begin();
       batch.draw(img, 0, 0);
-     //if (paused) bitmap.draw...
+
       if(!gameover){
         
         if(isShipVisible) batch.draw(nave, posX, posY, nave.getWidth()*4, nave.getHeight()*4 );
@@ -176,7 +181,7 @@ public class SpaceshipScreen implements Screen {
         bitmap.draw(batch, "Score: " + score, 20, Gdx.graphics.getHeight() - 20);
 
         drawHealthBar(game.getBatch(), font);
-        if(paused && !isBlinking) bitmap.draw(batch, "Press SPACE to continue...", (Gdx.graphics.getWidth()/2)-135, (Gdx.graphics.getHeight()/2)+20);
+        if(paused && !isBlinking) game.getMenu().getFont().draw(batch, "Press SPACE to continue...", (Gdx.graphics.getWidth()/2)-215, (Gdx.graphics.getHeight()/2)+20);
 
       }else{
         
@@ -191,7 +196,8 @@ public class SpaceshipScreen implements Screen {
         batch.setColor(0, 0, 0, fadeOutOpacity);
         batch.draw(img, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         if(fadeOutOpacity>=1 && firstCrash){
-          bitmap.draw(batch, "Crashed! \n ... \n \nⓘ Defeat the enemies inhabiting the asteroid to be able to continue your journey!", 100, Gdx.graphics.getHeight() / 3);
+          updateText(delta);
+          game.getMenu().getFont().draw(batch, currentText.toString(), 100, Gdx.graphics.getHeight() / 3);
         }
         batch.setColor(1, 1, 1, 1); // Reset color
         batch.end();
@@ -326,7 +332,7 @@ public class SpaceshipScreen implements Screen {
 
         if(fadeOut){
           collisionTimer +=delta;
-          if((collisionTimer>=1 && !firstCrash) || collisionTimer>=20){
+          if((collisionTimer>=1 && !firstCrash) || collisionTimer>=27){
             collided = false;
             firstCrash = false;
             game.setScreen(new EnemyGameScreen(game, timesCrashed, Constants.maxPlayerHealth, damage, playerHealth));
@@ -357,38 +363,38 @@ public class SpaceshipScreen implements Screen {
           return false;
         }
 
-        private void produceAsteroidPair(float delta) {
-          timeSinceLastAsteroidPair += delta;
-            if (timeSinceLastAsteroidPair > pairGenInterval) {
-                float baseY = MathUtils.random(0, Gdx.graphics.getHeight() - tEnemy1.getHeight()*2 - Constants.getAsteroidBatchDistance(game.getDif()));
-                float y1 = baseY;
-                float y2 = baseY + tEnemy1.getHeight() + Constants.getAsteroidBatchDistance(game.getDif());
+    private void produceAsteroidPair(float delta) {
+        timeSinceLastAsteroidPair += delta;
+          if (timeSinceLastAsteroidPair > pairGenInterval) {
+              float baseY = MathUtils.random(0, Gdx.graphics.getHeight() - tEnemy1.getHeight()*2 - Constants.getAsteroidBatchDistance(game.getDif()));
+              float y1 = baseY;
+              float y2 = baseY + tEnemy1.getHeight() + Constants.getAsteroidBatchDistance(game.getDif());
         
-                createAsteroid(Gdx.graphics.getWidth(), y1);
-                createAsteroid(Gdx.graphics.getWidth(), y2);
+              createAsteroid(Gdx.graphics.getWidth(), y1);
+              createAsteroid(Gdx.graphics.getWidth(), y2);
         
-                timeSinceLastAsteroidPair = 0f;
-          }
+              timeSinceLastAsteroidPair = 0f;
+         }
       
-      }
+    }
 
-      private void createAsteroid(float x, float y) {
-          Rectangle asteroid = new Rectangle(x, y, tEnemy1.getWidth(), tEnemy1.getHeight());
-          enemies1.add(asteroid);
-      }
+    private void createAsteroid(float x, float y) {
+        Rectangle asteroid = new Rectangle(x, y, tEnemy1.getWidth(), tEnemy1.getHeight());
+        enemies1.add(asteroid);
+    }
       
-      public void restart(boolean isPaused) {
-        if(!isPaused) score = 0;
-        posX = Constants.xPosOfUfoAtStart;
-        enemies1.clear();
-        candies.clear();
-        lastCandyTime = TimeUtils.nanoTime();
-        lastWeaponTime = TimeUtils.nanoTime();
-        gameover = false;
-        paused = isPaused;
-        isBlinking = false;
-        fadeOutOpacity=0f;
-        fadeOut=false;
+    public void restart(boolean isPaused) {
+      if(!isPaused) score = 0;
+      posX = Constants.xPosOfUfoAtStart;
+      enemies1.clear();
+      candies.clear();
+      lastCandyTime = TimeUtils.nanoTime();
+      lastWeaponTime = TimeUtils.nanoTime();
+      gameover = false;
+      paused = isPaused;
+      isBlinking = false;
+      fadeOutOpacity=0f;
+      fadeOut=false;
     }
 
     public void drawHealthBar(SpriteBatch batch, BitmapFont font) {
@@ -405,8 +411,6 @@ public class SpaceshipScreen implements Screen {
       float heartX = barX - heartSize - 20;
       float heartY = barY + (barHeight - heartSize) / 2;
 
-      //String healthText = "PLAYER'S HP: ";
-      //font.draw(batch, healthText, barX - 100, barY + barHeight);
       batch.draw(heartTexture, heartX, heartY, 40, 32);
       batch.draw(gunTexture, heartX, weaponBarY, 40, 32);
 
@@ -427,6 +431,16 @@ public class SpaceshipScreen implements Screen {
       batch.setColor(Color.WHITE);
       batch.draw(healthFrame, barX-3, barY-3, barWidth*1.03f, barHeight*1.25f);
       batch.draw(weaponBarFrame, barX-3, weaponBarY-3,barWidth*1.03f, barHeight*1.25f);
+    }
+
+    public void updateText(float delta) {
+      if (charIndex < fullText.length()) {
+          charTimer += delta;
+          if (charTimer >= charInterval) {
+              currentText.append(fullText.charAt(charIndex++));
+              charTimer = 0;
+          }
+      }
   }
 
     public void setDisposeEnemyScreen(EnemyGameScreen screen){

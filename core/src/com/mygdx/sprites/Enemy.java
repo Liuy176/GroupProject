@@ -269,11 +269,13 @@ public class Enemy extends Sprite {
         body.createFixture(fixtureDef).setUserData("enemyBackupRight");
     }
 
+    // called when collision happens (in WorldContactListener)
     public void jump() {
         body.applyLinearImpulse(new Vector2(0, 3), body.getWorldCenter(), true);
     }
 
     // 2 movement methods to prevent enemies getting stuck when running into a wall
+    // called when collision happens (in WorldContactListener)
     public void moveBack() {
         float forceMagnitude = speed > 3 ? -4f : -3f;
         moveBackDirection.set(forceMagnitude, 0);
@@ -281,6 +283,7 @@ public class Enemy extends Sprite {
         moveBackTimer = 0f;
         movingBack = true;
     }
+    // called when collision happens (in WorldContactListener)
     public void moveForward() {
         float forceMagnitude = speed > 3 ? 4f : 3f;
         moveBackDirection.set(forceMagnitude, 0);
@@ -289,6 +292,7 @@ public class Enemy extends Sprite {
         movingBack = true;
     }
 
+    // called when collision happens (in WorldContactListener)
     public void takeDamage() {
         currentHealth -= player.getDamage();
         isDamaged=0;

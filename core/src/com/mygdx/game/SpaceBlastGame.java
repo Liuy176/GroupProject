@@ -2,7 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.helpers.Constants;
-
+import com.mygdx.helpers.SoundManager;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -15,6 +15,8 @@ public class SpaceBlastGame extends Game {
 	private SpaceshipScreen spaceshipScreen;
 	private SpriteBatch batch;
 	private Preferences pref;
+	private SoundManager soundmanager;
+	private Settings settingsScreen;
 
 	public SpaceBlastGame() {}
 
@@ -26,7 +28,9 @@ public class SpaceBlastGame extends Game {
 		this.ortographicCamera = new OrthographicCamera();
         this.ortographicCamera.setToOrtho(false, screenWidth, screenHeight);
 		this.pref = (Preferences) Gdx.app.getPreferences("SpaceBlast");
-		this.mainMenuScreen = new MenuScreen(this);
+		this.soundmanager = new SoundManager(this);
+		this.mainMenuScreen = new MenuScreen(this, soundmanager);
+		this.settingsScreen = new Settings(this);
 		this.spaceshipScreen = new SpaceshipScreen(this, Constants.maxPlayerHealth);
 
         setScreen(mainMenuScreen); //menu screen appears after starting the game
@@ -85,6 +89,10 @@ public class SpaceBlastGame extends Game {
 
 	public SpaceshipScreen getSpaceshipScreen(){
 		return spaceshipScreen;
+	}
+
+	public Settings getSettingsScreen(){
+		return settingsScreen;
 	}
 
 	public int getScreenHeight() {

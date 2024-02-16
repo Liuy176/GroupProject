@@ -27,16 +27,8 @@ public class Settings implements Screen{
         this.game = game;
         stage = new Stage(new ScreenViewport());
         skin = game.getMenu().getSkin();
-    }
-
-    @Override
-    public void show() {
-        Gdx.input.setInputProcessor(stage);
-
-        // game music volume slider
         musicVolLabel = new Label("Music Volume", game.getMenu().getLabelStyle());
         musicVolSlider = new Slider(0, 100, 1, false, skin);
-        musicVolSlider.setValue(game.getVol() * 100);
         musicVolSlider.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 float volume = musicVolSlider.getValue() / 100;
@@ -45,24 +37,19 @@ public class Settings implements Screen{
             }
         });
 
-        // game sounds volume slider
         gameVolLabel = new Label("Game Sounds Volume", game.getMenu().getLabelStyle());
         gameVolSlider = new Slider(0, 100, 1, false, skin);
-        gameVolSlider.setValue(game.getGameVol() * 100);
         gameVolSlider.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 float volume = gameVolSlider.getValue() / 100;
                 game.saveGameVol(volume);
-                game.getMenu().updateGameVol();
+                //game.getMenu().updateGameVol();
             }
         });
-        
 
-        // game difficulty selector
         difficultyLabel = new Label("Difficulty", game.getMenu().getLabelStyle());
         difficultySelect = new SelectBox<>(skin);
         difficultySelect.setItems("Easy", "Medium", "Hard");
-        difficultySelect.setSelected(game.getDif()); 
         difficultySelect.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                     game.saveDifficulty(difficultySelect.getSelected());
@@ -70,14 +57,33 @@ public class Settings implements Screen{
             }
         });
 
-        // button to return to menu
         backButton = new TextButton("Back", game.getMenu().getButtonStyle());
         backButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                game.getMenu().getButtonSound().play();
+               // game.getMenu().getButtonSound().play(game.getGameVol());
                 game.setScreen(game.getMenu());
             }
         });
+    }
+
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
+
+        // game music volume slider
+        musicVolSlider.setValue(game.getVol() * 100);
+
+        // game sounds volume slider
+        gameVolSlider.setValue(game.getGameVol() * 100);
+
+        
+
+        // game difficulty selector
+        difficultySelect.setItems("Easy", "Medium", "Hard");
+        difficultySelect.setSelected(game.getDif()); 
+
+        // button to return to menu
+
 
         // adjust position
         musicVolLabel.setPosition(100, 300);

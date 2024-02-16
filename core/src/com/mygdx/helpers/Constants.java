@@ -43,9 +43,9 @@ public final class Constants {
     public static final int weaponPowerUpValue = 6; // how much extra weapon power does player get after claiming the power up
 
     // time interval between spawning asteroid batches
-    private static final float asteroidIntervalEasy = 1.4f;
+    private static final float asteroidIntervalEasy = 1.5f;
     private static final float asteroidIntervalMid = 1.2f;
-    private static final float asteroidIntervalHard = 0.88f;
+    private static final float asteroidIntervalHard = 0.9f;
 
     // time intervals accoirding to difficulty
     public static float getAsteroidInterval(String difficulty) {

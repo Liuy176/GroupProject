@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.mygdx.helpers.SoundManager;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class MenuScreen implements Screen {
@@ -25,16 +27,18 @@ public class MenuScreen implements Screen {
     private Skin skin;
     private int highScore;
     private Texture background;
-    private Music backgroundMusic, buttonClick;
+    private Music backgroundMusic;
     private FreeTypeFontGenerator gen;
     private BitmapFont font;
     private TextButtonStyle style;
     private LabelStyle labelStyle;
     private FreeTypeFontParameter param;
     private TextButton playButton, settingsButton, enemyModeButton, exitButton;
+    private SoundManager sounds;
     
-    public MenuScreen(SpaceBlastGame game) {
+    public MenuScreen(SpaceBlastGame game, SoundManager sounds) {
         this.game = game;
+        this.sounds = sounds;
         highScore = game.loadHighScore(game.getDif());
         gen = new FreeTypeFontGenerator(Gdx.files.internal("pixelmix.ttf"));
         labelStyle = new LabelStyle();
@@ -59,9 +63,12 @@ public class MenuScreen implements Screen {
 
         // start music
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Liu.mp3")); // original sound by Yixin
-        buttonClick = Gdx.audio.newMusic(Gdx.files.internal("button.mp3")); // sound from: https://pixabay.com/sound-effects/button-124476/
+        //buttonClick = Gdx.audio.newSound(Gdx.files.internal("button.mp3")); // sound from: https://pixabay.com/sound-effects/button-124476/
         backgroundMusic.setLooping(true);
+        
+        // set the volume to the one player chose before
         updateVol();
+        //updateGameVol();
         backgroundMusic.play();
     }
 
@@ -84,7 +91,7 @@ public class MenuScreen implements Screen {
         // button listeners
         playButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                buttonClick.play();
+                sounds.playButton();
                 game.setScreen(game.getSpaceshipScreen()); // start the game
                 restartMusic();
             }
@@ -92,21 +99,21 @@ public class MenuScreen implements Screen {
 
         settingsButton.addListener(new ChangeListener() {                
             public void changed(ChangeEvent event, Actor actor) {
-                buttonClick.play();
-                game.setScreen(new Settings(game));
+                game.setScreen(game.getSettingsScreen());
+                sounds.playButton();
             }
         });
 
         enemyModeButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                buttonClick.play();
-                game.setScreen(new EnemyGameScreen(game,5, 50, 60, 50)); // switch to Enemy Game Screen
+                sounds.playButton();
+                //game.setScreen(new EnemyGameScreen(game,5, 50, 60, 50)); // switch to Enemy Game Screen
             }
         });
 
         exitButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                buttonClick.play();
+                sounds.playButton();
                 Gdx.app.exit(); // exit the application
             }
         });
@@ -158,10 +165,10 @@ public class MenuScreen implements Screen {
         }
     }
 
-    public void updateGameVol(){
-        buttonClick.setVolume(game.getGameVol());
+    //public void updateGameVol(){
+      //  buttonClick.setVolume(game.getGameVol());
 
-    }
+//}
 
     public void updateHighScore(){
         highScore = game.loadHighScore(game.getDif());
@@ -178,6 +185,7 @@ public class MenuScreen implements Screen {
         skin.dispose();
         background.dispose();
         gen.dispose();
+       // buttonClick.dispose();
     }
 
     public int getHighScore(){
@@ -204,9 +212,9 @@ public class MenuScreen implements Screen {
     public TextButtonStyle getButtonStyle(){
         return style;
     }
-    public Music getButtonSound(){
-        return buttonClick;
-    }
+   // public Sound getButtonSound(){
+   ////     return buttonClick;
+    //}
 
     @Override
     public void pause() {}
