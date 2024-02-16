@@ -12,7 +12,7 @@ public class SoundManager {
     public SoundManager (SpaceBlastGame game){
         this.game = game;
         buttonClick = Gdx.audio.newSound(Gdx.files.internal("button.mp3")); // sound from: https://pixabay.com/sound-effects/button-124476/
-        shot = Gdx.audio.newSound(Gdx.files.internal("blaster.mp3"));
+        shot = Gdx.audio.newSound(Gdx.files.internal("blaster.mp3")); // sound from https://pixabay.com/sound-effects/blaster-2-81267/
     }
 
     public void playButton() {

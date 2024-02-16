@@ -70,10 +70,9 @@ public class SpaceshipScreen implements Screen {
     private TextureRegion whiteRegion;
     private BitmapFont font;
     
-    private String fullText = "Crashed... \n\n\nDefeat the enemies inhabiting the asteroid \n\nto continue your journey!";
+    private String crashText = "Crashed... \n\n\nDefeat the enemies inhabiting the asteroid \n\nto continue your journey!";
     private StringBuilder currentText = new StringBuilder();
-    private float charTimer = 0;
-    private float charInterval = 0.04f; 
+    private float charTimer = 0, charInterval = 0.04f;
     private int charIndex = 0;
 
   public SpaceshipScreen(SpaceBlastGame game, float health, SoundManager sounds){
@@ -437,10 +436,10 @@ public class SpaceshipScreen implements Screen {
     }
 
     public void updateText(float delta) {
-      if (charIndex < fullText.length()) {
+      if (charIndex < crashText.length()) {
           charTimer += delta;
           if (charTimer >= charInterval) {
-              currentText.append(fullText.charAt(charIndex++));
+              currentText.append(crashText.charAt(charIndex++));
               charTimer = 0;
           }
       }

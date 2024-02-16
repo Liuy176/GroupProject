@@ -71,9 +71,10 @@ public class MenuScreen implements Screen {
                 sounds.playButton();
             }
         });
-        enemyModeButton = new TextButton("Go to Enemy Mode", style); // the button to test the enemy game mode
+        enemyModeButton = new TextButton("About", style); // the button to test the enemy game mode
         enemyModeButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(game.getAboutScreen());
                 sounds.playButton();
                 //game.setScreen(new EnemyGameScreen(game,5, 50, 60, 50)); // switch to Enemy Game Screen
             }
