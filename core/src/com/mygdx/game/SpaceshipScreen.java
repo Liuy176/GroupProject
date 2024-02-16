@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.helpers.Constants;
+import com.mygdx.helpers.SoundManager;
 
 import java.util.Iterator;
 
@@ -42,6 +43,7 @@ public class SpaceshipScreen implements Screen {
     
     private boolean paused; 
     private SpaceBlastGame game;
+    private SoundManager sounds;
     
     private float gravity = 0.5f; 
     private float jumpVelocity = -10f; 
@@ -74,8 +76,9 @@ public class SpaceshipScreen implements Screen {
     private float charInterval = 0.04f; 
     private int charIndex = 0;
 
-  public SpaceshipScreen(SpaceBlastGame game, float health){
+  public SpaceshipScreen(SpaceBlastGame game, float health, SoundManager sounds){
     this.game = game;
+    this.sounds = sounds;
     batch = game.getBatch();
     img = new Texture("9.png");
     tNave = new Texture("ship-1.png.png");
@@ -335,7 +338,7 @@ public class SpaceshipScreen implements Screen {
           if((collisionTimer>=1 && !firstCrash) || collisionTimer>=27){
             collided = false;
             firstCrash = false;
-            game.setScreen(new EnemyGameScreen(game, timesCrashed, Constants.maxPlayerHealth, damage, playerHealth));
+            game.setScreen(new EnemyGameScreen(game, timesCrashed, Constants.maxPlayerHealth, damage, playerHealth, sounds));
           }
         }
       }

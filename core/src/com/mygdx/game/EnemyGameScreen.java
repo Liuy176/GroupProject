@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.mygdx.helpers.Constants;
+import com.mygdx.helpers.SoundManager;
 import com.mygdx.helpers.WorldContactListener;
 import com.mygdx.helpers.WorldCreator;
 import com.mygdx.sprites.Enemy;
@@ -14,6 +15,7 @@ import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.loaders.SoundLoader;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -66,12 +68,13 @@ public class EnemyGameScreen implements Screen{
     private float fadeInOpacity = 1.0f; 
     private float fadeInSpeed = 0.5f; 
     private ShapeRenderer shapeRenderer;
+    private SoundManager sounds;
 
     private Random random;
     public int enemyCount;
 
 
-    public EnemyGameScreen(SpaceBlastGame game, int roundNumber, float playerHealth, float playerWeaponStrength, float currHealth){
+    public EnemyGameScreen(SpaceBlastGame game, int roundNumber, float playerHealth, float playerWeaponStrength, float currHealth, SoundManager sounds){
 
         HashMap<Integer, String> gameMaps = new HashMap<Integer, String>();
         gameMaps.put(0, "map4.tmx");
@@ -84,6 +87,7 @@ public class EnemyGameScreen implements Screen{
         gameMaps.put(7, "map11.tmx");
 
         this.game = game;
+        this.sounds = sounds;
         this.camera = new OrthographicCamera();
         this.mapLoader = new TmxMapLoader();
         this.random = new Random();
@@ -96,7 +100,7 @@ public class EnemyGameScreen implements Screen{
         this.atlas = new TextureAtlas("spritePack.pack");
 
         new WorldCreator(world, map);
-        this.player = new Player(game, world, this, playerHealth, playerWeaponStrength, currHealth);
+        this.player = new Player(game, world, this, playerHealth, playerWeaponStrength, currHealth, sounds);
         this.blackTexture = new Texture("BlackScreen.jpg");
         this.enemies = new Array<Enemy>();
         this.enemyCount = roundNumber+random.nextInt(2);
@@ -174,7 +178,7 @@ public class EnemyGameScreen implements Screen{
         // palyer's health bar (top right)
         player.drawHealthBar(game.getBatch(), font);
         if(paused) {
-            game.getSpaceshipScreen().getBitmap().draw(game.getBatch(), "Press SPACE to continue...", (Gdx.graphics.getWidth()/2)-135, (Gdx.graphics.getHeight()/2)+20);
+            game.getMenu().getFont().draw(game.getBatch(), "Press SPACE to continue...", (Gdx.graphics.getWidth()/2)-215, (Gdx.graphics.getHeight()/2)+20);
         }
         game.getBatch().setProjectionMatrix(camera.combined);
 

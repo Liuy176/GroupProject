@@ -31,7 +31,7 @@ public class SpaceBlastGame extends Game {
 		this.soundmanager = new SoundManager(this);
 		this.mainMenuScreen = new MenuScreen(this, soundmanager);
 		this.settingsScreen = new Settings(this);
-		this.spaceshipScreen = new SpaceshipScreen(this, Constants.maxPlayerHealth);
+		this.spaceshipScreen = new SpaceshipScreen(this, Constants.maxPlayerHealth, soundmanager);
 
         setScreen(mainMenuScreen); //menu screen appears after starting the game
     }

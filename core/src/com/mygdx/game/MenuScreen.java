@@ -57,9 +57,34 @@ public class MenuScreen implements Screen {
 
         //buttons
         playButton = new TextButton("Play", style);
+        playButton.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                sounds.playButton();
+                game.setScreen(game.getSpaceshipScreen()); // start the game
+                restartMusic();
+            }
+        });
         settingsButton = new TextButton("Settings", style);
+        settingsButton.addListener(new ChangeListener() {                
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(game.getSettingsScreen());
+                sounds.playButton();
+            }
+        });
         enemyModeButton = new TextButton("Go to Enemy Mode", style); // the button to test the enemy game mode
+        enemyModeButton.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                sounds.playButton();
+                //game.setScreen(new EnemyGameScreen(game,5, 50, 60, 50)); // switch to Enemy Game Screen
+            }
+        });
         exitButton = new TextButton("Exit", style);
+        exitButton.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                sounds.playButton();
+                Gdx.app.exit(); // exit the application
+            }
+        });
 
         // start music
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Liu.mp3")); // original sound by Yixin
@@ -88,35 +113,6 @@ public class MenuScreen implements Screen {
         Label highScoreLabel = new Label(highScoreText, labelStyle);
         highScoreLabel.setFontScale(1.1f); // make label bigger
 
-        // button listeners
-        playButton.addListener(new ChangeListener() {
-            public void changed(ChangeEvent event, Actor actor) {
-                sounds.playButton();
-                game.setScreen(game.getSpaceshipScreen()); // start the game
-                restartMusic();
-            }
-        });
-
-        settingsButton.addListener(new ChangeListener() {                
-            public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(game.getSettingsScreen());
-                sounds.playButton();
-            }
-        });
-
-        enemyModeButton.addListener(new ChangeListener() {
-            public void changed(ChangeEvent event, Actor actor) {
-                sounds.playButton();
-                //game.setScreen(new EnemyGameScreen(game,5, 50, 60, 50)); // switch to Enemy Game Screen
-            }
-        });
-
-        exitButton.addListener(new ChangeListener() {
-            public void changed(ChangeEvent event, Actor actor) {
-                sounds.playButton();
-                Gdx.app.exit(); // exit the application
-            }
-        });
 
         // show high score
         table.add(highScoreLabel).colspan(2).padRight(900).padTop(30).row();

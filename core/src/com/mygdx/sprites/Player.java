@@ -19,6 +19,7 @@ import com.mygdx.game.EnemyGameScreen;
 import com.mygdx.game.SpaceBlastGame;
 import com.mygdx.helpers.Constants;
 import com.mygdx.helpers.Shaders;
+import com.mygdx.helpers.SoundManager;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.utils.Array;
@@ -43,12 +44,14 @@ public class Player extends Sprite{
     private int /*deadRotationDeg,*/ jumpcounter = 2, isDamaged = 10;
     private float damage;
     private Shaders shader;
+    private SoundManager sounds;
 
-    public Player(SpaceBlastGame game, World world, EnemyGameScreen screen, float maxHealth, float weaponStrength, float currHealth){
+    public Player(SpaceBlastGame game, World world, EnemyGameScreen screen, float maxHealth, float weaponStrength, float currHealth, SoundManager sounds){
         super(screen.getAtlas().findRegion("player"));
         this.world = world;
         this.game = game;
         this.screen = screen;
+        this.sounds = sounds;
         this.definePlayer();
         this.currState = State.STANDING;
         this.prevState = State.STANDING;
@@ -194,6 +197,7 @@ public class Player extends Sprite{
     
         Bullet bullet = new Bullet(world, x, y, facingRight, Constants.bulletSpeed);
         screen.addBullet(bullet);
+        sounds.playShotSound();
     }
 
     public float getHealthPercentage() {
