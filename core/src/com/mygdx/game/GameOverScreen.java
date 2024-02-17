@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.helpers.SoundManager;
 
 public class GameOverScreen implements Screen {
     private SpaceBlastGame game;
@@ -25,9 +27,11 @@ public class GameOverScreen implements Screen {
     private float fade = 1f;
     private float fadeDuration = 2f;
     private int finalScore;
+    private SoundManager sounds;
 
-    public GameOverScreen(SpaceBlastGame game, int score) {
+    public GameOverScreen(SpaceBlastGame game, int score, SoundManager sounds) {
         this.game = game;
+        this.sounds = sounds;
         spriteBatch = game.getBatch();
         background = new Texture("gameOver.png");
         finalScore = score;
@@ -54,6 +58,7 @@ public class GameOverScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //game.getMenu().getButtonSound().play(game.getGameVol());
+                sounds.playButton();
                 game.setScreen(game.getMenu());
             };
         });

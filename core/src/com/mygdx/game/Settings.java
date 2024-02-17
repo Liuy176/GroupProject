@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.helpers.SoundManager;
 
 public class Settings implements Screen{
     private final Stage stage;
@@ -23,7 +24,7 @@ public class Settings implements Screen{
 
     private final SpaceBlastGame game;
 
-    public Settings(SpaceBlastGame game) {
+    public Settings(SpaceBlastGame game, SoundManager sounds) {
         this.game = game;
         stage = new Stage(new ScreenViewport());
         skin = game.getMenu().getSkin();
@@ -60,7 +61,7 @@ public class Settings implements Screen{
         backButton = new TextButton("Back", game.getMenu().getButtonStyle());
         backButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-               // game.getMenu().getButtonSound().play(game.getGameVol());
+                sounds.playButton();
                 game.setScreen(game.getMenu());
             }
         });

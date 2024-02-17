@@ -1,7 +1,6 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,22 +9,21 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.helpers.SoundManager;
 
-public class AboutScreen implements Screen {
+public class AboutScreen4 implements Screen {
     private SpaceBlastGame game;
     private SpriteBatch spriteBatch;
     private Texture background;
     private Stage stage;
-    private TextButton toMenuButton, nextButton;
+    private TextButton toMenuButton, prevButton;
 
 
-    public AboutScreen(SpaceBlastGame game, SoundManager sounds) {
+    public AboutScreen4(SpaceBlastGame game, SoundManager sounds) {
         this.game = game;
         spriteBatch = game.getBatch();
-        background = new Texture("about6.png");
+        background = new Texture("about5.png");
         toMenuButton = new TextButton("menu", game.getMenu().getButtonStyle());
         toMenuButton.addListener(new ChangeListener() {                
             public void changed(ChangeEvent event, Actor actor) {
@@ -34,10 +32,10 @@ public class AboutScreen implements Screen {
             }
         });
         
-        nextButton = new TextButton(">", game.getMenu().getButtonStyle());
-        nextButton.addListener(new ChangeListener() {                
+        prevButton = new TextButton("<", game.getMenu().getButtonStyle());
+        prevButton.addListener(new ChangeListener() {                
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(game.getAboutScreen2());
+                game.setScreen(game.getAboutScreen3());
                 sounds.playButton();
             }
         });
@@ -52,12 +50,12 @@ public class AboutScreen implements Screen {
         toMenuButton.setHeight(40);
         toMenuButton.setWidth(100);
 
-        nextButton.setPosition(Gdx.graphics.getWidth()-70, Gdx.graphics.getHeight()-60);
-        nextButton.setHeight(40);
-        nextButton.setWidth(40);
+        prevButton.setPosition(Gdx.graphics.getWidth()-120, Gdx.graphics.getHeight()-60);
+        prevButton.setHeight(40);
+        prevButton.setWidth(40);
 
         stage.addActor(toMenuButton);
-        stage.addActor(nextButton);
+        stage.addActor(prevButton);
     }
 
     @Override
