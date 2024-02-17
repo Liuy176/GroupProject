@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
@@ -21,11 +22,13 @@ public class Settings implements Screen{
     private SelectBox<String> difficultySelect;
     private TextButton backButton;
     private Label musicVolLabel, difficultyLabel, gameVolLabel;
+    private Texture background;
 
     private final SpaceBlastGame game;
 
     public Settings(SpaceBlastGame game, SoundManager sounds) {
         this.game = game;
+        background = new Texture("about1.png");
         stage = new Stage(new ScreenViewport());
         skin = game.getMenu().getSkin();
         musicVolLabel = new Label("Music Volume", game.getMenu().getLabelStyle());
@@ -87,19 +90,19 @@ public class Settings implements Screen{
 
 
         // adjust position
-        musicVolLabel.setPosition(100, 300);
-        musicVolSlider.setPosition(100, 250);
+        musicVolLabel.setPosition(Gdx.graphics.getWidth() / 2 - musicVolLabel.getWidth()/2, 450);
+        musicVolSlider.setPosition(Gdx.graphics.getWidth() / 2 - 150, 400);
         musicVolSlider.setWidth(300);
 
-        gameVolLabel.setPosition(100, 400);
-        gameVolSlider.setPosition(100, 350);
+        gameVolLabel.setPosition(Gdx.graphics.getWidth() / 2 - gameVolLabel.getWidth()/2, 550);
+        gameVolSlider.setPosition(Gdx.graphics.getWidth() / 2 - 150, 500);
         gameVolSlider.setWidth(300);
         
-        difficultyLabel.setPosition(100, 200);
-        difficultySelect.setPosition(100, 150);
+        difficultyLabel.setPosition(Gdx.graphics.getWidth() / 2 - difficultyLabel.getWidth()/2, 350);
+        difficultySelect.setPosition(Gdx.graphics.getWidth() / 2 - 150, 300);
         difficultySelect.setWidth(300);
         
-        backButton.setPosition(100, 50);
+        backButton.setPosition(40, Gdx.graphics.getHeight()-60);
         backButton.setSize(100, 50);
 
         stage.addActor(musicVolLabel);
@@ -116,7 +119,12 @@ public class Settings implements Screen{
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        
+
+        // draw background
+        game.getBatch().begin();
+        game.getBatch().draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        game.getBatch().end();
+
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
