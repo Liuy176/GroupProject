@@ -12,6 +12,12 @@ import com.badlogic.gdx.Input;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.helpers.Constants;
@@ -39,9 +45,9 @@ public class SpaceshipScreen implements Screen {
     private FreeTypeFontGenerator.FreeTypeFontParameter parameter;
     private BitmapFont bitmap;
     private Array<Rectangle> candies, weapons;
-    private long lastCandyTime, lastWeaponTime;
+    private long lastCandyTime, lastWeaponTime, lastAsteroidPairTime;
     
-    private boolean paused; 
+    private boolean paused;
     private SpaceBlastGame game;
     private SoundManager sounds;
     
@@ -92,6 +98,7 @@ public class SpaceshipScreen implements Screen {
     weapons = new Array<Rectangle>();
     lastCandyTime = TimeUtils.nanoTime();
     lastWeaponTime = TimeUtils.nanoTime();
+    lastAsteroidPairTime = TimeUtils.nanoTime(); 
 
     tEnemy1 = new Texture("asteroidNew.png");
     enemies1 = new Array<Rectangle>();
@@ -120,14 +127,21 @@ public class SpaceshipScreen implements Screen {
     gunTexture = new Texture("gun.png");
     healthFrame = new Texture("healthFrame.png");
     weaponBarFrame = new Texture("weaponBarFrame2.png");
-
   }
   
     @Override
     public void render(float delta) {
       if(!isBlinking) {// can't pause/unpause shortly before swithcing to another screen
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) paused = !paused;
-        if(paused && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) paused = false;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+          paused = !paused;
+        }
+        if(paused && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){ 
+          paused = false;
+        }
+        if(paused && Gdx.input.isKeyJustPressed(Input.Keys.R)){
+          game.setScreen(game.getMenu());
+          restart(false);
+        }
       }
 
       if(!paused){
@@ -223,9 +237,9 @@ public class SpaceshipScreen implements Screen {
     private void moveNave(){
       if(paused) return;
 
-      if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-          restart(true);
-      }
+      //if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+     //     restart(true);
+     // }
       if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
           currentVelocity = jumpVelocity; // jump
       }
@@ -366,7 +380,7 @@ public class SpaceshipScreen implements Screen {
         }
 
     private void produceAsteroidPair(float delta) {
-        timeSinceLastAsteroidPair += delta;
+          timeSinceLastAsteroidPair = (TimeUtils.nanoTime() - lastAsteroidPairTime) / 1000000000.0f;
           if (timeSinceLastAsteroidPair > pairGenInterval) {
               float baseY = MathUtils.random(0, Gdx.graphics.getHeight() - tEnemy1.getHeight()*2 - Constants.getAsteroidBatchDistance(game.getDif()));
               float y1 = baseY;
@@ -374,8 +388,9 @@ public class SpaceshipScreen implements Screen {
         
               createAsteroid(Gdx.graphics.getWidth(), y1);
               createAsteroid(Gdx.graphics.getWidth(), y2);
-        
-              timeSinceLastAsteroidPair = 0f;
+            
+              lastAsteroidPairTime = TimeUtils.nanoTime();
+              //timeSinceLastAsteroidPair = 0f;
          }
       
     }
@@ -386,12 +401,18 @@ public class SpaceshipScreen implements Screen {
     }
       
     public void restart(boolean isPaused) {
-      if(!isPaused) score = 0;
+      if(!isPaused) {
+        score = 0;
+        playerHealth = Constants.maxPlayerHealth;
+        damage = 12;
+        timesCrashed = 0;
+      }
       posX = Constants.xPosOfUfoAtStart;
       enemies1.clear();
       candies.clear();
       lastCandyTime = TimeUtils.nanoTime();
       lastWeaponTime = TimeUtils.nanoTime();
+      lastAsteroidPairTime = TimeUtils.nanoTime();
       gameover = false;
       paused = isPaused;
       isBlinking = false;

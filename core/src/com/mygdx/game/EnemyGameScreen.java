@@ -294,6 +294,10 @@ public class EnemyGameScreen implements Screen{
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) pause();
         } else {
             if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) resume();
+            if(Gdx.input.isKeyJustPressed(Input.Keys.R)){
+                reset();
+                game.setScreen(game.getMenu());
+            }
         }   
     }
     
@@ -302,16 +306,17 @@ public class EnemyGameScreen implements Screen{
             game.getMenu().setHighScore(game.getSpaceshipScreen().getScore());
             game.saveHighScore(game.getSpaceshipScreen().getScore(), game.getDif());
         }
-        game.getSpaceshipScreen().setPlayerHealth(Constants.maxPlayerHealth);
-        game.getSpaceshipScreen().setDamage(12);
-        game.getSpaceshipScreen().setAmountOfCrashes(0);
-        game.getSpaceshipScreen().setScore(0);
-        game.getSpaceshipScreen().setGameOver(false);
-        game.getSpaceshipScreen().setFadeOut(false);
-        game.getSpaceshipScreen().setFadeOpacity(0f);
-        game.getSpaceshipScreen().setIsBlinking(false);
-        game.getSpaceshipScreen().clearCandies();
-        game.getSpaceshipScreen().clearEnemies();
+       // game.getSpaceshipScreen().setPlayerHealth(Constants.maxPlayerHealth);
+        //game.getSpaceshipScreen().setDamage(12);
+        //game.getSpaceshipScreen().setAmountOfCrashes(0);
+        //game.getSpaceshipScreen().setScore(0);
+        //game.getSpaceshipScreen().setGameOver(false);
+        //game.getSpaceshipScreen().setFadeOut(false);
+        //game.getSpaceshipScreen().setFadeOpacity(0f);
+        //game.getSpaceshipScreen().setIsBlinking(false);
+        //game.getSpaceshipScreen().clearCandies();
+        //game.getSpaceshipScreen().clearEnemies();
+        game.getSpaceshipScreen().restart(false);
     }
 
     private void fadeOut(float fadeIndex){
