@@ -20,6 +20,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mygdx.game.EnemyGameScreen;
 import com.mygdx.helpers.Constants;
 import com.mygdx.helpers.Shaders;
+import com.mygdx.helpers.SoundManager;
 
 public class Enemy extends Sprite {
     private World world;
@@ -47,8 +48,9 @@ public class Enemy extends Sprite {
     private Sprite armSprite;
     private int isDamaged = 10;
     private Shaders shader;
+    private SoundManager sounds;
 
-    public Enemy(World world,float x, float y, float speed, float health, Player player, EnemyGameScreen screen, float damage) {
+    public Enemy(World world,float x, float y, float speed, float health, Player player, EnemyGameScreen screen, float damage, SoundManager sounds) {
         super(screen.getAtlas().findRegion("enemy"));
         this.world = world;
         this.speed = speed;
@@ -62,6 +64,7 @@ public class Enemy extends Sprite {
         this.isDefeated = false;
         this.deadRotationDeg = 0;
         this.shader = new Shaders();
+        this.sounds = sounds;
 
         armTexture = new Texture("arm.png");
         armSprite = new Sprite(armTexture);
@@ -272,6 +275,7 @@ public class Enemy extends Sprite {
     // called when collision happens (in WorldContactListener)
     public void jump() {
         body.applyLinearImpulse(new Vector2(0, 3), body.getWorldCenter(), true);
+        sounds.playEnemyJump();
     }
 
     // 2 movement methods to prevent enemies getting stuck when running into a wall
@@ -300,6 +304,7 @@ public class Enemy extends Sprite {
             currentHealth = 0;
             enemyDies();
         }
+        sounds.playHit();
     }
 
     public float getHealthPercentage() {
@@ -354,6 +359,7 @@ public class Enemy extends Sprite {
         boolean facingRight = playerPosition.x > body.getPosition().x;
         EnemyBullet bullet = new EnemyBullet(world, bulletSpawnX, bulletSpawnY, facingRight, Constants.bulletSpeed, player, this);
         screen.addEnemyBullet(bullet);
+        sounds.playEnenyShotSound();
 
     }
 

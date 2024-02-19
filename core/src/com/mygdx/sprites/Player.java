@@ -248,6 +248,7 @@ public class Player extends Sprite{
             currentHealth = 0;
             playerDies();
         }
+        sounds.playEnemyHit();
     }
     
     private void playerDies() {

@@ -113,7 +113,7 @@ public class EnemyGameScreen implements Screen{
             int x = 450 + random.nextInt(300);
             int y = 340;
 
-            enemies.add(new Enemy(world, x,y, enemySpeed, enemyHealth, player, this, damage));
+            enemies.add(new Enemy(world, x,y, enemySpeed, enemyHealth, player, this, damage, sounds));
         }
 
         this.camera.setToOrtho(false, 18, 10);
@@ -283,8 +283,10 @@ public class EnemyGameScreen implements Screen{
 
     public void handleInput(float dt){
         if(!paused){
-            if((Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isKeyJustPressed(Input.Keys.W)) && player.getJumpCounter() < 2)
+            if((Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isKeyJustPressed(Input.Keys.W)) && player.getJumpCounter() < 2){
                 player.jump();
+                sounds.playJump(); // jump sound
+            }
             if(Gdx.input.isKeyPressed(Input.Keys.D) && player.getBody().getLinearVelocity().x <=3 )
                 player.getBody().applyLinearImpulse(new Vector2(0.3f, 0), player.getBody().getWorldCenter(), true);
             if(Gdx.input.isKeyPressed(Input.Keys.A) && player.getBody().getLinearVelocity().x >=-3 )

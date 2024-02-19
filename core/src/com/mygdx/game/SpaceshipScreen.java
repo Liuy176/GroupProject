@@ -336,6 +336,7 @@ public class SpaceshipScreen implements Screen {
             timesCrashed++;
             fadeOut = true;
             collisionTimer = 0;
+            sounds.playExplosion();
           }
           iter.remove();
         }
