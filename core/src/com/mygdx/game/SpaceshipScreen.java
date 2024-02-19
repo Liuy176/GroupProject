@@ -131,9 +131,13 @@ public class SpaceshipScreen implements Screen {
   
     @Override
     public void render(float delta) {
-      if(!isBlinking) {// can't pause/unpause shortly before swithcing to another screen
+      if(!isBlinking && !(collisionTimer>0)) {// can't pause/unpause shortly before swithcing to another screen
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-          paused = !paused;
+          if(paused){
+            paused = false;
+          } else {
+            paused = true;
+          }
         }
         if(paused && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){ 
           paused = false;
@@ -197,8 +201,10 @@ public class SpaceshipScreen implements Screen {
         bitmap.draw(batch, "Score: " + score, 20, Gdx.graphics.getHeight() - 20);
 
         drawHealthBar(game.getBatch(), font);
-        if(paused && !isBlinking) game.getMenu().getFont().draw(batch, "Press SPACE to continue...", (Gdx.graphics.getWidth()/2)-215, (Gdx.graphics.getHeight()/2)+20);
-
+        if(paused && !isBlinking) {
+          game.getMenu().getFont().draw(batch, "Press SPACE to continue...", (Gdx.graphics.getWidth()/2)-215, (Gdx.graphics.getHeight()/2)+20);
+          game.getMenu().getFont().draw(game.getBatch(), "(Press R to return to main menu)", (Gdx.graphics.getWidth()/2)-265, (Gdx.graphics.getHeight()/2)-20);
+        }
       }else{
         
         bitmap.draw(batch, "Score: " + score, 20, Gdx.graphics.getHeight() - 20);
@@ -350,6 +356,7 @@ public class SpaceshipScreen implements Screen {
           collisionTimer +=delta;
           if((collisionTimer>=1 && !firstCrash) || collisionTimer>=27){
             collided = false;
+            collisionTimer = 0;
             firstCrash = false;
             game.setScreen(new EnemyGameScreen(game, timesCrashed, Constants.maxPlayerHealth, damage, playerHealth, sounds));
           }
@@ -418,6 +425,7 @@ public class SpaceshipScreen implements Screen {
       isBlinking = false;
       fadeOutOpacity=0f;
       fadeOut=false;
+      collisionTimer = 0;
     }
 
     public void drawHealthBar(SpriteBatch batch, BitmapFont font) {

@@ -179,6 +179,7 @@ public class EnemyGameScreen implements Screen{
         player.drawHealthBar(game.getBatch(), font);
         if(paused) {
             game.getMenu().getFont().draw(game.getBatch(), "Press SPACE to continue...", (Gdx.graphics.getWidth()/2)-215, (Gdx.graphics.getHeight()/2)+20);
+            game.getMenu().getFont().draw(game.getBatch(), "(Press R to return to main menu)", (Gdx.graphics.getWidth()/2)-265, (Gdx.graphics.getHeight()/2)-20);
         }
         game.getBatch().setProjectionMatrix(camera.combined);
 
@@ -306,16 +307,7 @@ public class EnemyGameScreen implements Screen{
             game.getMenu().setHighScore(game.getSpaceshipScreen().getScore());
             game.saveHighScore(game.getSpaceshipScreen().getScore(), game.getDif());
         }
-       // game.getSpaceshipScreen().setPlayerHealth(Constants.maxPlayerHealth);
-        //game.getSpaceshipScreen().setDamage(12);
-        //game.getSpaceshipScreen().setAmountOfCrashes(0);
-        //game.getSpaceshipScreen().setScore(0);
-        //game.getSpaceshipScreen().setGameOver(false);
-        //game.getSpaceshipScreen().setFadeOut(false);
-        //game.getSpaceshipScreen().setFadeOpacity(0f);
-        //game.getSpaceshipScreen().setIsBlinking(false);
-        //game.getSpaceshipScreen().clearCandies();
-        //game.getSpaceshipScreen().clearEnemies();
+
         game.getSpaceshipScreen().restart(false);
     }
 
