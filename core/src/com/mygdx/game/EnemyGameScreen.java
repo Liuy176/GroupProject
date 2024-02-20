@@ -121,6 +121,8 @@ public class EnemyGameScreen implements Screen{
 
         this.mapWidth = map.getProperties().get("width", Integer.class);
         this.mapHeight = map.getProperties().get("height", Integer.class);
+
+        sounds.getBackground2().play();
     }
 
     @Override
@@ -192,6 +194,7 @@ public class EnemyGameScreen implements Screen{
                 fade = 1;
                 int score = game.getSpaceshipScreen().getScore();
                 this.reset();
+                sounds.getBackground2().pause();
                 game.setScreen(new GameOverScreen(game, score, sounds));
             }
         }
@@ -256,7 +259,9 @@ public class EnemyGameScreen implements Screen{
                     game.getSpaceshipScreen().restart(true);
                     game.getSpaceshipScreen().setDisposeEnemyScreen(this);
                     game.getSpaceshipScreen().setScore(game.getSpaceshipScreen().getScoreWhenCrashed());
+                    sounds.getBackground2().pause();
                     game.setScreen(game.getSpaceshipScreen());
+                    sounds.getBackground1().play();
                 }
             }
         }

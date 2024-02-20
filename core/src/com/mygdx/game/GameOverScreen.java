@@ -101,7 +101,7 @@ public class GameOverScreen implements Screen {
         // SPACE to restart the game
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             game.setScreen(game.getSpaceshipScreen());
-            game.getMenu().restartMusic();
+            sounds.restartMusic1();;
         }
     }
 

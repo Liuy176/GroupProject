@@ -27,7 +27,7 @@ public class MenuScreen implements Screen {
     private Skin skin;
     private int highScore;
     private Texture background;
-    private Music backgroundMusic;
+    //private Music backgroundMusic;
     private FreeTypeFontGenerator gen;
     private BitmapFont font;
     private TextButtonStyle style;
@@ -61,7 +61,6 @@ public class MenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 sounds.playButton();
                 game.setScreen(game.getSpaceshipScreen()); // start the game
-                restartMusic();
             }
         });
         settingsButton = new TextButton("Settings", style);
@@ -88,14 +87,15 @@ public class MenuScreen implements Screen {
         });
 
         // start music
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Liu.mp3")); // original sound by Yixin
+        //backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Liu.mp3")); // original sound by Yixin
         //buttonClick = Gdx.audio.newSound(Gdx.files.internal("button.mp3")); // sound from: https://pixabay.com/sound-effects/button-124476/
-        backgroundMusic.setLooping(true);
+        //backgroundMusic.setLooping(true);
         
         // set the volume to the one player chose before
-        updateVol();
+        //updateVol();
         //updateGameVol();
-        backgroundMusic.play();
+        //backgroundMusic.play();
+        sounds.getBackground1().play();
     }
 
     @Override
@@ -149,7 +149,7 @@ public class MenuScreen implements Screen {
         stage.getViewport().update(width, height, true);
     }
 
-    public void restartMusic() {
+   /* public void restartMusic() {
         if (backgroundMusic.isPlaying()) {
             backgroundMusic.stop();
         }
@@ -160,12 +160,8 @@ public class MenuScreen implements Screen {
         if(backgroundMusic !=null){
             backgroundMusic.setVolume(game.getVol());
         }
-    }
+    }*/
 
-    //public void updateGameVol(){
-      //  buttonClick.setVolume(game.getGameVol());
-
-//}
 
     public void updateHighScore(){
         highScore = game.loadHighScore(game.getDif());
@@ -203,15 +199,10 @@ public class MenuScreen implements Screen {
     public BitmapFont getFont(){
         return font;
     }
-    public Music getMusic(){
-        return backgroundMusic;
-    }
     public TextButtonStyle getButtonStyle(){
         return style;
     }
-   // public Sound getButtonSound(){
-   ////     return buttonClick;
-    //}
+
 
     @Override
     public void pause() {}

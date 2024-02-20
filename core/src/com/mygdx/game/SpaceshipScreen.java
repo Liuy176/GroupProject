@@ -347,6 +347,7 @@ public class SpaceshipScreen implements Screen {
             collided = false;
             collisionTimer = 0;
             firstCrash = false;
+            sounds.getBackground1().pause();
             game.setScreen(new EnemyGameScreen(game, timesCrashed, Constants.maxPlayerHealth, damage, playerHealth, sounds));
           }
         }

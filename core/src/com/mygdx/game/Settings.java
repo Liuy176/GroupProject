@@ -37,7 +37,7 @@ public class Settings implements Screen{
             public void changed(ChangeEvent event, Actor actor) {
                 float volume = musicVolSlider.getValue() / 100;
                 game.saveVol(volume);
-                game.getMenu().updateVol();
+                sounds.updateMusicVol();;
             }
         });
 
