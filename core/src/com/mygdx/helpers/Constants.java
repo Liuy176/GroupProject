@@ -23,6 +23,7 @@ public final class Constants {
 
     // distance based on difficulty
     public static float getAsteroidBatchDistance(String difficulty) {
+        //System.out.println(difficulty+"distance");
         switch (difficulty) {
             case "Easy":
                 return asteroidDistanceEasy;
@@ -43,12 +44,13 @@ public final class Constants {
     public static final int weaponPowerUpValue = 6; // how much extra weapon power does player get after claiming the power up
 
     // time interval between spawning asteroid batches
-    private static final float asteroidIntervalEasy = 1.2f;
+    private static final float asteroidIntervalEasy = 1.6f;
     private static final float asteroidIntervalMid = 1.2f;
-    private static final float asteroidIntervalHard = 1.2f;
+    private static final float asteroidIntervalHard = 0.9f;
 
     // time intervals accoirding to difficulty
     public static float getAsteroidInterval(String difficulty) {
+        //System.out.println(difficulty+" interval");
         switch (difficulty) {
             case "Easy":
                 return asteroidIntervalEasy;
@@ -61,9 +63,9 @@ public final class Constants {
     }
     
     // asteroid movement speed
-    private static final int asteroidSpeedEasy = 420;
+    private static final int asteroidSpeedEasy = 350;
     private static final int asteroidSpeedMid = 420;
-    private static final int asteroidSpeedHard = 420;
+    private static final int asteroidSpeedHard = 550;
 
     // asteroid movement speed according to difficulty
     public static float getAsteroidSpeed(String difficulty) {
