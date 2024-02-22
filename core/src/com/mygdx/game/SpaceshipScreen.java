@@ -141,6 +141,7 @@ public class SpaceshipScreen implements Screen {
           paused = false;
         }
         if(paused && Gdx.input.isKeyJustPressed(Input.Keys.R)){
+          sounds.getBackground1().pause();
           game.setScreen(game.getMenu());
           restart(false);
         }

@@ -304,6 +304,7 @@ public class EnemyGameScreen implements Screen{
             if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) resume();
             if(Gdx.input.isKeyJustPressed(Input.Keys.R)){
                 reset();
+                sounds.getBackground2().pause();
                 game.setScreen(game.getMenu());
             }
         }   

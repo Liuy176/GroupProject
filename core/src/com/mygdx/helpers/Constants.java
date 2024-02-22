@@ -19,7 +19,7 @@ public final class Constants {
     // distance between the 2 asteroids where player needs to fly through
     private static final float asteroidDistanceEasy = 340;
     private static final float asteroidDistanceMedium = 295;
-    private static final float asteroidDistanceHard = 265;
+    private static final float asteroidDistanceHard = 250;
 
     // distance based on difficulty
     public static float getAsteroidBatchDistance(String difficulty) {
@@ -61,9 +61,9 @@ public final class Constants {
     }
     
     // asteroid movement speed
-    private static final int asteroidSpeedEasy = 350;
+    private static final int asteroidSpeedEasy = 420;
     private static final int asteroidSpeedMid = 420;
-    private static final int asteroidSpeedHard = 600;
+    private static final int asteroidSpeedHard = 420;
 
     // asteroid movement speed according to difficulty
     public static float getAsteroidSpeed(String difficulty) {
