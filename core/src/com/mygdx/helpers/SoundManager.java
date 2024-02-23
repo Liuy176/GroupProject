@@ -12,7 +12,7 @@ public class SoundManager {
 
     public SoundManager (SpaceBlastGame game){
         this.game = game;
-        buttonClick = Gdx.audio.newSound(Gdx.files.internal("button.mp3")); // sound from: https://pixabay.com/sound-effects/button-124476/
+        buttonClick = Gdx.audio.newSound(Gdx.files.internal("blipSelect.wav")); // original by Pranav
         shot = Gdx.audio.newSound(Gdx.files.internal("laserShoot.wav")); // original by Pranav
         hit = Gdx.audio.newSound(Gdx.files.internal("hitHurt.wav")); // original by Pranav
         jump  = Gdx.audio.newSound(Gdx.files.internal("jump.wav")); // original by Pranav
@@ -33,7 +33,7 @@ public class SoundManager {
     }
 
     public void playButton() {
-        buttonClick.play(game.getGameVol());
+        buttonClick.play(game.getGameVol()/3);
     }
 
     public void playShotSound() {
@@ -45,17 +45,17 @@ public class SoundManager {
     }
 
     public void playHit(){
-        hit.play(game.getGameVol());
+        hit.play(game.getGameVol()/2);
     }
     public void playEnemyHit(){
         hit.play(game.getGameVol()/4);
     }
 
     public void playJump(){
-        jump.play(game.getGameVol()/3);
+        jump.play(game.getGameVol()/4);
     }
     public void playEnemyJump(){
-        jump.play(game.getGameVol()/5);
+        jump.play(game.getGameVol()/7);
     }
 
     public void playExplosion(){
@@ -63,7 +63,7 @@ public class SoundManager {
     }
 
     public void updateMusicVol(){
-        background1.setVolume(game.getVol());
+        background1.setVolume(game.getVol()*3);
         background2.setVolume(game.getVol());
     }
 
@@ -72,6 +72,10 @@ public class SoundManager {
             background1.stop();
         }
         background1.play();
+    }
+
+    public void playIfNotPlaying(){
+        if(!background1.isPlaying()) background1.play();
     }
 
 

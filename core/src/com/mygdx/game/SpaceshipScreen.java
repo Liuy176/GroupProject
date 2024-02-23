@@ -342,7 +342,7 @@ public class SpaceshipScreen implements Screen {
 
         if(fadeOut){
           collisionTimer +=delta;
-          if((collisionTimer>=1 && !firstCrash) || collisionTimer>=27){
+          if((collisionTimer>=1 && !firstCrash) || collisionTimer>=31){
             collided = false;
             collisionTimer = 0;
             firstCrash = false;

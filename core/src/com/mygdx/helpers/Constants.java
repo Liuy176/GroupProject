@@ -18,7 +18,7 @@ public final class Constants {
 
     // distance between the 2 asteroids where player needs to fly through
     private static final float asteroidDistanceEasy = 340;
-    private static final float asteroidDistanceMedium = 295;
+    private static final float asteroidDistanceMedium = 285;
     private static final float asteroidDistanceHard = 250;
 
     // distance based on difficulty
@@ -81,7 +81,7 @@ public final class Constants {
     }
 
     //EnemyGameScreen elements
-    public static final int bulletDistanceLimit = 20; // fhow far bullet can travel before despawning
+    public static final int bulletDistanceLimit = 12; // fhow far bullet can travel before despawning
     public static final float enemyShootingDistance = 4f; // from how close does enemy start shooting at player
     public static final int bulletSpeed = 10;
     public static final int maxPlayerHealth = 200;

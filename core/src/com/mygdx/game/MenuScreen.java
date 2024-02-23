@@ -60,6 +60,7 @@ public class MenuScreen implements Screen {
         playButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 sounds.playButton();
+                sounds.playIfNotPlaying();
                 game.setScreen(game.getSpaceshipScreen()); // start the game
             }
         });
@@ -86,15 +87,6 @@ public class MenuScreen implements Screen {
             }
         });
 
-        // start music
-        //backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Liu.mp3")); // original sound by Yixin
-        //buttonClick = Gdx.audio.newSound(Gdx.files.internal("button.mp3")); // sound from: https://pixabay.com/sound-effects/button-124476/
-        //backgroundMusic.setLooping(true);
-        
-        // set the volume to the one player chose before
-        //updateVol();
-        //updateGameVol();
-        //backgroundMusic.play();
         sounds.getBackground1().play();
     }
 
