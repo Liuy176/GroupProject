@@ -76,7 +76,7 @@ public class EnemyGameScreen implements Screen{
 
     public EnemyGameScreen(SpaceBlastGame game, int roundNumber, float playerHealth, float playerWeaponStrength, float currHealth, SoundManager sounds){
 
-        HashMap<Integer, String> gameMaps = new HashMap<Integer, String>();
+        HashMap<Integer, String> gameMaps = new HashMap<Integer, String>(); // used to choose a map for a game instance
         gameMaps.put(0, "map4.tmx");
         gameMaps.put(1, "map5.tmx");
         gameMaps.put(2, "map6.tmx");
@@ -157,28 +157,20 @@ public class EnemyGameScreen implements Screen{
         // background
         game.getBatch().draw(backgroundTexture, 0, 0, backgroundTexture.getWidth() * backgroundScaleX, backgroundTexture.getHeight() * backgroundScaleY);
 
-
         //debugRenderer.render(world, camera.combined);
         game.getBatch().setProjectionMatrix(camera.combined); 
         renderer.render();
 
         player.draw(game.getBatch());
 
-        for (Bullet bullet : bullets) {
-           bullet.draw(game.getBatch());
-        }
-        for (EnemyBullet bullet : enemyBullets) {
-            bullet.draw(game.getBatch());
-        }
-        for (Enemy enemy : enemies) {
-            enemy.drawHealthBar(game.getBatch());
-            enemy.draw(game.getBatch());
-        }
+        // draw bullets and enemies
+        drawMovingObjects();
 
         game.getBatch().setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
         // palyer's health bar (top right)
         player.drawHealthBar(game.getBatch(), font);
+        // instructions appear if game paused
         if(paused) {
             game.getMenu().getFont().draw(game.getBatch(), "Press SPACE to continue...", (Gdx.graphics.getWidth()/2)-215, (Gdx.graphics.getHeight()/2)+20);
             game.getMenu().getFont().draw(game.getBatch(), "(Press R to return to main menu)", (Gdx.graphics.getWidth()/2)-265, (Gdx.graphics.getHeight()/2)-20);
@@ -187,23 +179,14 @@ public class EnemyGameScreen implements Screen{
 
         game.getBatch().end();
 
-        // add fade out effect after player crashed
-        if (isDefeated) {
-            fade += delta / fadeDuration;
-            if (fade > 1) {
-                fade = 1;
-                int score = game.getSpaceshipScreen().getScore();
-                this.reset();
-                sounds.getBackground2().pause();
-                game.setScreen(new GameOverScreen(game, score, sounds, this));
-            }
-        }
+        // transition to GameOverScreen if the player got defeated
+        if (isDefeated) switchToGameOver(delta);
 
         fadeOut(fade);
 
         game.getBatch().setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
-        // fade in effect
+        // fade in effect after transitioning from spaceship screen
         if(fadeInOpacity>0) fadeIn();
     }
 
@@ -216,30 +199,7 @@ public class EnemyGameScreen implements Screen{
             cameraUpdate();
             player.update(dt);
 
-            for (Enemy enemy : enemies) {
-                enemy.update(dt);
-            }
-
-            for (int i = 0; i < bullets.size; i++) {
-                Bullet bullet = bullets.get(i);
-                bullet.update(dt);
-                    
-                    if (bullet.getToRemove()) {
-                        bullets.removeIndex(i);
-                        world.destroyBody(bullet.getBody()); 
-                        i--;
-                    }
-            }
-            for (int j = 0; j < enemyBullets.size; j++) {
-                EnemyBullet bullet = enemyBullets.get(j);
-                bullet.update(dt);
-                    
-                    if (bullet.getToRemove()) {
-                        enemyBullets.removeIndex(j);
-                        world.destroyBody(bullet.getBody()); 
-                        j--;
-                    }
-            }
+            updateMovingObjects(dt);
         }
         // move back to spaceship game mode if player has defeated all enemies
         if(enemyCount==0){
@@ -282,9 +242,9 @@ public class EnemyGameScreen implements Screen{
                 player.jump();
                 sounds.playJump(); // jump sound
             }
-            if(Gdx.input.isKeyPressed(Input.Keys.D) && player.getBody().getLinearVelocity().x <=3 )
+            if(Gdx.input.isKeyPressed(Input.Keys.D) && player.getBody().getLinearVelocity().x <=3 ) //move right
                 player.getBody().applyLinearImpulse(new Vector2(0.3f, 0), player.getBody().getWorldCenter(), true);
-            if(Gdx.input.isKeyPressed(Input.Keys.A) && player.getBody().getLinearVelocity().x >=-3 )
+            if(Gdx.input.isKeyPressed(Input.Keys.A) && player.getBody().getLinearVelocity().x >=-3 ) // move left
                 player.getBody().applyLinearImpulse(new Vector2(-0.3f, 0), player.getBody().getWorldCenter(), true);
             if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
                     player.shoot();
@@ -292,7 +252,7 @@ public class EnemyGameScreen implements Screen{
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && (enemyCount!=0)) pause();
         } else {
             if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) resume();
-            if(Gdx.input.isKeyJustPressed(Input.Keys.R)){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.R)){ // return to menu
                 reset();
                 sounds.getBackground2().pause();
                 game.setScreen(game.getMenu());
@@ -300,6 +260,7 @@ public class EnemyGameScreen implements Screen{
         }   
     }
     
+    // edit the state of spaceship screen and save high score
     private void reset(){
         if(game.getSpaceshipScreen().getScore() > game.getMenu().getHighScore()){
             game.getMenu().setHighScore(game.getSpaceshipScreen().getScore());
@@ -309,6 +270,7 @@ public class EnemyGameScreen implements Screen{
         game.getSpaceshipScreen().restart(false);
     }
 
+    // visual effect for transitions
     private void fadeOut(float fadeIndex){
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -319,6 +281,7 @@ public class EnemyGameScreen implements Screen{
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
+    // visual effect for transitions
     private void fadeIn(){
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -328,6 +291,58 @@ public class EnemyGameScreen implements Screen{
         game.getBatch().setColor(1, 1, 1, 1); // reset colour
         game.getBatch().end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
+    }
+
+    private void drawMovingObjects(){
+        for (Bullet bullet : bullets) {
+            bullet.draw(game.getBatch());
+         }
+         for (EnemyBullet bullet : enemyBullets) {
+             bullet.draw(game.getBatch());
+         }
+         for (Enemy enemy : enemies) {
+             enemy.drawHealthBar(game.getBatch());
+             enemy.draw(game.getBatch());
+         }
+    }
+
+    // transition to gameOver screen
+    private void switchToGameOver(float delta){
+        fade += delta / fadeDuration;
+        if (fade > 1) {
+            fade = 1;
+            int score = game.getSpaceshipScreen().getScore();
+            this.reset();
+            sounds.getBackground2().pause();
+            game.setScreen(new GameOverScreen(game, score, sounds, this));
+        }
+    }
+
+    private void updateMovingObjects(float dt){
+        for (Enemy enemy : enemies) {
+            enemy.update(dt);
+        }
+
+        for (int i = 0; i < bullets.size; i++) {
+            Bullet bullet = bullets.get(i);
+            bullet.update(dt);
+                //destroying bullet bodies
+                if (bullet.getToRemove()) {
+                    bullets.removeIndex(i);
+                    world.destroyBody(bullet.getBody()); 
+                    i--;
+                }
+        }
+        for (int j = 0; j < enemyBullets.size; j++) {
+            EnemyBullet bullet = enemyBullets.get(j);
+            bullet.update(dt);
+                //destroying bullet bodies
+                if (bullet.getToRemove()) {
+                    enemyBullets.removeIndex(j);
+                    world.destroyBody(bullet.getBody()); 
+                    j--;
+                }
+        }
     }
 
     private String getRandomMap(HashMap<Integer, String> map){

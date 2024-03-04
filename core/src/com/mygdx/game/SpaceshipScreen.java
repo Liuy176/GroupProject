@@ -125,10 +125,11 @@ public class SpaceshipScreen implements Screen {
   
     @Override
     public void render(float delta) {
-      if(!isBlinking && !(collisionTimer>0)) {// can't pause/unpause shortly before swithcing to another screen
+      if(!isBlinking && !(collisionTimer>0)) {// can't pause/unpause or do perform other actions shortly before swithcing to another screen
         handleInput();
       }
 
+      // update actions on the screen accordingly
       if(!paused){
         this.moveNave();
         this.moveEnemies(delta);
@@ -137,7 +138,7 @@ public class SpaceshipScreen implements Screen {
         gameTime = currTime - totalPauseTime; // gameTime used for not taking into account time that is being spent in paused state of the game
       } 
 
-      if (isBlinking) blinkShip();
+      if (isBlinking) blinkShip(); //blinking turns on for a few seconds if the spaceship crashes
     
       if (fadeOut) {
       fadeOutOpacity += fadeOutSpeed * delta;
@@ -150,12 +151,13 @@ public class SpaceshipScreen implements Screen {
         
       if(isShipVisible) batch.draw(nave, posX, posY, nave.getWidth()*4, nave.getHeight()*4 );
 
-      drawFlyingObjects();
+      drawFlyingObjects(); // draw asteroids and claimable items
          
-      bitmap.draw(batch, "Score: " + score, 20, Gdx.graphics.getHeight() - 20);
+      bitmap.draw(batch, "Score: " + score, 20, Gdx.graphics.getHeight() - 20); // score label in top left corner
 
-      drawHealthBar(game.getBatch(), font);
-      if(paused && !isBlinking) {
+      drawHealthBar(game.getBatch(), font); // top right corner
+
+      if(paused && !isBlinking) { // instructions appear when the game is paused (can't pause right when the spaceship crashed (it starts blinking then))
         game.getMenu().getFont().draw(batch, "Press SPACE to continue...", (Gdx.graphics.getWidth()/2)-215, (Gdx.graphics.getHeight()/2)+20);
         game.getMenu().getFont().draw(game.getBatch(), "(Press R to return to main menu)", (Gdx.graphics.getWidth()/2)-265, (Gdx.graphics.getHeight()/2)-20);
       }
@@ -179,6 +181,7 @@ public class SpaceshipScreen implements Screen {
       currentVelocity += gravity;
       posY -= currentVelocity;
 
+      // keep the ship within the screen boundries
       if(posY < 0){
           posY = 0;
       }
@@ -199,7 +202,8 @@ public class SpaceshipScreen implements Screen {
   
     private void moveCandy() {
       if(paused) return; 
-    
+      
+      // spawn claimable items
       if ((gameTime - lastCandyTime) * Constants.frequencyOfHealthPowerUp > 2000000000) { // Adjust time as needed
         this.produceCandy(tCandy, candies);
         lastCandyTime = gameTime;
@@ -218,7 +222,7 @@ public class SpaceshipScreen implements Screen {
           if(playerHealth + Constants.healthPowerUpValue>=Constants.maxPlayerHealth)
             playerHealth=Constants.maxPlayerHealth;
           else
-            playerHealth += Constants.healthPowerUpValue;
+            playerHealth += Constants.healthPowerUpValue; // add health points after claiming the item
           iter.remove();
         }
       }
@@ -228,10 +232,10 @@ public class SpaceshipScreen implements Screen {
         weapon.x -= Constants.weaponPowerUpMovementSpeed * Gdx.graphics.getDeltaTime(); // Adjust speed as needed
         if (weapon.x + tWeapon.getWidth() < 0) iter.remove();
         else if (collide(weapon.x, weapon.y, weapon.width*3, weapon.height*3, posX, posY, nave.getWidth()*4, nave.getHeight()*4)) {
-          if(damage + Constants.weaponPowerUpValue>=Constants.maxWeaponPower)
+          if(damage + Constants.weaponPowerUpValue>=Constants.maxWeaponPower) 
             damage=Constants.maxWeaponPower;
           else
-            damage += Constants.weaponPowerUpValue;
+            damage += Constants.weaponPowerUpValue; // add weapon power points after claiming the item
           iter.remove();
         }
       }
@@ -328,21 +332,18 @@ public class SpaceshipScreen implements Screen {
               lastAsteroidPairTime = gameTime;
               //timeSinceLastAsteroidPair = 0f;
          }
-      
     }
 
     private void createAsteroid(float x, float y) {
         Rectangle asteroid = new Rectangle(x, y, tEnemy1.getWidth(), tEnemy1.getHeight());
         enemies1.add(asteroid);
     }
-      
+    
+    // reset the game mode presented in this screen
     public void restart(boolean isPaused) {
       posX = Constants.xPosOfUfoAtStart;
       enemies1.clear();
       candies.clear();
-      //lastCandyTime = TimeUtils.nanoTime();
-      //lastWeaponTime = TimeUtils.nanoTime();
-      //lastAsteroidPairTime = TimeUtils.nanoTime();
       gameover = false;
       paused = isPaused;
       isBlinking = false;
@@ -363,9 +364,12 @@ public class SpaceshipScreen implements Screen {
         damage = Constants.initialWeaponPower;
         timesCrashed = 0;
         lastAsteroidPairTime = TimeUtils.nanoTime();
+        lastCandyTime = TimeUtils.nanoTime();
+        lastWeaponTime = TimeUtils.nanoTime();
       }
     }
 
+    // draws health bar and weapon power bar in the top right corner of the screen
     public void drawHealthBar(SpriteBatch batch, BitmapFont font) {
       float healthPercentage = playerHealth/Constants.maxPlayerHealth;
       float weaponStrengthPercentage = (float)damage/Constants.maxWeaponPower;
@@ -383,18 +387,18 @@ public class SpaceshipScreen implements Screen {
       batch.draw(heartTexture, heartX, heartY, 40, 32);
       batch.draw(gunTexture, heartX, weaponBarY, 40, 32);
 
-      //background
+      //background of healthbar
       batch.setColor(Color.RED);
       batch.draw(whiteRegion, barX, barY, barWidth, barHeight);
 
-      //foreground
+      //foreground of healthbar
       batch.setColor(Color.GREEN);
       batch.draw(whiteRegion, barX, barY, barWidth * healthPercentage, barHeight);
 
-      batch.setColor(Color.GRAY); // background
+      batch.setColor(Color.GRAY); // background of weapon power bar
       batch.draw(whiteRegion, barX, weaponBarY, barWidth, barHeight);
 
-      batch.setColor(Color.YELLOW); // foreground
+      batch.setColor(Color.YELLOW); // foreground of weapon ower bar
       batch.draw(whiteRegion, barX, weaponBarY, barWidth * weaponStrengthPercentage, barHeight);
 
       batch.setColor(Color.WHITE);
@@ -402,6 +406,7 @@ public class SpaceshipScreen implements Screen {
       batch.draw(weaponBarFrame, barX-3, weaponBarY-3,barWidth*1.03f, barHeight*1.25f);
     }
 
+    // transition effect when changing screens
     private void fadeOut(float delta){
       Gdx.gl.glEnable(GL20.GL_BLEND);
       Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -412,11 +417,12 @@ public class SpaceshipScreen implements Screen {
         updateText(delta);
         game.getMenu().getFont().draw(batch, currentText.toString(), 100, Gdx.graphics.getHeight() / 3);
       }
-      batch.setColor(1, 1, 1, 1); // Reset color
+      batch.setColor(1, 1, 1, 1); // reset color
       batch.end();
       Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
+    // transition to the EnemyGameScreen game mode
     private void fadeOutAndSwitch(float delta){
       collisionTimer +=delta;
       if((collisionTimer>=1 && !firstCrash) || collisionTimer>=31){
@@ -428,6 +434,7 @@ public class SpaceshipScreen implements Screen {
       }
     }
 
+    // display text instructions during the transition (when crashed for the first time)
     public void updateText(float delta) {
       if (charIndex < crashText.length()) {
           charTimer += delta;
@@ -438,6 +445,7 @@ public class SpaceshipScreen implements Screen {
       }
     }
 
+    //blinking animation of the spaceship texture
     private void blinkShip(){
       float elapsed = (TimeUtils.nanoTime() - blinkStartTime) *0.000000001f;
       if (elapsed > blinkDuration) {
@@ -458,16 +466,16 @@ public class SpaceshipScreen implements Screen {
       if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
         if(paused){
           paused = false;
-          totalPauseTime += TimeUtils.nanoTime() - pauseStartTime; 
+          totalPauseTime += TimeUtils.nanoTime() - pauseStartTime; // make time not account for the time when the game is paused
         } else {
           paused = true;
-          pauseStartTime = TimeUtils.nanoTime();
+          pauseStartTime = TimeUtils.nanoTime(); // make time not account for the time when the game is paused
         }
       }
       if(paused && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){ 
         paused = false;
       }
-      if(paused && Gdx.input.isKeyJustPressed(Input.Keys.R)){
+      if(paused && Gdx.input.isKeyJustPressed(Input.Keys.R)){ // return to menu
         sounds.getBackground1().pause();
         game.setScreen(game.getMenu());
         restart(false);

@@ -107,6 +107,7 @@ public class GameOverScreen implements Screen {
         }
     }
 
+    // transition from previous screen
     private void fadeIn(float delta){
         if (fade > 0) {
             fade -= delta / fadeDuration;
