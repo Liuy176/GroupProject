@@ -249,20 +249,19 @@ public class EnemyGameScreen implements Screen{
                         j--;
                     }
             }
-
-            // move back to spaceship game mode if player has defeated all enemies
-            if(enemyCount==0){
-                fade += dt / fadeDuration;
-                if (fade > 1) {
-                    fade = 1;
-                    game.getSpaceshipScreen().setPlayerHealth(player.getCurrentHealth());
-                    game.getSpaceshipScreen().restart(true);
-                    game.getSpaceshipScreen().setDisposeEnemyScreen(this);
-                    game.getSpaceshipScreen().setScore(game.getSpaceshipScreen().getScoreWhenCrashed());
-                    sounds.getBackground2().pause();
-                    game.setScreen(game.getSpaceshipScreen());
-                    sounds.getBackground1().play();
-                }
+        }
+        // move back to spaceship game mode if player has defeated all enemies
+        if(enemyCount==0){
+            fade += dt / fadeDuration;
+            if (fade > 1) {
+                fade = 1;
+                game.getSpaceshipScreen().setPlayerHealth(player.getCurrentHealth());
+                game.getSpaceshipScreen().restart(true);
+                game.getSpaceshipScreen().setDisposeEnemyScreen(this);
+                game.getSpaceshipScreen().setScore(game.getSpaceshipScreen().getScoreWhenCrashed());
+                sounds.getBackground2().pause();
+                game.setScreen(game.getSpaceshipScreen());
+                sounds.getBackground1().play();
             }
         }
         renderer.setView(camera);
@@ -299,7 +298,7 @@ public class EnemyGameScreen implements Screen{
             if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
                     player.shoot();
             }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) pause();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && (enemyCount!=0)) pause();
         } else {
             if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) resume();
             if(Gdx.input.isKeyJustPressed(Input.Keys.R)){

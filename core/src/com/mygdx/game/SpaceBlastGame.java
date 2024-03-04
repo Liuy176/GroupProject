@@ -62,7 +62,7 @@ public class SpaceBlastGame extends Game {
 		return pref.getInteger(mode, 0);
 	}
 
-	// function to save set volume for future sessions
+	// function to save set music volume for future sessions
 	public void saveVol(float volume){
 		pref.putFloat("volume", volume);
 		pref.flush();
@@ -84,11 +84,13 @@ public class SpaceBlastGame extends Game {
 		return pref.getString("difficulty", "Medium");
 	}
 
+	// function to save set game volume for future sessions
 	public void saveGameVol(float gameVol){
 		pref.putFloat("gameVolume", gameVol);
 		pref.flush();
 	}
 	
+	// function to load previously saved game volume value
 	public float getGameVol(){
 		return pref.getFloat("gameVolume", 0.5f);
 	}

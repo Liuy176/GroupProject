@@ -1,7 +1,5 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -27,18 +25,15 @@ public class MenuScreen implements Screen {
     private Skin skin;
     private int highScore;
     private Texture background;
-    //private Music backgroundMusic;
     private FreeTypeFontGenerator gen;
     private BitmapFont font;
     private TextButtonStyle style;
     private LabelStyle labelStyle;
     private FreeTypeFontParameter param;
     private TextButton playButton, settingsButton, enemyModeButton, exitButton;
-    private SoundManager sounds;
     
     public MenuScreen(SpaceBlastGame game, SoundManager sounds) {
         this.game = game;
-        this.sounds = sounds;
         highScore = game.loadHighScore(game.getDif());
         gen = new FreeTypeFontGenerator(Gdx.files.internal("pixelmix.ttf"));
         labelStyle = new LabelStyle();
@@ -141,20 +136,6 @@ public class MenuScreen implements Screen {
         stage.getViewport().update(width, height, true);
     }
 
-   /* public void restartMusic() {
-        if (backgroundMusic.isPlaying()) {
-            backgroundMusic.stop();
-        }
-        backgroundMusic.play();
-    }
-
-    public void updateVol(){
-        if(backgroundMusic !=null){
-            backgroundMusic.setVolume(game.getVol());
-        }
-    }*/
-
-
     public void updateHighScore(){
         highScore = game.loadHighScore(game.getDif());
     }
@@ -170,7 +151,6 @@ public class MenuScreen implements Screen {
         skin.dispose();
         background.dispose();
         gen.dispose();
-       // buttonClick.dispose();
     }
 
     public int getHighScore(){

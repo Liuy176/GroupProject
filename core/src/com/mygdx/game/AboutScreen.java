@@ -1,7 +1,6 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.helpers.SoundManager;
 
+// parent class for all the about screens
 public abstract class AboutScreen implements Screen {
     protected SpaceBlastGame game;
     protected SpriteBatch spriteBatch;
@@ -52,7 +52,9 @@ public abstract class AboutScreen implements Screen {
         toMenuButton.setWidth(100);
     }
 
+    // create additional necessary buttons
     public abstract void createButtons();
+    // configure the additionally added buttons
     public abstract void setupButtons();
 
     @Override

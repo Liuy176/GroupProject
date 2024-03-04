@@ -31,6 +31,8 @@ public class Settings implements Screen{
         background = new Texture("about1.png");
         stage = new Stage(new ScreenViewport());
         skin = game.getMenu().getSkin();
+
+        // game music volume slider
         musicVolLabel = new Label("Music Volume", game.getMenu().getLabelStyle());
         musicVolSlider = new Slider(0, 100, 1, false, skin);
         musicVolSlider.addListener(new ChangeListener() {
@@ -41,16 +43,17 @@ public class Settings implements Screen{
             }
         });
 
+        // game sounds volume slider
         gameVolLabel = new Label("Game Sounds Volume", game.getMenu().getLabelStyle());
         gameVolSlider = new Slider(0, 100, 1, false, skin);
         gameVolSlider.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 float volume = gameVolSlider.getValue() / 100;
                 game.saveGameVol(volume);
-                //game.getMenu().updateGameVol();
             }
         });
 
+        // game difficulty selector
         difficultyLabel = new Label("Difficulty", game.getMenu().getLabelStyle());
         difficultySelect = new SelectBox<>(skin);
         difficultySelect.setItems("Easy", "Medium", "Hard");
@@ -61,6 +64,7 @@ public class Settings implements Screen{
             }
         });
 
+        // button to return to menu
         backButton = new TextButton("Back", game.getMenu().getButtonStyle());
         backButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
@@ -74,20 +78,11 @@ public class Settings implements Screen{
     public void show() {
         Gdx.input.setInputProcessor(stage);
 
-        // game music volume slider
         musicVolSlider.setValue(game.getVol() * 100);
-
-        // game sounds volume slider
         gameVolSlider.setValue(game.getGameVol() * 100);
 
-        
-
-        // game difficulty selector
         difficultySelect.setItems("Easy", "Medium", "Hard");
         difficultySelect.setSelected(game.getDif()); 
-
-        // button to return to menu
-
 
         // adjust position
         musicVolLabel.setPosition(Gdx.graphics.getWidth() / 2 - musicVolLabel.getWidth()/2, 450);

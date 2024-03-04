@@ -397,24 +397,33 @@ public class SpaceshipScreen implements Screen {
     }
       
     public void restart(boolean isPaused) {
-      if(!isPaused) {
-        score = 0;
-        playerHealth = Constants.maxPlayerHealth;
-        damage = 12;
-        timesCrashed = 0;
-      }
       posX = Constants.xPosOfUfoAtStart;
       enemies1.clear();
       candies.clear();
-      lastCandyTime = TimeUtils.nanoTime();
-      lastWeaponTime = TimeUtils.nanoTime();
-      lastAsteroidPairTime = TimeUtils.nanoTime();
+      //lastCandyTime = TimeUtils.nanoTime();
+      //lastWeaponTime = TimeUtils.nanoTime();
+      //lastAsteroidPairTime = TimeUtils.nanoTime();
       gameover = false;
       paused = isPaused;
       isBlinking = false;
       fadeOutOpacity=0f;
       fadeOut=false;
       collisionTimer = 0;
+      gameTime = 0;
+      pauseStartTime = 0;
+      totalPauseTime = 0;
+      timeSinceLastAsteroidPair=0;
+      lastAsteroidBatchX = 0;
+      lastCandyTime = 0;
+      lastWeaponTime = 0;
+      lastAsteroidPairTime = 0;
+      if(!isPaused) {
+        score = 0;
+        playerHealth = Constants.maxPlayerHealth;
+        damage = Constants.initialWeaponPower;
+        timesCrashed = 0;
+        lastAsteroidPairTime = TimeUtils.nanoTime();
+      }
     }
 
     public void drawHealthBar(SpriteBatch batch, BitmapFont font) {

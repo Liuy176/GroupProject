@@ -14,8 +14,7 @@ public final class Constants {
 
     // edit values below to change difficulty and edit other aspects of gameplay
 
-    // SpaceshipScreen elements
-
+    // SpaceshipScreen elements //
     // distance between the 2 asteroids where player needs to fly through
     private static final float asteroidDistanceEasy = 340;
     private static final float asteroidDistanceMedium = 285;
@@ -80,14 +79,13 @@ public final class Constants {
         }
     }
 
-    //EnemyGameScreen elements
-    public static final int bulletDistanceLimit = 12; // fhow far bullet can travel before despawning
+    //EnemyGameScreen elements//
+    public static final int bulletDistanceLimit = 12; // how far bullet can travel before despawning
     public static final float enemyShootingDistance = 4f; // from how close does enemy start shooting at player
     public static final int bulletSpeed = 10;
     public static final int maxPlayerHealth = 200;
     public static final int maxWeaponPower = 120;
     public static final int initialWeaponPower = 12;
-
 
     // properties of health and weapon bars in the top right corner
     public static final int healthBarWidth = 200;

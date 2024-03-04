@@ -33,21 +33,10 @@ public class AboutScreen1 extends AboutScreen {
     }
 
     @Override
-    public void resize(int width, int height) {
-        // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'resize'");
-    }
-
+    public void resize(int width, int height) {}
     @Override
-    public void pause() {
-        // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'pause'");
-    }
-
+    public void pause() {}
     @Override
-    public void resume() {
-        // TODO Auto-generated method stub
-        //throw new UnsupportedOperationException("Unimplemented method 'resume'");
-    }
+    public void resume() {}
 }
 

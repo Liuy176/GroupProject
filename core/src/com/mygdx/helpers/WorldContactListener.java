@@ -39,11 +39,6 @@ public class WorldContactListener implements ContactListener{
             if(!(other.getUserData() instanceof Enemy) && !("enemyBackupRight".equals(other.getUserData())) && !("enemyBackupLeft").equals(other.getUserData())){
                 bullet.setToRemove(true);;
             }
-            
-            /*if(other.getUserData() instanceof Enemy){
-                Enemy enemy = (Enemy) other.getUserData();
-                enemy.takeDamage();
-            } else */
 
             // take damage when enemy hit by bullet
             if("enemy".equals(other.getUserData())){

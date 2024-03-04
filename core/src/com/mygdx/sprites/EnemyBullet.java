@@ -67,7 +67,6 @@ public class EnemyBullet extends Sprite {
         shape.dispose();
 
         body.setLinearVelocity(direction.scl(speed));
-         
     }
 
     public void update(float dt) {

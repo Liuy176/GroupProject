@@ -33,7 +33,7 @@ public class Player extends Sprite{
     private State currState, prevState;
     private Animation<TextureRegion> run;
     private TextureRegion jump;
-    private Animation<TextureRegion> idle;
+    //private Animation<TextureRegion> idle;
     private boolean facingRight;
     private float timer;
     private EnemyGameScreen screen;
@@ -41,7 +41,7 @@ public class Player extends Sprite{
     private Texture heartTexture, gunTexture, healthFrame, white, weaponBarFrame;
     private TextureRegion whiteRegion;
     private boolean isDefeated;
-    private int /*deadRotationDeg,*/ jumpcounter = 2, isDamaged = 10;
+    private int jumpcounter = 2, isDamaged = 10;
     private float damage;
     private Shaders shader;
     private SoundManager sounds;
@@ -67,7 +67,6 @@ public class Player extends Sprite{
         this.healthFrame = new Texture("healthFrame.png");
         this.weaponBarFrame = new Texture("weaponBarFrame2.png");
         this.isDefeated = false;
-        //this.deadRotationDeg = 0;
         this.shader = new Shaders();
 
         setBounds(0,0, 16/Constants.PPM, 16/Constants.PPM);
@@ -81,9 +80,6 @@ public class Player extends Sprite{
         setRegion(getFrame(delta));
 
         if(isDefeated){
-            //deadRotationDeg +=0;
-            //rotate(deadRotationDeg);
-            //body.setTransform(body.getPosition(), (float)Math.toRadians(deadRotationDeg));
             if(body.getPosition().y <= -1){
                body.setActive(false);
                this.setPosition(0, -1);

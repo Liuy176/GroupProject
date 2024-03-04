@@ -110,6 +110,7 @@ public class GameOverScreen implements Screen {
             fade -= delta / fadeDuration;
             fade = Math.max(fade, 0); // fade > 0
 
+            // fade in from black color effect
             Gdx.gl.glEnable(GL20.GL_BLEND);
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
             spriteBatch.setColor(0, 0, 0, fade);
