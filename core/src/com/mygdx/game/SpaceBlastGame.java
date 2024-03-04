@@ -17,7 +17,7 @@ public class SpaceBlastGame extends Game {
 	private Preferences pref;
 	private SoundManager soundmanager;
 	private Settings settingsScreen;
-	private AboutScreen about;
+	private AboutScreen1 about1;
 	private AboutScreen2 about2;
 	private AboutScreen3 about3;
 	private AboutScreen4 about4;
@@ -36,7 +36,7 @@ public class SpaceBlastGame extends Game {
 		this.mainMenuScreen = new MenuScreen(this, soundmanager);
 		this.settingsScreen = new Settings(this, soundmanager);
 		this.spaceshipScreen = new SpaceshipScreen(this, Constants.maxPlayerHealth, soundmanager);
-		this.about = new AboutScreen(this, soundmanager);
+		this.about1 = new AboutScreen1(this, soundmanager);
 		this.about2 = new AboutScreen2(this, soundmanager);
 		this.about3 = new AboutScreen3(this, soundmanager);
 		this.about4 = new AboutScreen4(this, soundmanager);
@@ -95,8 +95,8 @@ public class SpaceBlastGame extends Game {
 		return mainMenuScreen;
 	}
 
-	public AboutScreen getAboutScreen(){
-		return about;
+	public AboutScreen1 getAboutScreen1(){
+		return about1;
 	}
 	public AboutScreen2 getAboutScreen2(){
 		return about2;
