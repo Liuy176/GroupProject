@@ -1,37 +1,21 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.helpers.SoundManager;
 
-public class AboutScreen3 implements Screen {
-    private SpaceBlastGame game;
-    private SpriteBatch spriteBatch;
-    private Texture background;
-    private Stage stage;
-    private TextButton toMenuButton, nextButton, prevButton;
 
+public class AboutScreen3 extends AboutScreen {
+    private TextButton nextButton;
+    private TextButton prevButton;
 
     public AboutScreen3(SpaceBlastGame game, SoundManager sounds) {
-        this.game = game;
-        spriteBatch = game.getBatch();
-        background = new Texture("about4.png");
-        toMenuButton = new TextButton("menu", game.getMenu().getButtonStyle());
-        toMenuButton.addListener(new ChangeListener() {                
-            public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(game.getMenu());
-                sounds.playButton();
-            }
-        });
-        
+        super(game, sounds, "aboutGameplay2.png");
+    }
+
+    public void createButtons() {
         nextButton = new TextButton(">", game.getMenu().getButtonStyle());
         nextButton.addListener(new ChangeListener() {                
             public void changed(ChangeEvent event, Actor actor) {
@@ -47,16 +31,8 @@ public class AboutScreen3 implements Screen {
             }
         });
     }
-
     @Override
-    public void show() {
-        stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
-
-        toMenuButton.setPosition(40, Gdx.graphics.getHeight()-60);
-        toMenuButton.setHeight(40);
-        toMenuButton.setWidth(100);
-
+    public void setupButtons() {
         nextButton.setPosition(Gdx.graphics.getWidth()-70, Gdx.graphics.getHeight()-60);
         nextButton.setHeight(40);
         nextButton.setWidth(40);
@@ -65,43 +41,25 @@ public class AboutScreen3 implements Screen {
         prevButton.setHeight(40);
         prevButton.setWidth(40);
 
-        stage.addActor(toMenuButton);
         stage.addActor(nextButton);
         stage.addActor(prevButton);
     }
 
     @Override
-    public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        // draw background
-        spriteBatch.begin();
-        spriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        spriteBatch.end();
-
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
-    }
-
-
-    @Override
-    public void dispose() {
-        background.dispose();
-        stage.dispose();
+    public void resize(int width, int height) {
+        // TODO Auto-generated method stub
+        //throw new UnsupportedOperationException("Unimplemented method 'resize'");
     }
 
     @Override
-    public void resize(int width, int height) {}
+    public void pause() {
+        // TODO Auto-generated method stub
+        //throw new UnsupportedOperationException("Unimplemented method 'pause'");
+    }
 
     @Override
-    public void pause() {}
-
-    @Override
-    public void resume() {}
-
-    @Override
-    public void hide() {
-        Gdx.input.setInputProcessor(null);
+    public void resume() {
+        // TODO Auto-generated method stub
+        //throw new UnsupportedOperationException("Unimplemented method 'resume'");
     }
 }
