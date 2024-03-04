@@ -27,7 +27,7 @@ public abstract class AboutScreen implements Screen {
         this.spriteBatch = game.getBatch();
         this.sounds = sounds;
         this.background = new Texture(backgroundPath);
-        this.toMenuButton = new TextButton("menu", game.getMenu().getButtonStyle());
+        this.toMenuButton = new TextButton("Menu", game.getMenu().getButtonStyle());
         this.toMenuButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(game.getMenu());

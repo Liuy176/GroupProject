@@ -7,26 +7,26 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.mygdx.helpers.SoundManager;
 
 
-public class AboutScreen4 extends AboutScreen {
+public class AboutScreen5 extends AboutScreen {
     private TextButton nextButton;
     private TextButton prevButton;
 
-    public AboutScreen4(SpaceBlastGame game, SoundManager sounds) {
-        super(game, sounds, "aboutAsteroid1.png");
+    public AboutScreen5(SpaceBlastGame game, SoundManager sounds) {
+        super(game, sounds, "aboutAsteroid2.png");
     }
 
     public void createButtons() {
         nextButton = new TextButton(">", game.getMenu().getButtonStyle());
         nextButton.addListener(new ChangeListener() {                
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(game.getAboutScreen5());
+                game.setScreen(game.getAboutScreen6());
                 sounds.playButton();
             }
         });
         prevButton = new TextButton("<", game.getMenu().getButtonStyle());
         prevButton.addListener(new ChangeListener() {                
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(game.getAboutScreen3());
+                game.setScreen(game.getAboutScreen4());
                 sounds.playButton();
             }
         });

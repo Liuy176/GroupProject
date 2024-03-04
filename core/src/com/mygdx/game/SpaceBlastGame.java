@@ -21,6 +21,9 @@ public class SpaceBlastGame extends Game {
 	private AboutScreen2 about2;
 	private AboutScreen3 about3;
 	private AboutScreen4 about4;
+	private AboutScreen5 about5;
+	private AboutScreen6 about6;
+	private AboutScreen7 about7;
 
 	public SpaceBlastGame() {}
 
@@ -40,6 +43,9 @@ public class SpaceBlastGame extends Game {
 		this.about2 = new AboutScreen2(this, soundmanager);
 		this.about3 = new AboutScreen3(this, soundmanager);
 		this.about4 = new AboutScreen4(this, soundmanager);
+		this.about5 = new AboutScreen5(this, soundmanager);
+		this.about6 = new AboutScreen6(this, soundmanager);
+		this.about7 = new AboutScreen7(this, soundmanager);
 
         setScreen(mainMenuScreen); //menu screen appears after starting the game
     }
@@ -106,6 +112,15 @@ public class SpaceBlastGame extends Game {
 	}
 	public AboutScreen4 getAboutScreen4(){
 		return about4;
+	}
+	public AboutScreen5 getAboutScreen5(){
+		return about5;
+	}
+	public AboutScreen6 getAboutScreen6(){
+		return about6;
+	}
+	public AboutScreen7 getAboutScreen7(){
+		return about7;
 	}
 
 	public SpaceshipScreen getSpaceshipScreen(){
