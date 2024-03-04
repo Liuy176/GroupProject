@@ -195,7 +195,7 @@ public class EnemyGameScreen implements Screen{
                 int score = game.getSpaceshipScreen().getScore();
                 this.reset();
                 sounds.getBackground2().pause();
-                game.setScreen(new GameOverScreen(game, score, sounds));
+                game.setScreen(new GameOverScreen(game, score, sounds, this));
             }
         }
 

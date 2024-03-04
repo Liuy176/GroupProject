@@ -28,10 +28,12 @@ public class GameOverScreen implements Screen {
     private float fadeDuration = 2f;
     private int finalScore;
     private SoundManager sounds;
+    private EnemyGameScreen enemyScreen;
 
-    public GameOverScreen(SpaceBlastGame game, int score, SoundManager sounds) {
+    public GameOverScreen(SpaceBlastGame game, int score, SoundManager sounds, EnemyGameScreen enemyScreen) {
         this.game = game;
         this.sounds = sounds;
+        this.enemyScreen = enemyScreen;
         spriteBatch = game.getBatch();
         background = new Texture("gameOver.png");
         finalScore = score;
@@ -138,6 +140,8 @@ public class GameOverScreen implements Screen {
     @Override
     public void hide() {
         Gdx.input.setInputProcessor(null);
+        enemyScreen.dispose();
+        this.dispose();
     }
 }
 

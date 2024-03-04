@@ -175,7 +175,6 @@ public class MenuScreen implements Screen {
         return style;
     }
 
-
     @Override
     public void pause() {}
 

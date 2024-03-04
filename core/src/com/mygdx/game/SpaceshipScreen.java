@@ -522,12 +522,6 @@ public class SpaceshipScreen implements Screen {
       font = new BitmapFont();
       font.setColor(Color.WHITE);
       font.getData().setScale(1);
-
-      // dispose the enemyGmaeScreen we switched from to this screen(if that screen exists)
-      if(disposeEnemyScreen!=null) {
-        disposeEnemyScreen.dispose();
-        disposeEnemyScreen = null;
-      }
     }
 
     @Override
@@ -540,6 +534,12 @@ public class SpaceshipScreen implements Screen {
     public void resume() {}
 
     @Override
-    public void hide() {} 
+    public void hide() {
+      // dispose the enemyGmaeScreen we switched from to this screen(if that screen exists)
+      if(disposeEnemyScreen!=null) {
+        disposeEnemyScreen.dispose();
+        disposeEnemyScreen = null;
+      }
+    } 
   
 }
