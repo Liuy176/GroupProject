@@ -204,16 +204,7 @@ public class EnemyGameScreen implements Screen{
         game.getBatch().setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
         // fade in effect
-        if(fadeInOpacity>0){
-            Gdx.gl.glEnable(GL20.GL_BLEND);
-            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-            game.getBatch().begin();
-            game.getBatch().setColor(1, 1, 1, fadeInOpacity);
-            game.getBatch().draw(blackTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            game.getBatch().setColor(1, 1, 1, 1); // reset colour
-            game.getBatch().end();
-            Gdx.gl.glDisable(GL20.GL_BLEND);
-        }
+        if(fadeInOpacity>0) fadeIn();
     }
 
     public void update(float dt){
@@ -325,6 +316,17 @@ public class EnemyGameScreen implements Screen{
         shapeRenderer.setColor(0, 0, 0, fade);
         shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+    }
+
+    private void fadeIn(){
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        game.getBatch().begin();
+        game.getBatch().setColor(1, 1, 1, fadeInOpacity);
+        game.getBatch().draw(blackTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        game.getBatch().setColor(1, 1, 1, 1); // reset colour
+        game.getBatch().end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 

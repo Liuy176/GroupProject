@@ -126,23 +126,7 @@ public class SpaceshipScreen implements Screen {
     @Override
     public void render(float delta) {
       if(!isBlinking && !(collisionTimer>0)) {// can't pause/unpause shortly before swithcing to another screen
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-          if(paused){
-            paused = false;
-            totalPauseTime += TimeUtils.nanoTime() - pauseStartTime; 
-          } else {
-            paused = true;
-            pauseStartTime = TimeUtils.nanoTime();
-          }
-        }
-        if(paused && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){ 
-          paused = false;
-        }
-        if(paused && Gdx.input.isKeyJustPressed(Input.Keys.R)){
-          sounds.getBackground1().pause();
-          game.setScreen(game.getMenu());
-          restart(false);
-        }
+        handleInput();
       }
 
       if(!paused){
@@ -153,28 +137,9 @@ public class SpaceshipScreen implements Screen {
         gameTime = currTime - totalPauseTime; // gameTime used for not taking into account time that is being spent in paused state of the game
       } 
 
-      if(disposeEnemyScreen!=null) {
-        disposeEnemyScreen.dispose();
-        disposeEnemyScreen = null;
-      }
-
-      if (isBlinking) {
-        float elapsed = (TimeUtils.nanoTime() - blinkStartTime) *0.000000001f;
-        if (elapsed > blinkDuration) {
-            scoreWhenCrashed = score;
-            isBlinking = false;
-            paused = false;
-            isShipVisible = true;
-        } else {
-            if ((int)(elapsed / blinkInterval) % 2 == 0) {
-                isShipVisible = true;
-            }else {
-              isShipVisible = false;
-            }
-        }
-    } 
+      if (isBlinking) blinkShip();
     
-    if (fadeOut) {
+      if (fadeOut) {
       fadeOutOpacity += fadeOutSpeed * delta;
       fadeOutOpacity = Math.min(fadeOutOpacity, 1.0f); // opacity< 1
       } 
@@ -182,52 +147,25 @@ public class SpaceshipScreen implements Screen {
       ScreenUtils.clear(1, 0, 0, 1);
       batch.begin();
       batch.draw(img, 0, 0);
-
-      if(!gameover){
         
-        if(isShipVisible) batch.draw(nave, posX, posY, nave.getWidth()*4, nave.getHeight()*4 );
-        for (Rectangle candy : candies) {
-          batch.draw(tCandy, candy.x, candy.y, candy.width*3, candy.height*3);
-        }
-        for (Rectangle weapon : weapons) {
-          batch.draw(tWeapon, weapon.x, weapon.y, weapon.width*3, weapon.height*3);
-        }
-  
-        for(Rectangle enemy : enemies1 ){
-          batch.draw(tEnemy1, enemy.x, enemy.y, enemy.width * 3, enemy.height*3);
-        }
+      if(isShipVisible) batch.draw(nave, posX, posY, nave.getWidth()*4, nave.getHeight()*4 );
+
+      drawFlyingObjects();
          
-        bitmap.draw(batch, "Score: " + score, 20, Gdx.graphics.getHeight() - 20);
+      bitmap.draw(batch, "Score: " + score, 20, Gdx.graphics.getHeight() - 20);
 
-        drawHealthBar(game.getBatch(), font);
-        if(paused && !isBlinking) {
-          game.getMenu().getFont().draw(batch, "Press SPACE to continue...", (Gdx.graphics.getWidth()/2)-215, (Gdx.graphics.getHeight()/2)+20);
-          game.getMenu().getFont().draw(game.getBatch(), "(Press R to return to main menu)", (Gdx.graphics.getWidth()/2)-265, (Gdx.graphics.getHeight()/2)-20);
-        }
-      }else{
-        
-        bitmap.draw(batch, "Score: " + score, 20, Gdx.graphics.getHeight() - 20);
+      drawHealthBar(game.getBatch(), font);
+      if(paused && !isBlinking) {
+        game.getMenu().getFont().draw(batch, "Press SPACE to continue...", (Gdx.graphics.getWidth()/2)-215, (Gdx.graphics.getHeight()/2)+20);
+        game.getMenu().getFont().draw(game.getBatch(), "(Press R to return to main menu)", (Gdx.graphics.getWidth()/2)-265, (Gdx.graphics.getHeight()/2)-20);
       }
       batch.end();
 
-      if (fadeOut) {
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        batch.begin();
-        batch.setColor(0, 0, 0, fadeOutOpacity);
-        batch.draw(img, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        if(fadeOutOpacity>=1 && firstCrash){
-          updateText(delta);
-          game.getMenu().getFont().draw(batch, currentText.toString(), 100, Gdx.graphics.getHeight() / 3);
-        }
-        batch.setColor(1, 1, 1, 1); // Reset color
-        batch.end();
-        Gdx.gl.glDisable(GL20.GL_BLEND);
-     }
+      if (fadeOut) fadeOut(delta);
     }
   
     @Override
-    public void dispose () {
+    public void dispose () { // not implemented because the screen is used throughout the whole game. We change its state but never dispose
     }
   
     private void moveNave(){
@@ -340,19 +278,21 @@ public class SpaceshipScreen implements Screen {
           iter.remove();
         }
 
-        if(fadeOut){
-          collisionTimer +=delta;
-          if((collisionTimer>=1 && !firstCrash) || collisionTimer>=31){
-            collided = false;
-            collisionTimer = 0;
-            firstCrash = false;
-            sounds.getBackground1().pause();
-            game.setScreen(new EnemyGameScreen(game, timesCrashed, Constants.maxPlayerHealth, damage, playerHealth, sounds));
-          }
-        }
+        if(fadeOut) fadeOutAndSwitch(delta);
       }
     }
-  
+    
+    private void drawFlyingObjects(){
+      for (Rectangle candy : candies) {
+        batch.draw(tCandy, candy.x, candy.y, candy.width*3, candy.height*3);
+      }
+      for (Rectangle weapon : weapons) {
+        batch.draw(tWeapon, weapon.x, weapon.y, weapon.width*3, weapon.height*3);
+      }
+      for(Rectangle enemy : enemies1 ){
+        batch.draw(tEnemy1, enemy.x, enemy.y, enemy.width * 3, enemy.height*3);
+      }
+    }
   
     private boolean collide ( float x1, float y1, float w1, float h1, float x2, float y2, float w2, float h2){
           // Shrink the collision area slightly for more precise detection
@@ -462,6 +402,32 @@ public class SpaceshipScreen implements Screen {
       batch.draw(weaponBarFrame, barX-3, weaponBarY-3,barWidth*1.03f, barHeight*1.25f);
     }
 
+    private void fadeOut(float delta){
+      Gdx.gl.glEnable(GL20.GL_BLEND);
+      Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+      batch.begin();
+      batch.setColor(0, 0, 0, fadeOutOpacity);
+      batch.draw(img, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+      if(fadeOutOpacity>=1 && firstCrash){
+        updateText(delta);
+        game.getMenu().getFont().draw(batch, currentText.toString(), 100, Gdx.graphics.getHeight() / 3);
+      }
+      batch.setColor(1, 1, 1, 1); // Reset color
+      batch.end();
+      Gdx.gl.glDisable(GL20.GL_BLEND);
+    }
+
+    private void fadeOutAndSwitch(float delta){
+      collisionTimer +=delta;
+      if((collisionTimer>=1 && !firstCrash) || collisionTimer>=31){
+        collided = false;
+        collisionTimer = 0;
+        firstCrash = false;
+        sounds.getBackground1().pause();
+        game.setScreen(new EnemyGameScreen(game, timesCrashed, Constants.maxPlayerHealth, damage, playerHealth, sounds));
+      }
+    }
+
     public void updateText(float delta) {
       if (charIndex < crashText.length()) {
           charTimer += delta;
@@ -470,7 +436,43 @@ public class SpaceshipScreen implements Screen {
               charTimer = 0;
           }
       }
-  }
+    }
+
+    private void blinkShip(){
+      float elapsed = (TimeUtils.nanoTime() - blinkStartTime) *0.000000001f;
+      if (elapsed > blinkDuration) {
+          scoreWhenCrashed = score;
+          isBlinking = false;
+          paused = false;
+          isShipVisible = true;
+      } else {
+          if ((int)(elapsed / blinkInterval) % 2 == 0) {
+              isShipVisible = true;
+          }else {
+            isShipVisible = false;
+          }
+      }
+    }
+
+    private void handleInput(){
+      if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+        if(paused){
+          paused = false;
+          totalPauseTime += TimeUtils.nanoTime() - pauseStartTime; 
+        } else {
+          paused = true;
+          pauseStartTime = TimeUtils.nanoTime();
+        }
+      }
+      if(paused && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){ 
+        paused = false;
+      }
+      if(paused && Gdx.input.isKeyJustPressed(Input.Keys.R)){
+        sounds.getBackground1().pause();
+        game.setScreen(game.getMenu());
+        restart(false);
+      }
+    }
 
     public void setDisposeEnemyScreen(EnemyGameScreen screen){
       this.disposeEnemyScreen = screen;
@@ -520,6 +522,12 @@ public class SpaceshipScreen implements Screen {
       font = new BitmapFont();
       font.setColor(Color.WHITE);
       font.getData().setScale(1);
+
+      // dispose the enemyGmaeScreen we switched from to this screen(if that screen exists)
+      if(disposeEnemyScreen!=null) {
+        disposeEnemyScreen.dispose();
+        disposeEnemyScreen = null;
+      }
     }
 
     @Override
