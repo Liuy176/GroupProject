@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.helpers.SoundManager;
 
-// parent class for all the about screens
+//class for all about screens
 public class AboutScreen implements Screen {
     private SpaceBlastGame game;
     private SpriteBatch spriteBatch;
@@ -54,6 +54,7 @@ public class AboutScreen implements Screen {
         if(prev!=null)stage.addActor(prevScreenBtn);
     }
 
+    // position 'Menu' button
     private void setUpMenuButton(){
         toMenuButton.setPosition(40, Gdx.graphics.getHeight()-60);
         toMenuButton.setHeight(40);

@@ -12,14 +12,14 @@ public class SoundManager {
 
     public SoundManager (SpaceBlastGame game){
         this.game = game;
-        buttonClick = Gdx.audio.newSound(Gdx.files.internal("blipSelect.wav")); // original by Pranav
-        shot = Gdx.audio.newSound(Gdx.files.internal("laserShoot.wav")); // original by Pranav
-        hit = Gdx.audio.newSound(Gdx.files.internal("hitHurt.wav")); // original by Pranav
-        jump  = Gdx.audio.newSound(Gdx.files.internal("jump.wav")); // original by Pranav
-        explosion = Gdx.audio.newSound(Gdx.files.internal("explosion.wav")); // original by Pranav
-        background1 = Gdx.audio.newMusic(Gdx.files.internal("Liu.mp3")); // original sound by Yixin
+        buttonClick = Gdx.audio.newSound(Gdx.files.internal("blipSelect.wav"));
+        shot = Gdx.audio.newSound(Gdx.files.internal("laserShoot.wav"));
+        hit = Gdx.audio.newSound(Gdx.files.internal("hitHurt.wav"));
+        jump  = Gdx.audio.newSound(Gdx.files.internal("jump.wav"));
+        explosion = Gdx.audio.newSound(Gdx.files.internal("explosion.wav"));
+        background1 = Gdx.audio.newMusic(Gdx.files.internal("Liu.mp3"));
         background1.setLooping(true);
-        background2 = Gdx.audio.newMusic(Gdx.files.internal("Liu2.mp3")); // original sound by Yixin
+        background2 = Gdx.audio.newMusic(Gdx.files.internal("Liu2.mp3"));
         background2.setLooping(true);
         updateMusicVol();
     }

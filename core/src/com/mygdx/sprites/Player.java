@@ -74,11 +74,13 @@ public class Player extends Sprite{
     }
 
     public void update(float delta){
+        // set position of the rexture
         if(facingRight) setPosition((body.getPosition().x-getWidth()/2) + 0.2f, body.getPosition().y - getHeight()/2);
         else setPosition((body.getPosition().x-getWidth()/2) - 0.2f, body.getPosition().y - getHeight()/2);
         
         setRegion(getFrame(delta));
 
+        // fall through the ground when defeated
         if(isDefeated){
             if(body.getPosition().y <= -1){
                body.setActive(false);
@@ -106,6 +108,7 @@ public class Player extends Sprite{
         game.getBatch().setShader(null);
     }
 
+     // get appropriate texture for the player
     public TextureRegion getFrame(float delta){
         currState = getState();
 
@@ -126,6 +129,7 @@ public class Player extends Sprite{
                 region= stand;
                 break;
         }
+        // flip the texture according to player's direction of movement
         if((body.getLinearVelocity().x<0 || !facingRight) && !region.isFlipX()){
             region.flip(true,false);
             facingRight = false;
@@ -139,7 +143,7 @@ public class Player extends Sprite{
         return region;
     }
 
-
+    // determine player's state
     public State getState(){
         if(isDefeated)
             return State.DEAD;
@@ -165,10 +169,12 @@ public class Player extends Sprite{
         playerShape.setAsBox(4/Constants.PPM,7/Constants.PPM);
 
         fixture.shape = playerShape;
+        // collision bits
         fixture.filter.categoryBits = Constants.CATEGORY_PLAYER;
         fixture.filter.maskBits = Constants.CATEGORY_GROUND | Constants.CATEGORY_ENEMY_BULLET;
         body.createFixture(fixture).setUserData(this);
 
+        // create a sensor at the bottom of player's body
         EdgeShape leftSideClose = new EdgeShape();
         leftSideClose.set(new Vector2(-4/Constants.PPM, -8/Constants.PPM), new Vector2(4/Constants.PPM, -8/Constants.PPM));
         fixture.shape = leftSideClose;
@@ -200,6 +206,7 @@ public class Player extends Sprite{
         return currentHealth / startHealth;
     }
 
+    // draws health bar and weapon power bar in the top right corner of the screen
     public void drawHealthBar(SpriteBatch batch, BitmapFont font) {
         float healthPercentage = currentHealth/Constants.maxPlayerHealth;
         float weaponStrengthPercentage = (float)damage/Constants.maxWeaponPower;
@@ -218,18 +225,18 @@ public class Player extends Sprite{
         batch.draw(heartTexture, heartX, heartY, 40, 32);
         batch.draw(gunTexture, heartX, weaponBarY, 40, 32);
 
-        //background
+        //background of healthbar
         batch.setColor(Color.RED);
         batch.draw(whiteRegion, barX, barY, barWidth, barHeight);
 
-        //foreground
+        //foreground of healthbar
         batch.setColor(Color.GREEN);
         batch.draw(whiteRegion, barX, barY, barWidth * healthPercentage, barHeight);
 
-        batch.setColor(Color.GRAY); // background
+        batch.setColor(Color.GRAY); // background of weapon power bar
         batch.draw(whiteRegion, barX, weaponBarY, barWidth, barHeight);
 
-        batch.setColor(Color.YELLOW); // foreground
+        batch.setColor(Color.YELLOW); // foreground of weapon ower bar
         batch.draw(whiteRegion, barX, weaponBarY, barWidth * weaponStrengthPercentage, barHeight);
 
         batch.setColor(Color.WHITE);
@@ -249,9 +256,9 @@ public class Player extends Sprite{
     
     private void playerDies() {
         isDefeated = true;
-        for (Fixture fixture : body.getFixtureList()) {
+        for (Fixture fixture : body.getFixtureList()) { // make player not collide with anything once it gets defeated
             Filter filter = fixture.getFilterData();
-            filter.maskBits = 0; // no collision
+            filter.maskBits = 0;
             fixture.setFilterData(filter);
         }
 
@@ -270,6 +277,8 @@ public class Player extends Sprite{
         gunTexture.dispose();
         white.dispose();
         healthFrame.dispose();
+        sounds.dispose();
+        shader.dispose();
     }
 
     public World getWorld(){

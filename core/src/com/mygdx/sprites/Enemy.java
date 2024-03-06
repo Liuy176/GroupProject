@@ -36,9 +36,9 @@ public class Enemy extends Sprite {
     private State currState, prevState;
     private Fixture fix;
 
-    private float randomActionTimer = 0f;
-    private float randomActionInterval = 3.0f;
-    private float randomActionChance = 1.0f;
+    private float randomMoveTimer = 0f;
+    private float randomMoveInterval = 3.0f;
+    private float randomMoveChance = 1.0f;
     private float moveBackDuration = 0f;
     private float moveBackTimer = 0f;
     private Vector2 moveBackDirection = new Vector2();
@@ -186,11 +186,11 @@ public class Enemy extends Sprite {
 
     // possibility of enemy moving in a random direction
      private void performRandomActionOrStandStill(float dt) {
-        randomActionTimer += dt;
-        if (randomActionTimer >= randomActionInterval) {
-            randomActionTimer = 0f;
+        randomMoveTimer += dt;
+        if (randomMoveTimer >= randomMoveInterval) {
+            randomMoveTimer = 0f;
             
-            if (MathUtils.random() < randomActionChance) {
+            if (MathUtils.random() < randomMoveChance) {
                 // movement in random direction
                 float randomDirection = MathUtils.randomBoolean() ? 1f : -1f;
                 body.applyForceToCenter(new Vector2(randomDirection * 40f, 0), true);
