@@ -115,7 +115,6 @@ public class AboutScreen implements Screen {
     public void dispose() {
         background.dispose();
         stage.dispose();
-        sounds.dispose();
     }
 
     @Override

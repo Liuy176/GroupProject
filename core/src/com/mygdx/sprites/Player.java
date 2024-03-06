@@ -277,7 +277,6 @@ public class Player extends Sprite{
         gunTexture.dispose();
         white.dispose();
         healthFrame.dispose();
-        sounds.dispose();
         shader.dispose();
     }
 

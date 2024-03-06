@@ -45,7 +45,6 @@ public class SpaceshipScreen implements Screen {
     private long totalPauseTime = 0;
     private SpaceBlastGame game;
     private SoundManager sounds;
-    
     private float gravity = 0.5f; 
     private float jumpVelocity = -10f; 
     private float currentVelocity = 0f;

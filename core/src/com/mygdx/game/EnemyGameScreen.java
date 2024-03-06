@@ -391,7 +391,6 @@ public class EnemyGameScreen implements Screen{
         atlas.dispose();
         shapeRenderer.dispose();
         player.dispose();
-        sounds.dispose();
     }
     
 }
