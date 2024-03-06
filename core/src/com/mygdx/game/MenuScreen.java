@@ -151,6 +151,7 @@ public class MenuScreen implements Screen {
         skin.dispose();
         background.dispose();
         gen.dispose();
+        font.dispose();
     }
 
     public int getHighScore(){

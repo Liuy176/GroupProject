@@ -28,7 +28,6 @@ public class SpaceshipScreen implements Screen {
     private Texture img, tNave, tEnemy1, tCandy, tWeapon, weaponBarFrame;
     private Sprite nave;
     private float posX, posY;
-    private boolean  gameover;
     private Array<Rectangle> enemies1;
 
     private int score, damage=Constants.initialWeaponPower, scoreWhenCrashed;
@@ -70,7 +69,6 @@ public class SpaceshipScreen implements Screen {
     private Texture heartTexture, healthFrame, white, gunTexture;
     private TextureRegion whiteRegion;
     private BitmapFont font;
-    
     private String crashText = "Crashed... \n\n\nDefeat the enemies inhabiting the asteroid \n\nto continue your journey!";
     private StringBuilder currentText = new StringBuilder();
     private float charTimer = 0, charInterval = 0.04f;
@@ -110,7 +108,6 @@ public class SpaceshipScreen implements Screen {
     parameter.color = Color.WHITE;
     bitmap = generator.generateFont(parameter);
 
-    gameover = false;
     isBlinking=false;
     blinkStartTime = 0f;
     paused=false; 
@@ -218,7 +215,7 @@ public class SpaceshipScreen implements Screen {
         candy.x -= Constants.healthPowerUpMovementSpeed * Gdx.graphics.getDeltaTime(); // Adjust speed as needed
         if (candy.x + tCandy.getWidth() < 0) iter.remove();
         else if (collide(candy.x, candy.y, candy.width*3, candy.height*3, posX, posY, nave.getWidth()*4, nave.getHeight()*4)) {
-          // Restore power
+          // restore power
           if(playerHealth + Constants.healthPowerUpValue>=Constants.maxPlayerHealth)
             playerHealth=Constants.maxPlayerHealth;
           else
@@ -253,7 +250,7 @@ public class SpaceshipScreen implements Screen {
         if (enemy.x < lastAsteroidBatchX) {
           lastAsteroidBatchX = enemy.x;
         }
-        // Check if the player has moved past an asteroid batch, and increase the score accordingly
+        // check if the player has moved past an asteroid batch, and increase the score accordingly
         if (enemy.x + enemy.width < 0) {
           iter.remove();
         }
@@ -269,16 +266,14 @@ public class SpaceshipScreen implements Screen {
   
         // Check for collision with the ship
         if (collide(enemy.x, enemy.y, enemy.width*3, enemy.height*3, posX, posY, nave.getWidth()*4, nave.getHeight()*4) && !collided) {
-          if (!gameover) {
-            collided = true;
-            isBlinking = true;
-            blinkStartTime = TimeUtils.nanoTime();
-            paused = true; 
-            timesCrashed++;
-            fadeOut = true;
-            collisionTimer = 0;
-            sounds.playExplosion();
-          }
+          collided = true;
+          isBlinking = true;
+          blinkStartTime = TimeUtils.nanoTime();
+          paused = true; 
+          timesCrashed++;
+          fadeOut = true;
+          collisionTimer = 0;
+          sounds.playExplosion();
           iter.remove();
         }
 
@@ -344,7 +339,6 @@ public class SpaceshipScreen implements Screen {
       posX = Constants.xPosOfUfoAtStart;
       enemies1.clear();
       candies.clear();
-      gameover = false;
       paused = isPaused;
       isBlinking = false;
       fadeOutOpacity=0f;
@@ -496,9 +490,6 @@ public class SpaceshipScreen implements Screen {
     }
     public void setScore(int score){
       this.score = score;
-    }
-    public void setGameOver(boolean isGameOver){
-      this.gameover = isGameOver;
     }
     public void setFadeOut(boolean isFadeOut){
       this.fadeOut = isFadeOut;

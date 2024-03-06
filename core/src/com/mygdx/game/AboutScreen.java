@@ -14,19 +14,25 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.helpers.SoundManager;
 
 // parent class for all the about screens
-public abstract class AboutScreen implements Screen {
-    protected SpaceBlastGame game;
-    protected SpriteBatch spriteBatch;
-    protected Texture background;
-    protected Stage stage;
-    protected TextButton toMenuButton;
-    protected SoundManager sounds;
+public class AboutScreen implements Screen {
+    private SpaceBlastGame game;
+    private SpriteBatch spriteBatch;
+    private Texture background;
+    private Stage stage;
+    private TextButton toMenuButton;
+    private SoundManager sounds;
+    private TextButton prevScreenBtn;
+    private TextButton nextScreenBtn;
+    private AboutScreen next;
+    private AboutScreen prev;
 
-    public AboutScreen(SpaceBlastGame game, SoundManager sounds, String backgroundPath) {
+    public AboutScreen(SpaceBlastGame game, SoundManager sounds, String backgroundPath, AboutScreen next, AboutScreen prev) {
         this.game = game;
         this.spriteBatch = game.getBatch();
         this.sounds = sounds;
         this.background = new Texture(backgroundPath);
+        this.next = next;
+        this.prev = prev;
         this.toMenuButton = new TextButton("Menu", game.getMenu().getButtonStyle());
         this.toMenuButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
@@ -34,7 +40,6 @@ public abstract class AboutScreen implements Screen {
                 sounds.playButton();
             }
         });
-        createButtons();
     }
 
     @Override
@@ -42,8 +47,11 @@ public abstract class AboutScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         setUpMenuButton();
-        setupButtons();
+        createButtons(next, prev);
+        setupButtons(next, prev);
         stage.addActor(toMenuButton);
+        if(next!=null)stage.addActor(nextScreenBtn);
+        if(prev!=null)stage.addActor(prevScreenBtn);
     }
 
     private void setUpMenuButton(){
@@ -53,9 +61,39 @@ public abstract class AboutScreen implements Screen {
     }
 
     // create additional necessary buttons
-    public abstract void createButtons();
+    public  void createButtons(AboutScreen next, AboutScreen prev){
+        if(next!=null){
+            this.nextScreenBtn = new TextButton(">", game.getMenu().getButtonStyle());
+            nextScreenBtn.addListener(new ChangeListener() {                
+                public void changed(ChangeEvent event, Actor actor) {
+                    game.setScreen(next);
+                    sounds.playButton();
+                }
+            });
+        }
+        if(prev!=null){
+            this.prevScreenBtn = new TextButton("<", game.getMenu().getButtonStyle());
+            prevScreenBtn.addListener(new ChangeListener() {                
+                public void changed(ChangeEvent event, Actor actor) {
+                    game.setScreen(prev);
+                    sounds.playButton();
+                }
+            });
+        }
+    }
     // configure the additionally added buttons
-    public abstract void setupButtons();
+    public void setupButtons(AboutScreen next, AboutScreen prev){
+        if(next!=null){
+            nextScreenBtn.setPosition(Gdx.graphics.getWidth()-70, Gdx.graphics.getHeight()-60);
+            nextScreenBtn.setHeight(40);
+            nextScreenBtn.setWidth(40);
+        }
+        if(prev!=null){
+            prevScreenBtn.setPosition(Gdx.graphics.getWidth()-120, Gdx.graphics.getHeight()-60);
+            prevScreenBtn.setHeight(40);
+            prevScreenBtn.setWidth(40);
+        }
+    };
 
     @Override
     public void render(float delta) {
@@ -68,16 +106,30 @@ public abstract class AboutScreen implements Screen {
         stage.draw();
     }
 
+    public void setNext(AboutScreen next){
+        this.next = next;
+    }
+
     @Override
     public void dispose() {
         background.dispose();
         stage.dispose();
+        sounds.dispose();
     }
 
     @Override
     public void hide() {
         Gdx.input.setInputProcessor(null);
     }
+
+    @Override
+    public void pause() {}
+
+    @Override
+    public void resize(int arg0, int arg1) {}
+
+    @Override
+    public void resume() {}
 
 }
 

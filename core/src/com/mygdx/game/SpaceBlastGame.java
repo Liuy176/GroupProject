@@ -17,13 +17,13 @@ public class SpaceBlastGame extends Game {
 	private Preferences pref;
 	private SoundManager soundmanager;
 	private Settings settingsScreen;
-	private AboutScreen1 about1;
-	private AboutScreen2 about2;
-	private AboutScreen3 about3;
-	private AboutScreen4 about4;
-	private AboutScreen5 about5;
-	private AboutScreen6 about6;
-	private AboutScreen7 about7;
+	private AboutScreen about1;
+	private AboutScreen about2;
+	private AboutScreen about3;
+	private AboutScreen about4;
+	private AboutScreen about5;
+	private AboutScreen about6;
+	private AboutScreen about7;
 
 	public SpaceBlastGame() {}
 
@@ -39,14 +39,15 @@ public class SpaceBlastGame extends Game {
 		this.mainMenuScreen = new MenuScreen(this, soundmanager);
 		this.settingsScreen = new Settings(this, soundmanager);
 		this.spaceshipScreen = new SpaceshipScreen(this, Constants.maxPlayerHealth, soundmanager);
-		this.about1 = new AboutScreen1(this, soundmanager);
-		this.about2 = new AboutScreen2(this, soundmanager);
-		this.about3 = new AboutScreen3(this, soundmanager);
-		this.about4 = new AboutScreen4(this, soundmanager);
-		this.about5 = new AboutScreen5(this, soundmanager);
-		this.about6 = new AboutScreen6(this, soundmanager);
-		this.about7 = new AboutScreen7(this, soundmanager);
+		this.about1 = new AboutScreen(this, soundmanager, "aboutStory.png", null, null);
+		this.about2 = new AboutScreen(this, soundmanager, "aboutGameplay1.png", null, about1);
+		this.about3 = new AboutScreen(this, soundmanager, "aboutGameplay2.png", null, about2);
+		this.about4 = new AboutScreen(this, soundmanager, "aboutAsteroid1.png", null, about3);
+		this.about5 = new AboutScreen(this, soundmanager, "aboutAsteroid2.png", null, about4);
+		this.about6 = new AboutScreen(this, soundmanager, "aboutCombat1.png",  null, about5);
+		this.about7 = new AboutScreen(this, soundmanager, "aboutCombat2.png", null, about6);
 
+		setNextScreens();
         setScreen(mainMenuScreen); //menu screen appears after starting the game
     }
 
@@ -94,6 +95,16 @@ public class SpaceBlastGame extends Game {
 	public float getGameVol(){
 		return pref.getFloat("gameVolume", 0.5f);
 	}
+
+	// for navugation between about screens
+	private void setNextScreens(){
+		about1.setNext(about2);
+		about2.setNext(about3);
+		about3.setNext(about4);
+		about4.setNext(about5);
+		about5.setNext(about6);
+		about6.setNext(about7);
+	}
 	
 	public void render(){
 		super.render();
@@ -103,25 +114,25 @@ public class SpaceBlastGame extends Game {
 		return mainMenuScreen;
 	}
 
-	public AboutScreen1 getAboutScreen1(){
+	public AboutScreen getAboutScreen1(){
 		return about1;
 	}
-	public AboutScreen2 getAboutScreen2(){
+	public AboutScreen getAboutScreen2(){
 		return about2;
 	}
-	public AboutScreen3 getAboutScreen3(){
+	public AboutScreen getAboutScreen3(){
 		return about3;
 	}
-	public AboutScreen4 getAboutScreen4(){
+	public AboutScreen getAboutScreen4(){
 		return about4;
 	}
-	public AboutScreen5 getAboutScreen5(){
+	public AboutScreen getAboutScreen5(){
 		return about5;
 	}
-	public AboutScreen6 getAboutScreen6(){
+	public AboutScreen getAboutScreen6(){
 		return about6;
 	}
-	public AboutScreen7 getAboutScreen7(){
+	public AboutScreen getAboutScreen7(){
 		return about7;
 	}
 

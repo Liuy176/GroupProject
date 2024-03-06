@@ -16,8 +16,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.helpers.SoundManager;
 
 public class Settings implements Screen{
-    private final Stage stage;
-    private final Skin skin;
+    private Stage stage;
+    private Skin skin;
     private Slider musicVolSlider, gameVolSlider;
     private SelectBox<String> difficultySelect;
     private TextButton backButton;
@@ -145,6 +145,8 @@ public class Settings implements Screen{
     @Override
     public void dispose() {
         stage.dispose();
+        skin.dispose();
+        background.dispose();
     }
     
 }

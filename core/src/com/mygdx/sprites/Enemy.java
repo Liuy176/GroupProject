@@ -392,6 +392,7 @@ public class Enemy extends Sprite {
         armTexture.dispose();
         white.dispose();
         shader.dispose();
+        sounds.dispose();
     }
 
 }

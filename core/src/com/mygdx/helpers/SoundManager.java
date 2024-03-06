@@ -37,11 +37,11 @@ public class SoundManager {
     }
 
     public void playShotSound() {
-        shot.play(game.getGameVol()/4);
+        shot.play(game.getGameVol()/6);
     }
 
     public void playEnenyShotSound() {
-        shot.play(game.getGameVol()/7);
+        shot.play(game.getGameVol()/10);
     }
 
     public void playHit(){

@@ -64,15 +64,19 @@ public class WorldContactListener implements ContactListener{
         // push the enemy in the opposite direction from the wall if it gets stuck there and can't jump
         if(fixA.getUserData() != null && fixB.getUserData() != null && (fixA.getUserData().equals("enemyBackupLeft")|| fixB.getUserData().equals("enemyBackupLeft"))){
             Fixture enemyFix = (fixA.getUserData().equals("enemyBackupLeft")) ? fixA : fixB;
+            Fixture other = enemyFix == fixA ? fixB : fixA;
             Enemy enemy = (Enemy) enemyFix.getBody().getUserData();
-            enemy.moveForward();
+            if(!(other.getUserData() instanceof Bullet))
+                enemy.moveForward();
         }
 
         // push the enemy in the opposite direction from the wall if it gets stuck there and can't jump
         if(fixA.getUserData() != null && fixB.getUserData() != null && (fixA.getUserData().equals("enemyBackupRight")|| fixB.getUserData().equals("enemyBackupRight"))){
             Fixture enemyFix = (fixA.getUserData().equals("enemyBackupRight")) ? fixA : fixB;
+            Fixture other = enemyFix == fixA ? fixB : fixA;
             Enemy enemy = (Enemy) enemyFix.getBody().getUserData();
-            enemy.moveBack();
+            if(!(other.getUserData() instanceof Bullet))
+                enemy.moveBack();
         }
 
         // reset player's ability to make double jump whenever the player touches the ground
