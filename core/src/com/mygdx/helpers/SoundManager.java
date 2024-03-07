@@ -10,6 +10,7 @@ public class SoundManager {
     private Music background1, background2;
     private SpaceBlastGame game;
 
+    // class responsible for all sounds used in the game
     public SoundManager (SpaceBlastGame game){
         this.game = game;
         buttonClick = Gdx.audio.newSound(Gdx.files.internal("blipSelect.wav"));

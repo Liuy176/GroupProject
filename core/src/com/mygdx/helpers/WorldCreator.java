@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
+// class used for creating static objects within a map in EnemyGameScreen mode
 public class WorldCreator {
     public WorldCreator(World world, TiledMap map){
         BodyDef bodyDef = new BodyDef();

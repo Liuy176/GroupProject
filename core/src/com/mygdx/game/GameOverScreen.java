@@ -3,7 +3,6 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -59,7 +58,6 @@ public class GameOverScreen implements Screen {
         toMenuButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //game.getMenu().getButtonSound().play(game.getGameVol());
                 sounds.playButton();
                 game.setScreen(game.getMenu());
             };
@@ -127,7 +125,6 @@ public class GameOverScreen implements Screen {
     public void dispose() {
         background.dispose();
         stage.dispose();
-        sounds.dispose();
     }
 
     @Override

@@ -401,7 +401,7 @@ public class SpaceshipScreen implements Screen {
 
     // transition effect when changing screens
     private void fadeOut(float delta){
-      Gdx.gl.glEnable(GL20.GL_BLEND);
+      Gdx.gl.glEnable(GL20.GL_BLEND); // enable blend
       Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
       batch.begin();
       batch.setColor(0, 0, 0, fadeOutOpacity);
@@ -412,7 +412,7 @@ public class SpaceshipScreen implements Screen {
       }
       batch.setColor(1, 1, 1, 1); // reset color
       batch.end();
-      Gdx.gl.glDisable(GL20.GL_BLEND);
+      Gdx.gl.glDisable(GL20.GL_BLEND); // disable blend
     }
 
     // transition to the EnemyGameScreen game mode

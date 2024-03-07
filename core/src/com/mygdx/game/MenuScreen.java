@@ -30,7 +30,7 @@ public class MenuScreen implements Screen {
     private TextButtonStyle style;
     private LabelStyle labelStyle;
     private FreeTypeFontParameter param;
-    private TextButton playButton, settingsButton, enemyModeButton, exitButton;
+    private TextButton playButton, settingsButton, aboutButton, exitButton;
     
     public MenuScreen(SpaceBlastGame game, SoundManager sounds) {
         this.game = game;
@@ -66,12 +66,11 @@ public class MenuScreen implements Screen {
                 sounds.playButton();
             }
         });
-        enemyModeButton = new TextButton("About", style); // the button to test the enemy game mode
-        enemyModeButton.addListener(new ChangeListener() {
+        aboutButton = new TextButton("About", style);
+        aboutButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(game.getAboutScreen1());
                 sounds.playButton();
-                //game.setScreen(new EnemyGameScreen(game,5, 50, 60, 50)); // switch to Enemy Game Screen
             }
         });
         exitButton = new TextButton("Exit", style);
@@ -111,7 +110,7 @@ public class MenuScreen implements Screen {
         table.row();
         table.add(settingsButton).fillX().uniformX().padLeft(85).padBottom(20).width(400).height(45);
         table.row();
-        table.add(enemyModeButton).fillX().uniformX().padLeft(85).padBottom(20).width(400).height(45);
+        table.add(aboutButton).fillX().uniformX().padLeft(85).padBottom(20).width(400).height(45);
         table.row();
         table.add(exitButton).fillX().uniformX().padLeft(85).width(400).height(45);
     }

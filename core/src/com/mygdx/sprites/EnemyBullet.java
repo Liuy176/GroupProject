@@ -46,17 +46,18 @@ public class EnemyBullet extends Sprite {
     }
 
     private void defineBullet(float x, float y) {
-        // defining body
+        // defining physical body properties
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(x , y );
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.gravityScale = 0; 
         body = world.createBody(bodyDef);
 
+        // shape defines bullets collision boundries
         CircleShape shape = new CircleShape();
         shape.setRadius(1 / Constants.PPM);
 
-        // define properties of a fixture of the body
+        // define collision properties of the body
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.isSensor = true;
@@ -66,6 +67,7 @@ public class EnemyBullet extends Sprite {
 
         shape.dispose();
 
+        // initial velocity of a bullet
         body.setLinearVelocity(direction.scl(speed));
     }
 

@@ -82,7 +82,7 @@ public class AboutScreen implements Screen {
             });
         }
     }
-    // configure the additionally added buttons
+    // configure the additional buttons
     public void setupButtons(AboutScreen next, AboutScreen prev){
         if(next!=null){
             nextScreenBtn.setPosition(Gdx.graphics.getWidth()-70, Gdx.graphics.getHeight()-60);

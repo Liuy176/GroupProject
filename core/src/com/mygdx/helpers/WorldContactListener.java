@@ -10,6 +10,7 @@ import com.mygdx.sprites.Enemy;
 import com.mygdx.sprites.EnemyBullet;
 import com.mygdx.sprites.Player;
 
+// this class responsible for handling collisions in EnemyGameScreen mode
 public class WorldContactListener implements ContactListener{
 
     @Override

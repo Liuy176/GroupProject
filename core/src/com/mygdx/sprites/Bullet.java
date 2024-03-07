@@ -40,7 +40,7 @@ public class Bullet extends Sprite {
     }
 
     private void defineBullet(float x, float y) {
-        // defining body
+        // defining physical properties of the bullet body
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(x , y );
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -51,7 +51,7 @@ public class Bullet extends Sprite {
         CircleShape shape = new CircleShape();
         shape.setRadius(1 / Constants.PPM);
 
-        // define properties of a fixture of the body
+        // define collision properties of the body
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.isSensor = true;
